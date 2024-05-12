@@ -1,0 +1,114 @@
+.nav {
+  min-height: 75px;
+  letter-spacing: 4px;
+}
+
+.logo {
+  font-size: 1.65rem;
+  padding: 5px;
+}
+
+.brand {
+  margin-left: 20px;
+  font-size: 2rem;
+  color: white;
+  text-decoration: none;
+  font-family: sans-serif; /* Thêm font-family */
+}
+
+.brand:hover {
+  color: #1679AB;
+}
+
+.pageLinks {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.pageLinks a {
+  color: #1679AB;
+  font-weight: 500;
+  text-decoration: none;
+  margin-right: 40px;
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+  padding-bottom: 5px;
+  font-family: sans-serif; /* Thêm font-family */
+}
+
+.pageLinks a:hover {
+  border-bottom: 1px solid #1679AB;
+}
+
+.disabled a {
+  cursor: not-allowed;
+  color: #1679AB;
+}
+
+.disabled a:hover {
+  border: none;
+}
+
+a.active {
+  color: #1679AB;
+  border-radius: 2px;
+  border-bottom: 1px solid #1679AB;
+}
+
+.user {
+  letter-spacing: 2px;
+  color: #1679AB;
+  font-family: sans-serif; /* Thêm font-family */
+}
+
+.user:hover,
+.user:active {
+  outline: none;
+}
+
+.dropDown > .dropdown-menu {
+  width: 14rem;
+}
+
+.dropDown a {
+  width: 100%;
+  display: block;
+}
+
+.changePassword {
+  padding: 5px;
+  text-decoration: none;
+  text-align: center;
+  color: inherit;
+  font-family: sans-serif; /* Thêm font-family */
+}
+
+.changePassword:hover {
+  color: inherit;
+  background-color: #1679AB;
+}
+
+
+.user button:hover,
+button:active {
+  outline: none;
+}
+
+.username {
+  font-size: 1.3rem;
+  color: black;
+}
+
+.userLogo {
+  padding: 4px;
+  margin-right: 2px;
+}
+
+@media screen and (max-width: 281px) {
+  .brand {
+    margin-left: 0;
+    font-size: 1.7rem;
+  }
+}
+
