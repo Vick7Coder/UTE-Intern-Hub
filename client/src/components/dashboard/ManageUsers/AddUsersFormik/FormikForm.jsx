@@ -80,7 +80,7 @@ const FormikForm = (props) => {
           <Form id="manageUser-form">
             <div className={classes.formInputs}>
               <TextInput
-                label="Name"
+                label="Tên người dùng"
                 id="name"
                 name="name"
                 mandatory={"true"}
@@ -88,7 +88,7 @@ const FormikForm = (props) => {
             </div>
             <div className={classes.formInputs}>
               <TextInput
-                label="Email"
+                label="Tài khoản"
                 id="email"
                 name="email"
                 mandatory={"true"}
@@ -96,7 +96,7 @@ const FormikForm = (props) => {
             </div>
             <div className={classes.formInputs}>
               <TextInput
-                label="Password"
+                label="Mật khẩu"
                 id="password"
                 type="password"
                 name="password"
@@ -106,7 +106,7 @@ const FormikForm = (props) => {
             </div>
             <div className={classes.formInputs}>
               <TextInput
-                label="Mobile No"
+                label="Liên hệ"
                 id="mobile"
                 name="mobile"
                 mandatory={"true"}
@@ -117,7 +117,7 @@ const FormikForm = (props) => {
                 className={`${classes["formInputs__side__inner"]} ${classes.age}`}
               >
                 <NumberInput
-                  label="Age"
+                  label="Tuổi"
                   name="age"
                   id="age"
                   mandatory={"true"}
@@ -125,12 +125,12 @@ const FormikForm = (props) => {
               </div>
               <div className={classes["formInputs__side__inner"]}>
                 <label>
-                  Gender<span className="text-danger">*</span>
+                  Giới tính<span className="text-danger">*</span>
                 </label>
                 <div className={classes.gender}>
                   <div>
                     <Field type="radio" value="Male" name="gender" id="Male" />
-                    <label htmlFor="Male">Male</label>
+                    <label htmlFor="Male">Nam</label>
                   </div>
                   <div>
                     <Field
@@ -139,7 +139,7 @@ const FormikForm = (props) => {
                       name="gender"
                       id="Female"
                     />
-                    <label htmlFor="Female">Female</label>
+                    <label htmlFor="Female">Nữ</label>
                   </div>
                 </div>
                 {formik.errors.gender && (
@@ -152,27 +152,26 @@ const FormikForm = (props) => {
                 <SelectInput
                   name="qualification"
                   id="qualification"
-                  label="Qualification"
+                  label="Trình độ chuyên môn"
                   mandatory={"true"}
                 >
-                  <option value="">Select</option>
-                  <option value="Post Graduate">Post Graduate</option>
-                  <option value="Graduate">Graduate</option>
-                  <option value="Diploma">Diploma</option>
-                  <option value="High School">High School</option>
+                  <option value="">Lựa chọn</option>
+                  <option value="Student">Chưa tốt nghiệp</option>
+                  <option value="Graduate">Đã tốt nghiệp</option>
+                  <option value="business">Doanh nghiệp</option>
                 </SelectInput>
               </div>
               <div className={classes["formInputs__side__inner"]}>
                 <SelectInput
                   name="experience"
                   id="experience"
-                  label="Experience"
+                  label="Kinh nghiệm làm việc"
                 >
-                  <option value="">Select</option>
-                  <option value="0-2">0-2</option>
-                  <option value="3-7">3-7</option>
-                  <option value="7-10">7-10</option>
-                  <option value="10-50">10-50</option>
+                  <option value="">Lựa chọn</option>
+                  <option value="0-1"> Dưới 1 năm</option>
+                  <option value="1-3">Từ 1 - 3 năm</option>
+                  <option value="3-6">Từ 3 - 6 năm</option>
+                  <option value="6-50">Hơn 6 năm</option>
                 </SelectInput>
               </div>
             </div>
@@ -180,11 +179,11 @@ const FormikForm = (props) => {
               <SelectInput
                 name="role"
                 id="role"
-                label="Role"
+                label="Vai trò người dùng"
                 mandatory={"true"}
               >
-                <option value="User">User</option>
-                <option value="Job Provider">Job Provider</option>
+                <option value="User">Người tìm việc</option>
+                <option value="Job Provider">Nhà tuyển dụng</option>
               </SelectInput>
             </div>
           </Form>

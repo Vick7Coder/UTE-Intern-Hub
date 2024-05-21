@@ -82,7 +82,7 @@ const Navigation = () => {
                 }
                 to="/manage-applicants"
               >
-                Applicant
+                ỨNG VIÊN
               </NavLink>
               <NavLink
                 className={(navData) =>
@@ -90,7 +90,7 @@ const Navigation = () => {
                 }
                 to="/manage-jobs"
               >
-                Jobs
+                QUẢN LÝ CÔNG VIỆC
               </NavLink>
               <NavLink
                 className={(navData) =>
@@ -98,7 +98,7 @@ const Navigation = () => {
                 }
                 to="/provider-report"
               >
-                Reports
+                TÀI LIỆU
               </NavLink>
             </Nav>
           )}
@@ -110,7 +110,15 @@ const Navigation = () => {
                 }
                 to="/dashboard"
               >
-                Apply
+                CÔNG VIỆC
+              </NavLink>
+              <NavLink
+                className={(navData) =>
+                  navData.isActive ? classes.active : ""
+                }
+                to="/blog"
+              >
+                BLOG
               </NavLink>
               <NavLink
                 className={(navData) =>
@@ -118,13 +126,13 @@ const Navigation = () => {
                 }
                 to="/appliedJobs"
               >
-                Applied Jobs
+                CÔNG VIỆC ĐÃ ỨNG TUYỂN
               </NavLink>
             </Nav>
           )}
           <Nav>
             <Dropdown align={"end"} className={classes.dropDown}>
-              <Dropdown.Toggle className={classes.user}>
+              <Dropdown.Toggle className={classes.user} style={{ border: "none", backgroundColor: "#fff", fontFamily: "sans-serif" }}>
                 <span className={classes.username}>
                   <span className={classes.userLogo}>
                     <i className="bi bi-person-circle"></i>
@@ -133,11 +141,11 @@ const Navigation = () => {
                 </span>
               </Dropdown.Toggle>
 
-              <Dropdown.Menu>
-                <Link to="/change-password" className={classes.changePassword}>
-                  Đổi mật khẩu
+              <Dropdown.Menu style={{ marginRight: "-6px", marginTop: "10px" }}>
+                {/* <Link to="/change-password" className={classes.changePassword} style={{ fontFamily: "sans-serif", letterSpacing: "-3px;" }}>
+                  ĐỔI MẬT KHẨU
                 </Link>
-                <Dropdown.Divider />
+                <Dropdown.Divider /> */}
                 <Dropdown.Item
                   as={"button"}
                   onClick={logoutHandler}

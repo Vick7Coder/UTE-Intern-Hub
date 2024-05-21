@@ -6,7 +6,7 @@ const MyNavigation = () => {
       <ul>
         <li className={classes.brand}>
           <NavLink to="/dashboard">
-            <i class="bi bi-search"></i>Job Portal
+            <i class="bi bi-search"></i>UTEInternHub
           </NavLink>
         </li>
         <ul className={classes.pageLinks}>

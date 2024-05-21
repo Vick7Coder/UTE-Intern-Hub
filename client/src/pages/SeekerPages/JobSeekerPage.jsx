@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import JobList from "../../JobSeeker/JobList";
 import Config from "../../config/Config.json";
+import Footer from "../../components/navigation/Footer";
 
 const JobSeekerPage = () => {
   useEffect(() => {
@@ -9,6 +10,7 @@ const JobSeekerPage = () => {
   return (
     <React.Fragment>
       <JobList />
+      <Footer />
     </React.Fragment>
   );
 };

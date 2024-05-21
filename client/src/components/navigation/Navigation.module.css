@@ -4,16 +4,26 @@
 }
 
 .logo {
-  font-size: 1.65rem;
+  font-size: 18px;
   padding: 5px;
+}
+
+.brand,
+.pageLinks a,
+.user,
+.changePassword,
+.username {
+  font-size: 18px;
+  color: black;
 }
 
 .brand {
   margin-left: 20px;
-  font-size: 2rem;
+  font-size: 18px;
   color: white;
   text-decoration: none;
-  font-family: sans-serif; /* Thêm font-family */
+  font-family: sans-serif;
+  text-transform: uppercase; /* Viết in hoa */
 }
 
 .brand:hover {
@@ -27,14 +37,14 @@
 }
 
 .pageLinks a {
-  color: #1679AB;
   font-weight: 500;
   text-decoration: none;
   margin-right: 40px;
-  font-size: 1.2rem;
+  font-size: 18px;
   letter-spacing: 2px;
   padding-bottom: 5px;
-  font-family: sans-serif; /* Thêm font-family */
+  font-family: sans-serif;
+  text-transform: uppercase; /* Viết in hoa */
 }
 
 .pageLinks a:hover {
@@ -59,7 +69,7 @@ a.active {
 .user {
   letter-spacing: 2px;
   color: #1679AB;
-  font-family: sans-serif; /* Thêm font-family */
+  font-family: sans-serif;
 }
 
 .user:hover,
@@ -77,27 +87,19 @@ a.active {
 }
 
 .changePassword {
-  padding: 5px;
   text-decoration: none;
   text-align: center;
-  color: inherit;
-  font-family: sans-serif; /* Thêm font-family */
+  font-family: sans-serif;
 }
 
 .changePassword:hover {
-  color: inherit;
-  background-color: #1679AB;
+  color: #1679AB;
+  font-weight: bold;
 }
-
 
 .user button:hover,
 button:active {
   outline: none;
-}
-
-.username {
-  font-size: 1.3rem;
-  color: black;
 }
 
 .userLogo {
@@ -108,7 +110,6 @@ button:active {
 @media screen and (max-width: 281px) {
   .brand {
     margin-left: 0;
-    font-size: 1.7rem;
+    font-size: 18px;
   }
 }
-

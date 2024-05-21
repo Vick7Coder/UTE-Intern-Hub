@@ -147,7 +147,7 @@ const ManageUsersPage = () => {
           formId="manageUser-form"
         >
           {{
-            title: "Add new User",
+            title: "Thêm người dùng",
             body: (
               <FormikForm edit={true} inititalValue onAdd={addUserHandler} />
             ),
@@ -165,7 +165,7 @@ const ManageUsersPage = () => {
           formId="manageUser-form"
         >
           {{
-            title: "Edit User",
+            title: "Chỉnh sửa người dùng",
             body: (
               <FormikForm
                 userInfo={showEditUserModal.inititalValues}
@@ -183,7 +183,7 @@ const ManageUsersPage = () => {
           setDeleteModal(false);
         }}
       >
-        {{ title: "Delete user", body: <h5>Are you sure?</h5> }}
+        {{ title: "Xoá người dùng", body: <h5>Bạn có chắc chắn xoá người dùng này?</h5> }}
       </ReactModal>
 
       <ManageUsers
