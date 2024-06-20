@@ -19,138 +19,167 @@ const Navigation = () => {
   };
 
   return (
-    <Navbar
-      fixed="top"
-      variant="dark"
-      expand="md"
-      bg="white"
-      className={classes.nav}
-
+    <>
+      {/* Navbar */}
+      <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        {/* Container wrapper */}
+        <div className="container">
+          {/* Navbar brand */}
+          <NavLink className="navbar-brand" to="/dashboard">
+            <img
+              src={"/images/logo.svg"}
+              alt="logo"
+              style={{ width: "160px", height: "40px" }}
+            />
+          </NavLink>
+          {/* Toggle button */}
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <i className="fas fa-bars" />
+          </button>
+          {/* Collapsible wrapper */}
+          <div className="collapse navbar-collapse" id="navbarSupportedContent">
+            {/* Left links */}
+            <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+              {redAuthToken.role === "Admin" && (
+                <>
+                  <li className="nav-item">
+                    <NavLink
+                      className="nav-link"
+                      to="/manage-users"
+                      activeClassName="active"
+                    >
+                      Người dùng
+                    </NavLink>
+                  </li>
+                  <li className="nav-item">
+                    <NavLink
+                      className="nav-link"
+                      to="/manage-jobs"
+                      activeClassName="active"
+                    >
+                      Công việc
+                    </NavLink>
+                  </li>
+                  <li className="nav-item">
+                    <NavLink
+                      className="nav-link"
+                      to="/reports"
+                      activeClassName="active"
+                    >
+                      Tài liệu
+                    </NavLink>
+                  </li>
+                  <li className="nav-item">
+                    <NavLink
+                      className="nav-link"
+                      to="/blog"
+                      activeClassName="active"
+                    >
+                      Blog
+                    </NavLink>
+                  </li>
+                </>
+              )}
+              {redAuthToken.role === "Job Provider" && (
+                <>
+                  <li className="nav-item">
+                    <NavLink
+                      className="nav-link"
+                      to="/manage-applicants"
+                      activeClassName="active"
+                    >
+                      Applicant
+                    </NavLink>
+                  </li>
+                  <li className="nav-item">
+                    <NavLink
+                      className="nav-link"
+                      to="/manage-jobs"
+                      activeClassName="active"
+                    >
+                      Jobs
+                    </NavLink>
+                  </li>
+                  <li className="nav-item">
+                    <NavLink
+                      className="nav-link"
+                      to="/provider-report"
+                      activeClassName="active"
+                    >
+                      Reports
+                    </NavLink>
+                  </li>
+                </>
+              )}
+              {redAuthToken.role === "User" && (
+                <>
+                  <li className="nav-item">
+                    <NavLink
+                      className="nav-link"
+                      to="/dashboard"
+                      activeClassName="active"
+                    >
+                      Việc làm
+                    </NavLink>
+                  </li>
+                  <li className="nav-item">
+                    <NavLink
+                      className="nav-link"
+                      to="/appliedJobs"
+                      activeClassName="active"
+                    >
+                      Việc đã nộp
+                    </NavLink>
+                  </li>
+                </>
+              )}
+              <li className="nav-item dropdown">
+              <Nav>
+  <Dropdown align={"end"} className={classes.dropDown}>
+    <Dropdown.Toggle
+      className={`nav-link dropdown-toggle ${classes.user} btn-light`}
+      id="navbarDropdownMenuLink"
+      role=""
+      data-bs-toggle="dropdown"
+      aria-expanded="false"
     >
-      <Container fluid>
-
-        <NavLink
-          className={classes.brand}
-          to="/dashboard"
-        >
-          <img src={"/images/logo.svg"} alt="logo" style={{ width: "160px", height: "40px" }} />
-        </NavLink>
-        <Navbar.Toggle aria-controls="navbar-dark-example" />
-        <Navbar.Collapse id="navbar-dark-example">
-          {redAuthToken.role === "Admin" && (
-            <Nav className={`me-auto ${classes.pageLinks}`}>
-              <NavLink
-                style={{ color: "black" }}
-                className={(navData) =>
-                  navData.isActive ? classes.active : ""
-                }
-                to="/manage-users"
-              >
-                Người dùng
-              </NavLink>
-              <NavLink style={{ color: "black" }}
-                className={(navData) =>
-                  navData.isActive ? classes.active : ""
-                }
-                to="/manage-jobs"
-              >
-                Công việc
-              </NavLink>
-              <NavLink style={{ color: "black" }}
-                className={(navData) =>
-                  navData.isActive ? classes.active : ""
-                }
-                to="/reports"
-              >
-                Tài liệu
-              </NavLink>
-              <NavLink style={{ color: "black" }}
-                className={(navData) =>
-                  navData.isActive ? classes.active : ""
-                }
-                to="/blog"
-              >
-                Blog
-              </NavLink>
-            </Nav>
-          )}
-          {redAuthToken.role === "Job Provider" && (
-            <Nav className={`me-auto ${classes.pageLinks}`}>
-              <NavLink
-                className={(navData) =>
-                  navData.isActive ? classes.active : ""
-                }
-                to="/manage-applicants"
-              >
-                Applicant
-              </NavLink>
-              <NavLink
-                className={(navData) =>
-                  navData.isActive ? classes.active : ""
-                }
-                to="/manage-jobs"
-              >
-                Jobs
-              </NavLink>
-              <NavLink
-                className={(navData) =>
-                  navData.isActive ? classes.active : ""
-                }
-                to="/provider-report"
-              >
-                Reports
-              </NavLink>
-            </Nav>
-          )}
-          {redAuthToken.role === "User" && (
-            <Nav className={`me-auto ${classes.pageLinks}`}>
-              <NavLink
-                className={(navData) =>
-                  navData.isActive ? classes.active : ""
-                }
-                to="/dashboard"
-              >
-                Apply
-              </NavLink>
-              <NavLink
-                className={(navData) =>
-                  navData.isActive ? classes.active : ""
-                }
-                to="/appliedJobs"
-              >
-                Applied Jobs
-              </NavLink>
-            </Nav>
-          )}
-          <Nav>
-            <Dropdown align={"end"} className={classes.dropDown}>
-              <Dropdown.Toggle className={classes.user}>
-                <span className={classes.username}>
-                  <span className={classes.userLogo}>
-                    <i className="bi bi-person-circle"></i>
-                  </span>
-                  {redAuthToken.userName}
-                </span>
-              </Dropdown.Toggle>
-
-              <Dropdown.Menu>
-                <Link to="/change-password" className={classes.changePassword}>
-                  Đổi mật khẩu
-                </Link>
-                <Dropdown.Divider />
-                <Dropdown.Item
-                  as={"button"}
-                  onClick={logoutHandler}
-                  className={classes.changePassword}
-                >
-                  Đăng xuất
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+      
+        <i className="bi bi-person-circle"></i> {redAuthToken.userName}
+     
+    </Dropdown.Toggle>
+    <Dropdown.Menu className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+      <Link to="/change-password" className={`dropdown-item ${classes.changePassword}`}>
+        Đổi mật khẩu
+      </Link>
+      <Dropdown.Divider />
+      <Dropdown.Item
+        as={"button"}
+        onClick={logoutHandler}
+        className={`dropdown-item ${classes.changePassword}`}
+      >
+        Đăng xuất
+      </Dropdown.Item>
+    </Dropdown.Menu>
+  </Dropdown>
+</Nav>
+              </li>
+            </ul>
+            {/* Left links */}
+          </div>
+          {/* Collapsible wrapper */}
+        </div>
+        {/* Container wrapper */}
+      </nav>
+      {/* Navbar */}
+    </>
   );
 };
 
