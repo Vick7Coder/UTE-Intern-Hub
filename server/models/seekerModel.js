@@ -20,6 +20,17 @@ let seekerSchema = new mongoose.Schema({
     resumeUrl:{type:String},
     headLine:{type:String},
     about:{type:String},
+    review :{
+        type:String,
+        default:"N/A"
+    },
+    status: {
+        type: String
+      },
+      providerId: {
+        type: Schema.Types.ObjectId,
+        ref: "recruiter"
+      },
 
 },
     {timestamps:true} 

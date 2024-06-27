@@ -24,7 +24,11 @@ export const recruiterRegister = async (req, res, next) => {
     const userExists = await Recruiters.findOne({ email });
 
     if (userExists) {
-      throw new Error("Email Already In Use")
+      throw new Error("Email registed before!");
+      return res.status(400).json({
+        success: false,
+        message: "Email đã tồn tại"
+      });
     }
 
     //password hasing (these are Synchronous)

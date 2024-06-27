@@ -15,14 +15,22 @@ let recruiterSchema = new mongoose.Schema({
     }),
     accountType :{
         type:String,
-        default:"seeker"
+        default:"recruiter"
     },
     contact:{type:String},
     location:{type:String},
     about:{type:String},
     profileUrl:{type:String},
 
-    jobPosts:[{type:Schema.Types.ObjectId, ref:"Jobs" }]  //data comes from the job model
+    jobPosts:[{type:Schema.Types.ObjectId, ref:"Jobs" }] , //data comes from the job model
+    applicants: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: "Seekers",
+          required: true,
+        }],
+        
+    
 },
     {timestamps:true} 
 )
