@@ -14,7 +14,7 @@ const app = express();
 
 const port = process.env.PORT || 8000;
 
-const allowedOrigins = ['http://localhost:5173', 'http://your-production-domain.com'];
+const allowedOrigins = ['*'];
 
 const corsOptions = {
   origin: (origin, callback) => {
