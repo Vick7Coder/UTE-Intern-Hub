@@ -1,7 +1,7 @@
 export const jobTypes = ["Full-Time", "Part-Time", "Contract", "Intern"];
 
 export const experience = [
-  { title: "Fresher(0 Year)", value: "0" },
+  { title: "Freshes Man", value: "0" },
   { title: "1 Year", value: "1" },
   { title: "2 Year", value: "2" },
   { title: "3 Year", value: "3" },

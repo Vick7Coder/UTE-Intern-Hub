@@ -174,7 +174,7 @@ const JobDetails = () => {
               </div>
 
               <div className="bg-[#c2c387bf] w-40 h-16 rounded-lg flex flex-col items-center justify-center">
-                <span className="text-sm">Experience</span>
+                <span className="text-sm">College experience</span>
                 <p className="text-lg font-semibold text-gray-700 capitalize">
                   {jobData.experience}
                 </p>

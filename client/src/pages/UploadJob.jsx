@@ -147,7 +147,7 @@ const UploadJob = () => {
               <div className='w-full sm:w-1/2'>
                 <TextInput
                   name='experience'
-                  label='Years of Experience'
+                  label='Years of university study'
                   placeholder='0 - 2'
                   type='text'
                   register={register("experience")}

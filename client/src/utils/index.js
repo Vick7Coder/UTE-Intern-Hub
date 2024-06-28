@@ -39,7 +39,7 @@ export const handleFileUpload = async (uploadFile) => {
     const formData = new FormData();
     formData.append("file", uploadFile);
     formData.append('upload_preset', 'm0rb0b5i');
-formData.append('api_key', '562788298864231');
+    formData.append('api_key', '562788298864231');
     try {
         const response = await axios.post(
             'https://api.cloudinary.com/v1_1/dsoc0fo9o/auto/upload', formData

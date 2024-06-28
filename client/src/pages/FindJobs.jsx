@@ -169,7 +169,7 @@ const FindJobs = () => {
             <div className="flex justify-between mb-3">
               <p className="flex items-center gap-2 font-semibold break-alls">
                 <BsStars />
-                Experience
+                Years of university study
               </p>
 
               <button>
