@@ -30,6 +30,9 @@ const corsOptions = {
 
 // Preflight request handling
 app.options('*', cors(corsOptions));
+app.options('/api/user/register', cors(), (req, res) => {
+  res.sendStatus(200);
+});
 
 app.use(cors(corsOptions));
 app.use(express.json());
