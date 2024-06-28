@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { Office } from "../assets";
+import { F88 } from "../assets";
+
 import { CustomButton, TextInput } from '../components';
 import * as yup from 'yup';
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -199,7 +201,7 @@ const Auth = () => {
           alt={"office"}
           effect="blur"
           className="hidden lg:block w-[40rem]"
-          src={Office}
+          src={F88}
         />
       </div>
     </>

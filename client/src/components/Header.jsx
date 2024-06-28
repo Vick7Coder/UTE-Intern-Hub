@@ -1,6 +1,5 @@
 import React from "react";
 import { popularSearch } from "../utils/data";
-import { HeroImage, TreegrowImg } from "../assets";
 import { AiOutlineSearch } from "react-icons/ai";
 import { CiLocationOn } from "react-icons/ci";
 import { CustomButton, SearchInput } from "./";
