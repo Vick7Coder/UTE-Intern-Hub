@@ -250,7 +250,7 @@ export const deleteUser = async (req, res, next) => {
   }
 }
 
-export const forgetPassword = async (req, res) => {
+export const forgetPassword = async (req, res, next) => {
   const { email } = req.body;
   try {
     //Find the user by email
@@ -295,7 +295,7 @@ export const forgetPassword = async (req, res) => {
     });
 
   } catch (error) {
-    res.status(500).send({ message: error.message });
+    next(error);
   }
 };
 
