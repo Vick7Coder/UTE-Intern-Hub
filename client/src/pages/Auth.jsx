@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { Office } from "../assets";
 import { F88 } from "../assets";
 
 import { CustomButton, TextInput } from '../components';
@@ -59,7 +58,7 @@ const Auth = () => {
     let URL = null;
 
     if (isForgotPassword) {
-      URL = accountType === 'seeker' ? '/user/forgot-password' : '/companies/forgot-password';
+      URL = accountType === 'seeker' ? '/user/forget-password' : '/companies/forgot-password';
     } else if (isRegister) {
       URL = accountType === 'seeker' ? '/user/register' : '/companies/register';
     } else {

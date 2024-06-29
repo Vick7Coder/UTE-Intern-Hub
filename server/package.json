@@ -23,9 +23,10 @@
     "mongo-sanitize": "^1.1.0",
     "mongoose": "^8.2.1",
     "morgan": "^1.10.0",
+    "nodemailer": "^6.9.14",
     "xss-clean": "^0.1.4"
   },
-  "devDependencies": {  
+  "devDependencies": {
     "nodemon": "^2.0.22"
   }
 }
