@@ -12,6 +12,7 @@ import {
   JobDetails,
   UploadJob,
   UserProfile,
+  ResetPassword,
 } from "../pages";
 import { useSelector } from "react-redux";
 
@@ -74,6 +75,7 @@ const AppRoutes = () => {
 
         <Route path="/about-us" element={<About />} />
         <Route path="/user-auth" element={<Auth />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
       </Routes>
 
       {user && <Footer />}
