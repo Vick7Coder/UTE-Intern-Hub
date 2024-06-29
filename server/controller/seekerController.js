@@ -263,7 +263,7 @@ export const forgetPassword = async (req, res, next) => {
     }
 
     //Generated a unique JWT token for the user that contains the user's id
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET , { expiresIn: "10m", });
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "10m", });
 
     //send the token to the user's email
     const transporter = nodemailer.createTransport({
@@ -300,28 +300,29 @@ export const forgetPassword = async (req, res, next) => {
 };
 
 
-export const resetPassword = async (req, res) => {
+export const resetPassword = async (req, res, next) => {
   try {
     // Verify the token sent by the user
     const decodedToken = jwt.verify(
       req.params.token,
-      process.env.JWT_SECRET_KEY
+      process.env.JWT_SECRET
     );
-
     // If the token is invalid, return an error
     if (!decodedToken) {
       return res.status(401).send({ message: "Invalid token" });
     }
+    const { userId } = decodedToken;
+    console.log(userId);
 
     // find the user with the id from the token
-    const user = await User.findOne({ _id: decodedToken.userId });
+    const user = await Seekers.findById({ _id: userId });
     if (!user) {
       return res.status(401).send({ message: "no user found" });
     }
 
     // Hash the new password
-    const salt = await bycrypt.genSalt(10);
-    req.body.newPassword = await bycrypt.hash(req.body.newPassword, salt);
+    const salt = await bcrypt.genSalt(10);
+    req.body.newPassword = await bcrypt.hash(req.body.newPassword, salt);
 
     // Update user's password, clear reset token and expiration time
     user.password = req.body.newPassword;
@@ -331,6 +332,6 @@ export const resetPassword = async (req, res) => {
     res.status(200).send({ message: "Password updated" });
   } catch (error) {
     // Send error response if any error occurs
-    res.status(500).send({ message: err.message });
+    next(error);
   }
 };
