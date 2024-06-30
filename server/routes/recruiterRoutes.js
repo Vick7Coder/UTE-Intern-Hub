@@ -1,9 +1,9 @@
 import express  from "express";
-import {rateLimit} from 'express-rate-limit'
+import {rateLimit} from 'express-rate-limit';
 import { recruiterLogin, recruiterRegister,  getCompanies,
     getCompanyById,
     getCompanyJobListing,
-    getCompanyProfile,updateCompanyProfile, } from "../controller/recruiterController.js";
+    getCompanyProfile,updateCompanyProfile, forgetPassword, resetRecruiterPassword } from "../controller/recruiterController.js";
 
 import userAuth from "../middleware/authMiddleware.js";
 
@@ -19,14 +19,14 @@ const limiter = rateLimit({
   standardHeaders: true, // Return how many requests they have left within the current time window.
 
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-})
+});
 
 
-router.post('/register',limiter, recruiterRegister)
+router.post('/register',limiter, recruiterRegister);
 
 // here the limiter acts as a traffic controller, ensuring that too many requests don't overload the system.
 
-router.post('/login', limiter, recruiterLogin)
+router.post('/login', limiter, recruiterLogin);
 
 // get details
 
@@ -37,5 +37,11 @@ router.get("/get-company/:id", userAuth, getCompanyById);
 
 // UPDATE DATA
 router.put("/update-company", userAuth, updateCompanyProfile);
+
+//forget password
+router.post("/forget-password", forgetPassword);
+
+//reset password
+router.post("/reset-password/:token", resetRecruiterPassword );
 
 export  default router;

@@ -1,16 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    seekerInfo:null
+    seekerInfo: null
 }
 
 const seekerSlice = createSlice({
-    name:"seekerInfo",
+    name: "seekerInfo",
     initialState,
-    reducers:{
-       seekerData:(state,action)=>{
-        state.seekerInfo = action.payload
-       },
+    reducers: {
+        seekerData: (state, action) => {
+            state.seekerInfo = action.payload
+        },
 
     }
 })

@@ -13,6 +13,7 @@ import {
   UploadJob,
   UserProfile,
   ResetPassword,
+  AdminProfile,
 } from "../pages";
 import { useSelector } from "react-redux";
 
@@ -69,13 +70,17 @@ const AppRoutes = () => {
 
           <Route path={"/job-details/:id"} element={<JobDetails />} />
           <Route path={"/applicants/:id"} element={<Applicants />} />
-        </Route>
 
+          <Route path="/admin-profile">
+            <Route index element={user?.accountType === "admin" ? <AdminProfile /> : <Navigate to="/" replace />} />
+            <Route path=":id" element={user?.accountType === "admin" ? <AdminProfile /> : <Navigate to="/" replace />} />
+          </Route>
+        </Route>
         {/* and if not authenticated he can only access these routes */}
 
         <Route path="/about-us" element={<About />} />
         <Route path="/user-auth" element={<Auth />} />
-        <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path=":userType/reset-password/:token" element={<ResetPassword />} />
       </Routes>
 
       {user && <Footer />}

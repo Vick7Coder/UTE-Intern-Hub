@@ -3,8 +3,11 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { apiRequest } from "../utils";
 import { toast } from "react-toastify";
+import { jwtDecode } from "jwt-decode";
+
 
 const ResetPassword = () => {
+    const navigate = useNavigate();
     const formik = useFormik({
         initialValues: {
             newPassword: "",
@@ -21,18 +24,19 @@ const ResetPassword = () => {
         onSubmit: async (values) => {
             const { newPassword } = values;
             const token = window.location.pathname.split("/").pop();
-
+            const decodedToken = jwtDecode(token);
+            const usertype = decodedToken.userType;
             try {
                 const response = await apiRequest({
-                    url: `user/reset-password/${token}`,
+                    url: `${usertype}/reset-password/${token}`,
                     data: { newPassword },
                     method: "POST",
                 });
                 if (response && response.status === 200) {
                     toast.success(response.data.message);
                     setTimeout(() => {
-                        window.location.href = "/user-auth";
-                    }, 3000);
+                        window.close();
+                    }, 5000);
                 } else {
                     toast.error(response.error || "An error occurred"); // Xử lý lỗi từ apiRequest
                 }

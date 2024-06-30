@@ -1,39 +1,40 @@
-import mongoose,{Schema} from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 let seekerSchema = new mongoose.Schema({
 
-    name:String,
-    
-    email:{
-        type:String,
-        unique:true,
-    },
-    password:String,
+    name: String,
 
-    accountType :{
-        type:String,
-        default:"seeker"
+    email: {
+        type: String,
+        unique: true,
     },
-    contact:{type:String},
-    location:{type:String},
-    profileUrl:{type:String},
-    resumeUrl:{type:String},
-    headLine:{type:String},
-    about:{type:String},
-    review :{
-        type:String,
-        default:"N/A"
+    password: String,
+
+    accountType: {
+        type: String,
+        default: "seeker"
+    },
+    contact: { type: String },
+    location: { type: String },
+    profileUrl: { type: String },
+    resumeUrl: { type: String },
+    headLine: { type: String },
+    about: { type: String },
+    review: {
+        type: String,
+        default: "N/A"
     },
     status: {
         type: String
-      },
-      providerId: {
+    },
+    providerId: {
         type: Schema.Types.ObjectId,
         ref: "recruiter"
-      },
+    },
+
 
 },
-    {timestamps:true} 
+    { timestamps: true }
 )
 
 const Seekers = mongoose.model("Seekers", seekerSchema)

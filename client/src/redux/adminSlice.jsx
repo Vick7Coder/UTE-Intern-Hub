@@ -1,20 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    companyInfo:null
+    adminInfo: null
 }
 
 const adminSlice = createSlice({
-    name:"AdminInfo",
+    name: "AdminInfo",
     initialState,
-    reducers:{
-       cmpData:(state,action)=>{
-        state.companyInfo = action.payload
-       },
+    reducers: {
+        adData: (state, action) => {
+            state.adminInfo = action.payload
+        },
 
     }
 })
 
-export const { cmpData} = adminSliceSlice.actions;
+export const { adData } = adminSlice.actions;
 
 export default adminSlice.reducer;

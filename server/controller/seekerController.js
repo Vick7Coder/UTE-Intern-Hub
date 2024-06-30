@@ -263,7 +263,7 @@ export const forgetPassword = async (req, res, next) => {
     }
 
     //Generated a unique JWT token for the user that contains the user's id
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "10m", });
+    const token = jwt.sign({ userId: user._id, userType: 'user' }, process.env.JWT_SECRET, { expiresIn: "10m", });
 
     //send the token to the user's email
     const transporter = nodemailer.createTransport({
@@ -281,7 +281,7 @@ export const forgetPassword = async (req, res, next) => {
       subject: "Reset Password",
       html: `<h1>Reset Your Password</h1>
       <p>Click on the following link to reset your password:</p>
-      <a href="http://localhost:5173/reset-password/${token}">http://localhost:5173/reset-password/${token}</a>
+      <a href="http://localhost:5173/user/reset-password/${token}">Click here!</a>
       <p>The link will expire in 10 minutes.</p>
       <p>If you didn't request a password reset, please ignore this email.</p>`,
     };
@@ -312,7 +312,7 @@ export const resetPassword = async (req, res, next) => {
       return res.status(401).send({ message: "Invalid token" });
     }
     const { userId } = decodedToken;
-    console.log(userId);
+ 
 
     // find the user with the id from the token
     const user = await Seekers.findById({ _id: userId });

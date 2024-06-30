@@ -26,7 +26,7 @@ let AdminSchema = new mongoose.Schema({
     {timestamps:true} 
 )
 
-const Admins = mongoose.model("Admins", recruiterSchema)
+const Admins = mongoose.model("Admins", AdminSchema)
 
 export default Admins;
 

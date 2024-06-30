@@ -17,7 +17,6 @@ import 'react-lazy-load-image-component/src/effects/blur.css';
 import { toast } from "react-toastify";
 
 const Auth = () => {
-
   const [isRegister, setIsRegister] = useState(true);
   const [accountType, setAccountType] = useState("seeker");
   const [isForgotPassword, setIsForgotPassword] = useState(false);
@@ -32,7 +31,8 @@ const Auth = () => {
   if (isRegister) {
     schema = yup.object().shape({
       email: yup.string().email("Enter a valid email").required("Email Is Required"),
-      [accountType === 'seeker' ? 'seekerName' : 'companyName']: yup.string().min(5, 'At least 5 Characters').required(),
+      [accountType === 'seeker' ? 'seekerName' :
+        accountType === 'company' ? 'companyName' : 'lectureName']: yup.string().min(5, 'At least 5 Characters').required(),
       password: yup.string().min(8, 'Length should be at least 8').max(16, 'Length cannot exceed 16'),
     });
   } else if (isForgotPassword) {
@@ -58,11 +58,16 @@ const Auth = () => {
     let URL = null;
 
     if (isForgotPassword) {
-      URL = accountType === 'seeker' ? '/user/forget-password' : '/companies/forgot-password';
+      URL = accountType === 'seeker' ? '/user/forget-password' :
+        accountType === 'company' ? '/companies/forget-password' :
+          accountType === 'admin' ? '/admin/forget-password' : '/lecture/forgot-password';
     } else if (isRegister) {
-      URL = accountType === 'seeker' ? '/user/register' : '/companies/register';
+      URL = accountType === 'seeker' ? '/user/register' :
+        accountType === 'company' ? '/companies/register' : '/lecture/register';
     } else {
-      URL = accountType === 'seeker' ? '/user/login' : '/companies/login';
+      URL = accountType === 'seeker' ? '/user/login' :
+        accountType === 'company' ? '/companies/login' :
+          accountType === 'admin' ? '/admin/login' : '/lecture/login';
     }
 
     const result = await apiRequest({
@@ -96,21 +101,34 @@ const Auth = () => {
             <h3 className="text-xl font-semibold text-black">
               {isForgotPassword ? "Forgot Password" : (isRegister ? "Create Account" : "Sign In")}
             </h3>
-
-            <div className="flex items-center justify-center py-2 gap-1">
+            <div className="flex items-center justify-center py-2 gap-1 flex-wrap">
               <button
                 className={`flex-1 px-1 sm:px-4 py-2 rounded text-sm outline-none ${accountType === "seeker" ? "bg-[#1d4fd862] text-blue-700 font-semibold" : "bg-white border border-blue-400"}`}
                 onClick={() => setAccountType("seeker")}
               >
-                User Account
+                User
               </button>
 
               <button
-                className={`flex-1 px-1 sm:px-4 py-2 rounded text-sm outline-none ${accountType !== "seeker" ? "bg-[#1d4fd862] text-blue-900 font-semibold" : "bg-white border border-blue-400"
-                  }`}
+                className={`flex-1 px-1 sm:px-4 py-2 rounded text-sm outline-none ${accountType === "company" ? "bg-[#1d4fd862] text-blue-900 font-semibold" : "bg-white border border-blue-400"}`}
                 onClick={() => setAccountType("company")}
               >
-                Company Account
+                Company
+              </button>
+              {!isRegister && (
+                <button
+                  className={`flex-1 px-1 sm:px-4 py-2 rounded text-sm outline-none ${accountType === "admin" ? "bg-[#1d4fd862] text-blue-900 font-semibold" : "bg-white border border-blue-400"}`}
+                  onClick={() => setAccountType("admin")}
+                >
+                  Admin
+                </button>
+              )}
+
+              <button
+                className={`flex-1 px-1 sm:px-4 py-2 rounded text-sm outline-none ${accountType === "lecture" ? "bg-[#1d4fd862] text-blue-900 font-semibold" : "bg-white border border-blue-400"}`}
+                onClick={() => setAccountType("lecture")}
+              >
+                Lecture
               </button>
             </div>
 
@@ -128,12 +146,18 @@ const Auth = () => {
                 <div className="w-full flex gap-1 md:gap-2">
                   <div className="w-full">
                     <TextInput
-                      label={accountType === "seeker" ? "Full Name" : "Company Name"}
-                      name={accountType === "seeker" ? "seekerName" : "companyName"}
-                      placeholder={accountType === "seeker" ? "eg. James John" : "eg. Facebook Inc"}
+                      label={accountType === "seeker" ? "Full Name" :
+                        accountType === "company" ? "Company Name" : "Lecture Name"}
+                      name={accountType === "seeker" ? "seekerName" :
+                        accountType === "company" ? "companyName" : "lectureName"}
+                      placeholder={accountType === "seeker" ? "eg. James John" :
+                        accountType === "company" ? "eg. Facebook Inc" : "eg. Lecture Name"}
                       type="text"
-                      register={register(accountType === "seeker" ? "seekerName" : "companyName")}
-                      error={accountType === "seeker" ? errors.seekerName && errors.seekerName.message : errors.companyName && errors.companyName.message}
+                      register={register(accountType === "seeker" ? "seekerName" :
+                        accountType === "company" ? "companyName" : "lectureName")}
+                      error={accountType === "seeker" ? errors.seekerName && errors.seekerName.message :
+                        accountType === "company" ? errors.companyName && errors.companyName.message :
+                          errors.lectureName && errors.lectureName.message}
                     />
                   </div>
                 </div>
@@ -185,7 +209,12 @@ const Auth = () => {
                     {isRegister ? "Already have an account?" : "Don't have an account?"}
                     <span
                       className="text-blue-600 ml-2 hover:text-blue-700 cursor-pointer"
-                      onClick={() => setIsRegister((prev) => !prev)}
+                      onClick={() => {
+                        setIsRegister((prev) => !prev);
+                        if (accountType === "admin") {
+                          setAccountType("seeker");
+                        }
+                      }}
                     >
                       {isRegister ? "Login" : "Create Account"}
                     </span>
