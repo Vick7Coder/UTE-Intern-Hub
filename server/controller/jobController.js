@@ -251,3 +251,35 @@ export const deleteJobPost = async (req, res, next) => {
     next(err);
   }
 };
+
+
+// Thêm cái này cho accepted applicant
+export const acceptApplicant = async (req, res, next) => {
+  try {
+    const { jobId } = req.body;
+    const userId = req.params.userId;
+
+    const job = await Jobs.findById(jobId);
+    if (!job) {
+      return res.status(404).json({ message: "Job not found" });
+    }
+
+    // Kiểm tra xem người dùng đã được chấp nhận chưa
+    if (job.acceptedApplicants.includes(userId)) {
+      return res.status(400).json({ message: "User already accepted for this job" });
+    }
+
+    // Thêm người dùng vào danh sách đã chấp nhận
+    job.acceptedApplicants.push(userId);
+
+    // Xóa người dùng khỏi danh sách ứng viên (nếu có)
+    job.applicants = job.applicants.filter(applicant => applicant.toString() !== userId);
+
+    await job.save();
+
+    res.status(200).json({ message: "Applicant accepted successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
+

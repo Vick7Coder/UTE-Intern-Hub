@@ -54,6 +54,28 @@ const NavBar = () => {
               )}
             </>
           )}
+
+          {user?.accountType === "seeker" ? (
+            <>
+              <li>
+                <Link to="/blogs">Blogs</Link>
+              </li>
+              <li>
+                <Link to="/applied-jobs">Applied</Link>
+              </li>
+            </>
+
+          ) : (
+            <>
+              <li>
+                <Link to="/blogs">Blogs</Link>
+              </li>
+              <li>
+                <Link to="/upload-blog">Upload Blog</Link>
+              </li>
+            </>
+          )}
+
           <li>
             <Link to="/about-us">About us</Link>
           </li>
@@ -96,6 +118,13 @@ const NavBar = () => {
             )}
           </>
         )}
+
+        {user?.accountType == "seeker" ? (
+          <Link to="/blogs" onClick={() => setIsOpen(false)}>Blogs </Link>
+        ) : (
+          <Link to="/upload-blog" onClick={() => setIsOpen(false)}>Upload Blog</Link>
+        )}
+
         <Link to="/about-us" onClick={() => setIsOpen(false)}>About</Link>
 
         {user?.token && (

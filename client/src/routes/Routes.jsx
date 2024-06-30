@@ -14,6 +14,9 @@ import {
   UserProfile,
   ResetPassword,
   AdminProfile,
+  BlogDetails,
+  FindBlogs,
+  UploadBlog,
 } from "../pages";
 import { useSelector } from "react-redux";
 
@@ -44,6 +47,8 @@ const AppRoutes = () => {
             path="/companies"
             element={user?.accountType !== "company" && <Companies />}
           />
+          <Route path="/blogs" element={<FindBlogs />} />
+          <Route path={"/blog-details/:id"} element={<BlogDetails />} />
 
           <Route
             path={
@@ -67,7 +72,10 @@ const AppRoutes = () => {
             path={"/upload-job"}
             element={user?.accountType !== "seeker" && <UploadJob />}
           />
-
+          <Route
+            path={"/upload-blog"}
+            element={user?.accountType !== "seeker" && <UploadBlog />}
+          />
           <Route path={"/job-details/:id"} element={<JobDetails />} />
           <Route path={"/applicants/:id"} element={<Applicants />} />
 

@@ -1,14 +1,16 @@
 import mongoose, { Schema } from "mongoose";
 
-const BlogSchema = new mongoose.Schema(
+// Định nghĩa Blog Schema
+const blogSchema = new mongoose.Schema(
     {
-
-        BlogTitle: { type: String },
-        ContentBlog: { description: { type: String }, requirements: { type: String } },
+        title: { type: String, required: true },
+        content: { type: String, required: true },
+        recruiter: { type: Schema.Types.ObjectId, ref: "Recruiters", required: true }
     },
     { timestamps: true }
 );
 
-const Blogs = mongoose.model("Blogs", BlogSchema);
+// Tạo Blog Model
+const Blog = mongoose.model("Blog", blogSchema);
 
-export default Blogs;
+export default Blog;
