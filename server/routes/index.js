@@ -4,6 +4,7 @@ import seekerRoutes from './seekerRoutes.js'
 import recruiterRoutes from './recruiterRoutes.js'
 import jobRoutes from './jobRoutes.js'
 import tokenRoute from './tokenRoute.js'
+import adminRoute from './adminRoutes.js'
 
 const router = express.Router();
 
@@ -13,6 +14,7 @@ router.use(`${path}user`, seekerRoutes);
 router.use(`${path}companies`, recruiterRoutes);
 router.use(`${path}jobs`, jobRoutes);
 router.use(`${path}token`, tokenRoute);
+router.use(`${path}admin`, adminRoute);
 
 
 export default router;

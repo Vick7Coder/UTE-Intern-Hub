@@ -6,4 +6,5 @@ const router = express.Router();
 
 router.get("/checkToken", userAuth);
 
+
 export default router;
