@@ -6,6 +6,7 @@ import {
   getJobById,
   getJobPosts,
   updateJob,
+  acceptApplicant,
 } from "../controller/jobController.js"
 
 const router = express.Router();
@@ -22,5 +23,6 @@ router.get("/get-job-detail/:id", getJobById);
 
 // DELETE JOB POST
 router.delete("/delete-job/:jobId", userAuth, deleteJobPost);
-
+// Thêm cái này cho accepted applicant
+router.post("/accept-user/:userId", userAuth, acceptApplicant);
 export default router;
