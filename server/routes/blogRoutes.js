@@ -6,7 +6,7 @@ import {
     getBlogById,
     getBlogPosts,
     updateBlog,
-} from '../controller/blogController.js';
+} from '../controller/BlogController.js';
 
 const router = express.Router();
 
