@@ -64,8 +64,9 @@ const BlogDetails = () => {
     }
 
     // Check if the logged-in user is a recruiter/company and the author of the blog
-    const canEdit = user?.accountType === "company" && blogData?.recruiter?._id === user?.id;
 
+    // const canEdit = user?.accountType === "company" && blogData?.recruiter?._id === user?.id;
+    const canEdit = user?.accountType === "admin";
     return (
         <div className="container mx-auto">
             <div className="w-full bg-white px-5 py-10 shadow-md">

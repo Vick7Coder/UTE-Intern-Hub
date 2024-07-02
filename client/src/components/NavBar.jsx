@@ -5,13 +5,17 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/userSlice";
 import { MenuList } from "./";
+import { useNavigate } from "react-router-dom";
 
 const NavBar = () => {
   const { user } = useSelector((state) => state.user);
 
   const [isOpen, setIsOpen] = useState(false); // navbar display - mobile size
+  const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false); // user dropdown visibility
+  const [selectedUserType, setSelectedUserType] = useState("User"); // selected user type
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   // localStorage change detecting and logging out the user
   useEffect(() => {
@@ -23,6 +27,19 @@ const NavBar = () => {
     window.addEventListener("storage", handleStorageChange);
     return () => window.removeEventListener("storage", handleStorageChange);
   }, [dispatch]);
+
+  const toggleUserDropdown = () => {
+    setIsUserDropdownOpen((prev) => !prev);
+  };
+
+  const handleUserTypeSelect = (type) => {
+    setSelectedUserType(type);
+    setIsUserDropdownOpen(false);
+    setIsOpen(false);
+    if (type === "Company") {
+      navigate("/companies");
+    }
+  };
 
   return (
     <div className="relative bg-[#f7fdfd] z-50">
@@ -38,47 +55,104 @@ const NavBar = () => {
         <ul className="hidden lg:flex gap-10 text-md font-bold">
           {user?.token && (
             <>
-              <li>
-                <Link to="/">
-                  {user?.accountType === "seeker" ? "Find Jobs" : "Jobs"}
-                </Link>
-              </li>
-              {user?.accountType === "seeker" ? (
-                <li>
-                  <Link to="/companies">Companies</Link>
-                </li>
-              ) : (
-                <li>
-                  <Link to="/upload-job">Upload Job</Link>
-                </li>
+              {user?.accountType === "seeker" && (
+                <>
+                  <li>
+                    <Link to="/">Find Jobs</Link>
+                  </li>
+                  <li>
+                    <Link to="/companies">Companies</Link>
+                  </li>
+                  <li>
+                    <Link to="/blogs">Blogs</Link>
+                  </li>
+                  <li>
+                    <Link to="/applied-jobs">Applied</Link>
+                  </li>
+                </>
               )}
+              {user?.accountType === "company" && (
+                <>
+                  <li>
+                    <Link to="/">Jobs</Link>
+                  </li>
+                  <li>
+                    <Link to="/upload-job">Upload Job</Link>
+                  </li>
+                  <li>
+                    <Link to="/blogs">Blogs</Link>
+                  </li>
+                </>
+              )}
+              {user?.accountType === "admin" && (
+                <>
+                  <li>
+                    <Link to="/">Jobs</Link>
+                  </li>
+                  <li>
+                    <Link to="/upload-job">Upload Job</Link>
+                  </li>
+                  <li>
+                    <Link to="/blogs">Blogs</Link>
+                  </li>
+                  <li>
+                    <Link to="/upload-blog">Upload Blog</Link>
+                  </li>
+                  <li className="relative">
+                    <button onClick={toggleUserDropdown} className="focus:outline-none">
+                      {selectedUserType}
+                    </button>
+                    {isUserDropdownOpen && (
+                      <ul className="absolute bg-white shadow-lg rounded-lg mt-2">
+                        <li>
+                          <button className="block px-4 py-2" onClick={() => handleUserTypeSelect("Seeker")}>
+                            Seeker
+                          </button>
+                        </li>
+                        <li>
+                          <button className="block px-4 py-2" onClick={() => handleUserTypeSelect("Company")}>
+                            Company
+                          </button>
+                        </li>
+                        <li>
+                          <button className="block px-4 py-2" onClick={() => handleUserTypeSelect("Lecturer")}>
+                            Lecturer
+                          </button>
+                        </li>
+                        <li>
+                          <button className="block px-4 py-2" onClick={() => handleUserTypeSelect("Admin")}>
+                            Admin
+                          </button>
+                        </li>
+                      </ul>
+                    )}
+                  </li>
+                </>
+              )}
+              {user?.accountType === "lecture" && (
+                <>
+                  <li>
+                    <Link to="/">Find Jobs</Link>
+                  </li>
+                  <li>
+                    <Link to="/companies">Companies</Link>
+                  </li>
+                  <li>
+                    <Link to="/blogs">Blogs</Link>
+                  </li>
+                  <li>
+                    <Link to="/applied-jobs">Applied</Link>
+                  </li>
+                  <li>
+                    <Link to="/students">Student</Link>
+                  </li>
+                </>
+              )}
+              <li>
+                <Link to="/about-us">About us</Link>
+              </li>
             </>
           )}
-
-          {user?.accountType === "seeker" ? (
-            <>
-              <li>
-                <Link to="/blogs">Blogs</Link>
-              </li>
-              <li>
-                <Link to="/applied-jobs">Applied</Link>
-              </li>
-            </>
-
-          ) : (
-            <>
-              <li>
-                <Link to="/blogs">Blogs</Link>
-              </li>
-              <li>
-                <Link to="/upload-blog">Upload Blog</Link>
-              </li>
-            </>
-          )}
-
-          <li>
-            <Link to="/about-us">About us</Link>
-          </li>
         </ul>
 
         {/* Right side of the navbar */}
@@ -108,30 +182,114 @@ const NavBar = () => {
       >
         {user?.token && (
           <>
-            <Link to="/" onClick={() => setIsOpen(false)}>
-              {user?.accountType === "seeker" ? "Find Jobs" : "Jobs"}
-            </Link>
-            {user?.accountType === "seeker" ? (
-              <Link to="/companies" onClick={() => setIsOpen(false)}>Companies</Link>
-            ) : (
-              <Link to="/upload-job" onClick={() => setIsOpen(false)}>Upload Job</Link>
+            {user?.accountType === "seeker" && (
+              <>
+                <Link to="/" onClick={() => setIsOpen(false)}>
+                  Find Jobs
+                </Link>
+                <Link to="/companies" onClick={() => setIsOpen(false)}>
+                  Companies
+                </Link>
+                <Link to="/blogs" onClick={() => setIsOpen(false)}>
+                  Blogs
+                </Link>
+                <Link to="/applied-jobs" onClick={() => setIsOpen(false)}>
+                  Applied
+                </Link>
+              </>
             )}
+            {user?.accountType === "recruiter" && (
+              <>
+                <Link to="/" onClick={() => setIsOpen(false)}>
+                  Jobs
+                </Link>
+                <Link to="/upload-job" onClick={() => setIsOpen(false)}>
+                  Upload Job
+                </Link>
+                <Link to="/blogs" onClick={() => setIsOpen(false)}>
+                  Blogs
+                </Link>
+              </>
+            )}
+            {user?.accountType === "admin" && (
+              <>
+                <Link to="/" onClick={() => setIsOpen(false)}>
+                  Jobs
+                </Link>
+                <Link to="/upload-job" onClick={() => setIsOpen(false)}>
+                  Upload Job
+                </Link>
+                <Link to="/blogs" onClick={() => setIsOpen(false)}>
+                  Blogs
+                </Link>
+                <Link to="/upload-blog" onClick={() => setIsOpen(false)}>
+                  Upload Blog
+                </Link>
+                <div className="relative">
+                  <button onClick={toggleUserDropdown} className="block focus:outline-none">
+                    {selectedUserType}
+                  </button>
+                  {isUserDropdownOpen && (
+                    <ul className="absolute bg-white shadow-lg rounded-lg mt-2">
+                      <li>
+                        <button className="block px-4 py-2" onClick={() => handleUserTypeSelect("Seeker")}>
+                          Seeker
+                        </button>
+                      </li>
+                      <li>
+                        <button className="block px-4 py-2" onClick={() => handleUserTypeSelect("Company")}>
+                          Company
+                        </button>
+                      </li>
+                      <li>
+                        <button className="block px-4 py-2" onClick={() => handleUserTypeSelect("Lecturer")}>
+                          Lecturer
+                        </button>
+                      </li>
+                      <li>
+                        <button className="block px-4 py-2" onClick={() => handleUserTypeSelect("Admin")}>
+                          Admin
+                        </button>
+                      </li>
+                    </ul>
+                  )}
+                </div>
+              </>
+            )}
+            {user?.accountType === "lecture" && (
+              <>
+                <Link to="/" onClick={() => setIsOpen(false)}>
+                  Find Jobs
+                </Link>
+                <Link to="/companies" onClick={() => setIsOpen(false)}>
+                  Companies
+                </Link>
+                <Link to="/blogs" onClick={() => setIsOpen(false)}>
+                  Blogs
+                </Link>
+                <Link to="/applied-jobs" onClick={() => setIsOpen(false)}>
+                Applied
+                </Link>
+                <Link to="/students" onClick={() => setIsOpen(false)}>
+                  Student
+                </Link>
+              </>
+            )}
+            <Link to="/about-us" onClick={() => setIsOpen(false)}>
+              About us
+            </Link>
           </>
         )}
 
-        {user?.accountType == "seeker" ? (
-          <Link to="/blogs" onClick={() => setIsOpen(false)}>Blogs </Link>
-        ) : (
-          <Link to="/upload-blog" onClick={() => setIsOpen(false)}>Upload Blog</Link>
-        )}
-
-        <Link to="/about-us" onClick={() => setIsOpen(false)}>About</Link>
-
-        {user?.token && (
-          <div className="w-full py-10">
-            <MenuList user={user} />
-          </div>
-        )}
+        <div className="my-5">
+          {!user?.token ? (
+            <div className="text-red-700 font-semibold">
+              @The system requires an account to use the services!
+            </div>
+          ) : (
+            <MenuList user={user} position="relative" />
+          )}
+        </div>
       </div>
     </div>
   );

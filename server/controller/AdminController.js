@@ -232,28 +232,19 @@ export const getAdminById = async (req, res, next) => {
   try {
 
     const { id } = req.params;
-
-    console.log('============REQ===================================');
-    console.log(req);
-    console.log('============PARAMS===================================');
-    console.log(req.params);
-    console.log('============END===================================');
-
-    const ad = await Admins.findById({ _id: id });
-
-    console.log('================ADMIN=======================');
-    console.log(ad);
-    console.log('===========================================================');
+    const ad = await Admins.findById(id);
 
     if (!ad) {
       throw new Error("Admin Not Found")
     }
+    console.log('------Vô--------');
 
 
     res.status(200).json({
       success: true,
       data: ad,
     });
+    console.log('------Vô--------');
 
   }
   catch (err) {
