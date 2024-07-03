@@ -141,9 +141,6 @@ const NavBar = () => {
                     <Link to="/blogs">Blogs</Link>
                   </li>
                   <li>
-                    <Link to="/applied-jobs">Applied</Link>
-                  </li>
-                  <li>
                     <Link to="/students">Student</Link>
                   </li>
                 </>
@@ -266,9 +263,6 @@ const NavBar = () => {
                 </Link>
                 <Link to="/blogs" onClick={() => setIsOpen(false)}>
                   Blogs
-                </Link>
-                <Link to="/applied-jobs" onClick={() => setIsOpen(false)}>
-                Applied
                 </Link>
                 <Link to="/students" onClick={() => setIsOpen(false)}>
                   Student

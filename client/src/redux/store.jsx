@@ -4,6 +4,7 @@ import userReducer from './userSlice'
 import cmpReducer from './companySlice'
 import seekerReducer from './seekerSlice'
 import adminReducer from './adminSlice'
+import lecturerReducer from './lecturerSlice'
 
 
 export const store = configureStore({
@@ -13,6 +14,7 @@ export const store = configureStore({
         cmp : cmpReducer,
         seeker: seekerReducer,
         ad: adminReducer,
+        lt: lecturerReducer,
     }
 
 })

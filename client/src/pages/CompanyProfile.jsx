@@ -74,7 +74,7 @@ const CompanyProfile = () => {
   }
           </h2>
 
-          {(user?.accountType !== 'seeker' || user?.accountType !== 'lecturer') && (id ? id === user.id : !id) &&(
+          {(user?.accountType !== 'seeker' || user?.accountType !== 'lecture') && (id ? id === user.id : !id) &&(
             
               <div className='flex items-center justifu-center py-5 md:py-0 gap-4'>
                 <CustomButton

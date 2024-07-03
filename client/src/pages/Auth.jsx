@@ -60,14 +60,14 @@ const Auth = () => {
     if (isForgotPassword) {
       URL = accountType === 'seeker' ? '/user/forget-password' :
         accountType === 'company' ? '/companies/forget-password' :
-          accountType === 'admin' ? '/admin/forget-password' : '/lecture/forgot-password';
+          accountType === 'admin' ? '/admin/forget-password' : '/lecturer/forgot-password';
     } else if (isRegister) {
       URL = accountType === 'seeker' ? '/user/register' :
-        accountType === 'company' ? '/companies/register' : '/lecture/register';
+        accountType === 'company' ? '/companies/register' : '/lecturer/register';
     } else {
       URL = accountType === 'seeker' ? '/user/login' :
         accountType === 'company' ? '/companies/login' :
-          accountType === 'admin' ? '/admin/login' : '/lecture/login';
+          accountType === 'admin' ? '/admin/login' : '/lecturer/login';
     }
 
     const result = await apiRequest({
