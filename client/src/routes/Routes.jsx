@@ -17,6 +17,7 @@ import {
   BlogDetails,
   FindBlogs,
   UploadBlog,
+  AppliedJobs,
 } from "../pages";
 import { useSelector } from "react-redux";
 
@@ -89,6 +90,9 @@ const AppRoutes = () => {
         <Route path="/about-us" element={<About />} />
         <Route path="/user-auth" element={<Auth />} />
         <Route path=":userType/reset-password/:token" element={<ResetPassword />} />
+
+        <Route path="/applied-jobs" element={<AppliedJobs />} />
+
       </Routes>
 
       {user && <Footer />}

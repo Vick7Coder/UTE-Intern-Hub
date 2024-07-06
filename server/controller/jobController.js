@@ -159,7 +159,7 @@ export const getJobPosts = async (req, res, next) => {
 
     // pagination
     const page = Number(req.query.page) || 1;
-    const limit = Number(req.query.limit) || 5;
+    const limit = Number(req.query.limit) || 8;
 
 
     //records count
@@ -252,7 +252,7 @@ export const deleteJobPost = async (req, res, next) => {
   }
 };
 
-
+// 
 // Thêm cái này cho accepted applicant
 export const acceptApplicant = async (req, res, next) => {
   try {

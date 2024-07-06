@@ -60,9 +60,14 @@ const NavBar = () => {
               <li>
                 <Link to="/blogs">Blogs</Link>
               </li>
+<<<<<<< Updated upstream
               <li>
                 <Link to="/applied-jobs">Applied</Link>
               </li>
+=======
+              <li><Link to="/applied-jobs">Applied Jobs</Link></li>
+
+>>>>>>> Stashed changes
             </>
 
           ) : (

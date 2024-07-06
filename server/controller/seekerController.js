@@ -312,7 +312,7 @@ export const resetPassword = async (req, res, next) => {
       return res.status(401).send({ message: "Invalid token" });
     }
     const { userId } = decodedToken;
- 
+
 
     // find the user with the id from the token
     const user = await Seekers.findById({ _id: userId });

@@ -3,12 +3,12 @@ import moment from "moment"; //job posted time
 import { Link } from "react-router-dom";
 import { NoProfile } from "../assets";
 
-const JobCard = ({data,user}) => {
+const JobCard = ({ data, user }) => {
 
   return (
     <Link to={user ? `/applicants/${data?._id}` : `/job-details/${data?._id}`} >
-      <div className=' max-[600px]:w-full  w-[17rem] xl:w-[20rem] 2xl:w-[18rem]  bg-white flex flex-col shadow-lg rounded-md px-3 py-5 gap-4' >
-        <div className='flex gap-5'>
+      <div className=' w-[17rem] xl:w-[20rem] 2xl:w-[18rem] h-[18rem] bg-white flex flex-col shadow-lg rounded-md px-3 py-5 gap-4 overflow-hidden' >
+        <div className='flex gap-6'>
           <img
             src={data?.logo ?? NoProfile}
             alt={data?.name}
@@ -16,7 +16,7 @@ const JobCard = ({data,user}) => {
           />
 
           <div >
-            <p className='text-lg font-semibold'>{data?.jobTitle?.length > 20 ? data?.jobTitle.slice(0, 20)+"..." : data?.jobTitle}</p>
+            <p className='text-lg font-semibold'>{data?.jobTitle?.length > 20 ? data?.jobTitle.slice(0, 20) + "..." : data?.jobTitle}</p>
             <span className='flex gap-2 items-center break-all'>
               <GoLocation className='text-slate-900 text-sm' />
               {data?.location}

@@ -15,7 +15,7 @@ const UserProfile = () => {
   const { user } = useSelector((state) => state.user);
   const { seekerInfo } = useSelector((state) => state.seeker);
 
-  const {id} = useParams();
+  const { id } = useParams();
 
   const [open, setOpen] = useState(false);
 
@@ -23,49 +23,49 @@ const UserProfile = () => {
   const navigate = useNavigate();
 
 
-  const getUserData = async()=>{
+  const getUserData = async () => {
 
     const result = await apiRequest({
-      url:`/user/get-user-profile/${id}`,
-      token:user.token,
-      method:'GET'
+      url: `/user/get-user-profile/${id}`,
+      token: user.token,
+      method: 'GET'
     })
 
 
-    if(result.status === 200) {
+    if (result.status === 200) {
       dispatch(seekerData(result.data.user))
     }
-    else{
+    else {
       console.log(result)
       toast.error("Something Went Wrong")
     }
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     id && getUserData();
-  },[id])
+  }, [id])
 
-  const deleteAccount = async()=>{
+  const deleteAccount = async () => {
 
 
-  if( window.confirm("Do you want to delete your account? ")){
+    if (window.confirm("Do you want to delete your account? ")) {
 
-    const result= await apiRequest({
-      url:`/user/delete-user/${user.id}`,
-      token:user.token,
-      method:"DELETE"
-    })
-    console.log(result)
+      const result = await apiRequest({
+        url: `/user/delete-user/${user.id}`,
+        token: user.token,
+        method: "DELETE"
+      })
+      console.log(result)
 
-    if(result.status === 200){
-      toast.success(result.data.message)
-      dispatch(logout())
-      navigate('/user-auth')
+      if (result.status === 200) {
+        toast.success(result.data.message)
+        dispatch(logout())
+        navigate('/user-auth')
+      }
+      else {
+        toast.error("Something Went Wrong")
+      }
     }
-    else{
-      toast.error("Something Went Wrong")
-    }
-  }
 
   }
 
@@ -118,32 +118,32 @@ const UserProfile = () => {
               />
             </div>
 
-           
+
           </div>
 
           {user.accountType === "seeker" ? (
-              <div className="w-full sm:flex justify-around ">
-                <button
-                  className="w-full sm:w-1/4  bg-blue-600 text-white mt-4 py-2 rounded"
-                  onClick={() => setOpen(true)}
-                >
-                  Edit Profile
-                </button>
+            <div className="w-full sm:flex justify-around ">
+              <button
+                className="w-full sm:w-1/4  bg-blue-600 text-white mt-4 py-2 rounded"
+                onClick={() => setOpen(true)}
+              >
+                Edit Profile
+              </button>
 
-                <button
-                  className="w-full sm:w-1/4 bg-red-600 text-white mt-4 py-2 rounded"
-                  onClick={deleteAccount}
-                >
-                 Delete Account
-                </button>
-              </div>
-            ):
+              <button
+                className="w-full sm:w-1/4 bg-red-600 text-white mt-4 py-2 rounded"
+                onClick={deleteAccount}
+              >
+                Delete Account
+              </button>
+            </div>
+          ) :
             <div className="flex justify-start">
               <button className=" bg-blue-600 p-2 rounded text-white"
-               onClick={()=>window.location.href=`mailto:${seekerInfo?.email}`}
-               >Contact</button>
+                onClick={() => window.location.href = `mailto:${seekerInfo?.email}`}
+              >Contact</button>
             </div>
-            }
+          }
         </div>
       </div>
 

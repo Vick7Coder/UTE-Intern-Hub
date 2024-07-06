@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const BlogCard = ({ data }) => {
     return (
         <Link to={`/blog-details/${data?._id}`}>
-            <div className="max-[600px] w-full w-[17rem] xl:w-[20rem] 2xl:w-[18rem] bg-white flex flex-col shadow-lg rounded-md px-3 py-5 gap-4">
+            <div className="w-[17rem] xl:w-[20rem] 2xl:w-[18rem] h-[12rem] bg-white flex flex-col shadow-lg rounded-md px-3 py-5 gap-4 overflow-hidden">
                 <div className="flex gap-5">
                     <div>
                         <p className="text-lg font-semibold">
@@ -14,9 +14,8 @@ const BlogCard = ({ data }) => {
                         </p>
                     </div>
                 </div>
-
-                <div className="py-2">
-                    <p className="text-sm break-all text-justify">
+                <div className="py-2 flex-1">
+                    <p className="text-sm break-words text-justify overflow-hidden overflow-ellipsis h-full">
                         {data?.content?.slice(0, 120) + "..."}
                     </p>
                 </div>
