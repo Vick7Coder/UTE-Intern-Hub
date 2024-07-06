@@ -31,7 +31,8 @@ let seekerSchema = new mongoose.Schema({
         type: Schema.Types.ObjectId,
         ref: "recruiter"
     },
-
+    // them de hien thi danh sach job da apply seeker
+    appliedJobs: [{ type: Schema.Types.ObjectId, ref: 'Jobs' }],
 
 },
     { timestamps: true }

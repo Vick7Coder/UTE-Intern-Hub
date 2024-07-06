@@ -206,31 +206,68 @@ export const getUserById = async (req, res, next) => {
 }
 
 export const applyJob = async (req, res, next) => {
-
   try {
-
     const { jobId } = req.params;
-    const id = req.user.userId
+    const userId = req.user.userId;
 
-    //pushing the user id to the applicants array and updating the record
+    // Find the job by jobId
     const job = await Jobs.findById(jobId);
 
-    job.applicants.push(id);
+    if (!job) {
+      throw new Error("Job not found");
+    }
 
-    await Jobs.findByIdAndUpdate(jobId, job, {
-      new: true,
-    });
+    // Update the job's applicants array with userId
+    job.applicants.push(userId);
+    await job.save();
+
+    // Update the seeker's appliedJobs array with jobId
+    const seeker = await Seekers.findById(userId);
+
+    if (!seeker) {
+      throw new Error("Seeker not found");
+    }
+
+    seeker.appliedJobs.push(jobId);
+    await seeker.save();
 
     res.status(200).json({
-      message: "Applied Successfully"
-    })
+      success: true,
+      message: "Applied Successfully",
+    });
+  } catch (err) {
+    console.log(err);
+    next(err);
   }
+};
 
-  catch (err) {
-    console.log(err)
-    next(err)
-  }
-}
+
+// export const applyJob = async (req, res, next) => {
+
+//   try {
+
+//     const { jobId } = req.params;
+//     const id = req.user.userId
+
+//     //pushing the user id to the applicants array and updating the record
+//     const job = await Jobs.findById(jobId);
+
+//     job.applicants.push(id);
+
+//     await Jobs.findByIdAndUpdate(jobId, job, {
+//       new: true,
+//     });
+
+//     res.status(200).json({
+//       message: "Applied Successfully"
+//     })
+//   }
+
+//   catch (err) {
+//     console.log(err)
+//     next(err)
+//   }
+// }
 
 export const deleteUser = async (req, res, next) => {
   try {
@@ -333,5 +370,31 @@ export const resetPassword = async (req, res, next) => {
   } catch (error) {
     // Send error response if any error occurs
     next(error);
+  }
+};
+
+// Trong seekerController.js
+export const getAppliedJobs = async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+
+    console.log("Fetching applied jobs for user:", userId);  // Thêm log này
+
+    const seeker = await Seekers.findById(userId).populate('appliedJobs');
+
+    if (!seeker) {
+      console.log("User not found");  // Thêm log này
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    console.log("Applied jobs:", seeker.appliedJobs);  // Thêm log này
+
+    res.status(200).json({
+      success: true,
+      appliedJobs: seeker.appliedJobs
+    });
+  } catch (error) {
+    console.error("Error in getAppliedJobs:", error);
+    res.status(500).json({ success: false, message: "Server error" });
   }
 };

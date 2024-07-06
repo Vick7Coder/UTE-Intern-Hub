@@ -73,36 +73,6 @@ const CompanyProfile = () => {
               )
             }
           </h2>
-
-<<<<<<< Updated upstream
-          {user?.accountType !== 'seeker' && (id ? id === user.id : !id) &&(
-            
-              <div className='flex items-center justifu-center py-5 md:py-0 gap-4'>
-                <CustomButton
-                  onClick={() => setOpenForm(true)}
-                  iconRight={<FiEdit3 />}
-                  containerStyles={`py-1.5 px-3 md:px-5 focus:outline-none bg-blue-600  hover:bg-blue-700 text-white rounded text-sm md:text-base border border-blue-600`}
-                />
-=======
-          {user?.accountType !== 'seeker' && (id ? id === user.id : !id) && (
-
-            <div className='flex items-center justifu-center py-5 md:py-0 gap-4'>
-              <CustomButton
-                onClick={() => setOpenForm(true)}
-                iconRight={<FiEdit3 />}
-                containerStyles={`py-1.5 px-3 md:px-5 focus:outline-none bg-blue-600  hover:bg-blue-700 text-white rounded text-sm md:text-base border border-blue-600`}
-              />
-
-              <Link to='/upload-job'>
-                <CustomButton
-                  title='Upload Job'
-                  containerStyles={`text-blue-600 py-1.5 px-3 md:px-5 focus:outline-none  rounded text-sm md:text-base border border-blue-600`}
-                />
-              </Link>
-            </div>
-          )}
->>>>>>> Stashed changes
-
         </div>
 
         <div className='w-full flex flex-col md:flex-row justify-start md:justify-between mt-4 md:mt-8 text-base'>

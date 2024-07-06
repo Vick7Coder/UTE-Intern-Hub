@@ -1,44 +1,61 @@
-// src/pages/AppliedJobs.jsx
 import React, { useEffect, useState } from "react";
-import JobCard from "../components/JobCard";
-import { apiRequest, updateURl } from '../utils';
+import { useSelector } from "react-redux";
+import { JobCard } from "../components";
+import { apiRequest } from "../utils";
 
 const AppliedJobs = () => {
-    const [jobs, setJobs] = useState([]);
+    const { user } = useSelector((state) => state.user);
+    const [appliedJobs, setAppliedJobs] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchAppliedJobs = async () => {
+            setIsLoading(true);
+            setError(null);
             try {
-                const response = await apiRequest.get("/jobs/applied-jobs");
-                if (response.status === 200) {
-                    setJobs(response.data.data);
+                const result = await apiRequest({
+                    url: `/user/applied-jobs/${user?.id}`,
+                    method: "GET",
+                    token: user?.token,
+                });
+
+                if (result.data?.success) {
+                    setAppliedJobs(result.data.appliedJobs || []);
                 } else {
-                    console.error("Failed to fetch applied jobs:", response.data);
+                    setError(result.data?.message || "Failed to fetch applied jobs");
                 }
             } catch (error) {
                 console.error("Error fetching applied jobs:", error);
+                setError("An error occurred while fetching applied jobs");
             } finally {
                 setIsLoading(false);
             }
         };
 
-        fetchAppliedJobs();
-    }, []);
+        if (user?.id && user?.token) {
+            fetchAppliedJobs();
+        }
+    }, [user?.id, user?.token]);
+
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    if (error) {
+        return <div>Error: {error}</div>;
+    }
 
     return (
-        <div>
-            {isLoading ? (
-                <p>Loading...</p>
+        <div className='container mx-auto p-5'>
+            <h2 className='text-2xl font-semibold mb-4'>Applied Jobs</h2>
+            {appliedJobs.length === 0 ? (
+                <p className='text-gray-600'>You haven't applied to any jobs yet.</p>
             ) : (
-                <div className="w-full flex flex-wrap gap-16 max-[600px]:justify-center pt-8 pl-4">
-                    {jobs.length > 0 ? (
-                        jobs.map((job) => (
-                            <JobCard key={job._id} data={job} />
-                        ))
-                    ) : (
-                        <p>No jobs applied yet.</p>
-                    )}
+                <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'>
+                    {appliedJobs.map((job) => (
+                        <JobCard key={job._id} data={job} />
+                    ))}
                 </div>
             )}
         </div>

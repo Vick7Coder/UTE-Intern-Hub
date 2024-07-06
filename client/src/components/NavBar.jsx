@@ -60,14 +60,8 @@ const NavBar = () => {
               <li>
                 <Link to="/blogs">Blogs</Link>
               </li>
-<<<<<<< Updated upstream
-              <li>
-                <Link to="/applied-jobs">Applied</Link>
-              </li>
-=======
               <li><Link to="/applied-jobs">Applied Jobs</Link></li>
 
->>>>>>> Stashed changes
             </>
 
           ) : (
@@ -125,7 +119,12 @@ const NavBar = () => {
         )}
 
         {user?.accountType == "seeker" ? (
-          <Link to="/blogs" onClick={() => setIsOpen(false)}>Blogs </Link>
+          <>
+            <Link to="/blogs" onClick={() => setIsOpen(false)}>Blogs </Link>
+            {/*  */}
+            <Link to="/applied-jobs" onClick={() => setIsOpen(false)}>Applied Jobs </Link>
+            {/*  */}
+          </>
         ) : (
           <Link to="/upload-blog" onClick={() => setIsOpen(false)}>Upload Blog</Link>
         )}

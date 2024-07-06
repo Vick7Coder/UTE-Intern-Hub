@@ -1,6 +1,6 @@
 import express from "express";
 import { rateLimit } from 'express-rate-limit'
-import { getUser, seekerLogin, seekerRegister, updateUser, applyJob, deleteUser, getUserById } from "../controller/seekerController.js";
+import { getUser, seekerLogin, seekerRegister, updateUser, applyJob, deleteUser, getUserById, getAppliedJobs } from "../controller/seekerController.js";
 import userAuth from "../middleware/authMiddleware.js";
 import { forgetPassword, resetPassword } from "../controller/seekerController.js";
 // Rate limiting prevents the same IP address from making too many requests that will help us prevent attacks like brute force.
@@ -44,6 +44,11 @@ router.post("/forget-password", forgetPassword);
 
 //reset password
 router.post("/reset-password/:token", resetPassword);
+
+// display apply jobs of seeker
+// seekerRoutes.js
+
+router.get("/applied-jobs/:id", userAuth, getAppliedJobs);
 
 
 
