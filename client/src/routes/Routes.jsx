@@ -17,6 +17,7 @@ import {
   BlogDetails,
   FindBlogs,
   UploadBlog,
+  Applicants,
   AppliedJobs,  // Import AppliedJobs component
 } from "../pages";
 import { useSelector } from "react-redux";
@@ -78,7 +79,7 @@ const AppRoutes = () => {
 
           {/* New route for displaying applied jobs */}
           <Route path="/applied-jobs" element={<AppliedJobs />} />
-
+          <Route path={"/applicants/:id"} element={<Applicants />} />
           <Route path="/admin-profile">
             <Route
               index
