@@ -35,7 +35,7 @@ const FindBlogs = () => {
             {isLoading ? (
                 <p>Loading...</p>
             ) : (
-                <div className="w-full flex flex-wrap gap-4 max-[600px]:justify-center">
+                <div className="w-full flex flex-wrap gap-16 max-[600px]:justify-center pt-8 pl-4">
                     {blogs.map((blog) => (
                         <BlogCard key={blog._id} data={blog} />
                     ))}
@@ -46,3 +46,4 @@ const FindBlogs = () => {
 };
 
 export default FindBlogs;
+
