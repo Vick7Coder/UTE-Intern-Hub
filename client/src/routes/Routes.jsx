@@ -1,10 +1,10 @@
+// File: src/routes/AppRoutes.js
 import React from "react";
 import { Routes, Route, Navigate, Outlet } from "react-router-dom";
 
 import { Footer, NavBar } from "../components";
 import {
   About,
-  Applicants,
   Auth,
   Companies,
   CompanyProfile,
@@ -17,6 +17,7 @@ import {
   BlogDetails,
   FindBlogs,
   UploadBlog,
+  AppliedJobs,  // Import AppliedJobs component
 } from "../pages";
 import { useSelector } from "react-redux";
 
@@ -37,10 +38,7 @@ const AppRoutes = () => {
       <NavBar />
 
       <Routes>
-        {/* if user is authenticated he can access these routes         */}
-
         <Route element={<Layout />}>
-
           <Route path="/" element={<FindJobs />} />
 
           <Route
@@ -77,14 +75,25 @@ const AppRoutes = () => {
             element={user?.accountType !== "seeker" && <UploadBlog />}
           />
           <Route path={"/job-details/:id"} element={<JobDetails />} />
-          <Route path={"/applicants/:id"} element={<Applicants />} />
+
+          {/* New route for displaying applied jobs */}
+          <Route path="/applied-jobs" element={<AppliedJobs />} />
 
           <Route path="/admin-profile">
-            <Route index element={user?.accountType === "admin" ? <AdminProfile /> : <Navigate to="/" replace />} />
-            <Route path=":id" element={user?.accountType === "admin" ? <AdminProfile /> : <Navigate to="/" replace />} />
+            <Route
+              index
+              element={
+                user?.accountType === "admin" ? <AdminProfile /> : <Navigate to="/" replace />
+              }
+            />
+            <Route
+              path=":id"
+              element={
+                user?.accountType === "admin" ? <AdminProfile /> : <Navigate to="/" replace />
+              }
+            />
           </Route>
         </Route>
-        {/* and if not authenticated he can only access these routes */}
 
         <Route path="/about-us" element={<About />} />
         <Route path="/user-auth" element={<Auth />} />

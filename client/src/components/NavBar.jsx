@@ -67,7 +67,8 @@ const NavBar = () => {
                     <Link to="/blogs">Blogs</Link>
                   </li>
                   <li>
-                    <Link to="/applied-jobs">Applied</Link>
+                    <Link to="/applied-jobs">Applied Jobs</Link>
+
                   </li>
                 </>
               )}
@@ -191,7 +192,7 @@ const NavBar = () => {
                   Blogs
                 </Link>
                 <Link to="/applied-jobs" onClick={() => setIsOpen(false)}>
-                  Applied
+                  Applied Jobs
                 </Link>
               </>
             )}
