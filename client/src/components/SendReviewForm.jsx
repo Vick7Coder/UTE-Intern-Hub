@@ -1,25 +1,28 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { CustomButton, Loading } from ".";
 
 import * as yup from 'yup';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { apiRequest, handleFileUpload } from "../utils";
 import { toast } from "react-toastify";
-import { seekerData } from '../redux/seekerSlice';
 
-const SendReportForm = ({ open, setOpen }) => {
-    const dispatch = useDispatch();
+const SendReviewForm = ({ open, setOpen, seekerInfo }) => {
     const { user } = useSelector((state) => state.user);
 
+    // Kiểm tra xem người dùng có phải là company không
+    if (user.accountType !== 'company') {
+        return null; // Không render form nếu không phải company
+    }
+
     const schema = yup.object().shape({
-        confirmScientific: yup.boolean()
-            .oneOf([true], "You must confirm that the report is written in a scientific spirit")
+        confirmObjective: yup.boolean()
+            .oneOf([true], "You must confirm that this review is objective")
             .required(),
-        confirmOriginal: yup.boolean()
-            .oneOf([true], "You must confirm that the report is not plagiarized")
+        confirmFair: yup.boolean()
+            .oneOf([true], "You must confirm that this review is fair and unbiased")
             .required(),
     });
 
@@ -28,36 +31,35 @@ const SendReportForm = ({ open, setOpen }) => {
         resolver: yupResolver(schema)
     });
 
-    const [reportFile, setReportFile] = useState("");
+    const [reviewFile, setReviewFile] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
     const onSubmit = async (data) => {
         setIsLoading(true);
 
-        const reportURL = reportFile && (await handleFileUpload(reportFile));
+        const reviewURL = reviewFile && (await handleFileUpload(reviewFile));
 
-        if (!reportURL) {
-            toast.error("Failed to upload report file.");
+        if (!reviewURL) {
+            toast.error("Failed to upload review file.");
             setIsLoading(false);
             return;
         }
 
         const result = await apiRequest({
-            url: '/user/upload-report',
+            url: '/user/upload-review',
             token: user.token,
-            data: { reportUrl: reportURL },
+            data: { review: reviewURL, seekerId: seekerInfo._id },
             method: "PUT"
         });
 
         if (result.status === 200) {
             setIsLoading(false);
-            toast.success("Report uploaded successfully!");
-            dispatch(seekerData(result.data.user));
+            toast.success("Review uploaded successfully!");
             setOpen(false);
         } else {
             console.log(result);
             setIsLoading(false);
-            toast.error("Error occurred while uploading report");
+            toast.error("Error occurred while uploading review");
         }
     };
 
@@ -95,7 +97,7 @@ const SendReportForm = ({ open, setOpen }) => {
                                         as='h3'
                                         className='text-lg font-semibold leading-6 text-gray-900'
                                     >
-                                        Upload Report
+                                        Upload Review
                                     </Dialog.Title>
                                     <form
                                         className='w-full mt-2 flex flex-col gap-5'
@@ -103,11 +105,11 @@ const SendReportForm = ({ open, setOpen }) => {
                                     >
                                         <div className='w-full'>
                                             <label className='text-gray-600 text-sm mb-1'>
-                                                Report File
+                                                Review File
                                             </label>
                                             <input
                                                 type='file'
-                                                onChange={(e) => setReportFile(e.target.files[0])}
+                                                onChange={(e) => setReviewFile(e.target.files[0])}
                                                 required
                                                 className='w-full text-sm text-gray-500
                                                 file:mr-4 file:py-2 file:px-4
@@ -121,31 +123,31 @@ const SendReportForm = ({ open, setOpen }) => {
                                         <div className='flex items-center'>
                                             <input
                                                 type='checkbox'
-                                                id='confirmScientific'
-                                                {...register('confirmScientific')}
+                                                id='confirmObjective'
+                                                {...register('confirmObjective')}
                                                 className='mr-2'
                                             />
-                                            <label htmlFor='confirmScientific' className='text-sm text-gray-700'>
-                                                I confirm that this report is written in a scientific spirit
+                                            <label htmlFor='confirmObjective' className='text-sm text-gray-700'>
+                                                I confirm that this review is objective
                                             </label>
                                         </div>
-                                        {errors.confirmScientific && (
-                                            <p className='text-red-500 text-xs'>{errors.confirmScientific.message}</p>
+                                        {errors.confirmObjective && (
+                                            <p className='text-red-500 text-xs'>{errors.confirmObjective.message}</p>
                                         )}
 
                                         <div className='flex items-center'>
                                             <input
                                                 type='checkbox'
-                                                id='confirmOriginal'
-                                                {...register('confirmOriginal')}
+                                                id='confirmFair'
+                                                {...register('confirmFair')}
                                                 className='mr-2'
                                             />
-                                            <label htmlFor='confirmOriginal' className='text-sm text-gray-700'>
-                                                I confirm that this report is not plagiarized
+                                            <label htmlFor='confirmFair' className='text-sm text-gray-700'>
+                                                I confirm that this review is fair and unbiased
                                             </label>
                                         </div>
-                                        {errors.confirmOriginal && (
-                                            <p className='text-red-500 text-xs'>{errors.confirmOriginal.message}</p>
+                                        {errors.confirmFair && (
+                                            <p className='text-red-500 text-xs'>{errors.confirmFair.message}</p>
                                         )}
 
                                         <div className='mt-4'>
@@ -178,4 +180,4 @@ const SendReportForm = ({ open, setOpen }) => {
     );
 };
 
-export default SendReportForm;
+export default SendReviewForm;
