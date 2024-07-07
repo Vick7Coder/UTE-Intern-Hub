@@ -363,6 +363,7 @@ export const resetPassword = async (req, res, next) => {
 };
 
 // Trong seekerController.js
+// Trong seekerController.js
 export const getAppliedJobs = async (req, res, next) => {
   try {
     const userId = req.params.id;

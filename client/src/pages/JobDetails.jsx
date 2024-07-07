@@ -25,7 +25,6 @@ const JobDetails = () => {
 
 
 
-
   const getJobDetails = async () => {
     const result = await apiRequest({
       url: `/jobs/get-job-detail/${id}`,
@@ -41,7 +40,6 @@ const JobDetails = () => {
       toast.error('Something Went Wrong')
     }
   };
-
 
   //job apply
   const handleJobApply = async () => {
@@ -64,13 +62,11 @@ const JobDetails = () => {
     }
   }
 
-
   useEffect(() => {
 
     getJobDetails();
 
   }, [id]);
-
 
   const navigate = useNavigate();
 
@@ -81,7 +77,6 @@ const JobDetails = () => {
         token: user.token,
         method: "DELETE",
       });
-
 
 
       if (result.status === 200) {
@@ -95,12 +90,10 @@ const JobDetails = () => {
 
 
 
-
   return (
     <div className="container mx-auto">
       <div className="w-full flex flex-col md:flex-row gap-10">
         {jobData && <>
-
 
           <div className="w-full h-fit md:w-2/3 2xl:w-2/4 bg-white px-5 py-10 md:px-10 shadow-md">
             <div className="w-full flex items-center justify-between">
@@ -152,7 +145,7 @@ const JobDetails = () => {
               </div>
 
               {
-                (user.accountType === 'company' || user.accountType === 'admin' || user.accountType === 'lecture') && (
+                jobData.company._id === user.id && (
                   <Link to={`/applicants/${id}`} title="View the applicants">
                     <div className="bg-[#fed0ab] w-40 h-16 px-6 rounded-lg flex flex-col items-center justify-center">
                       <span className="text-sm">View Applicants</span>
@@ -163,7 +156,6 @@ const JobDetails = () => {
                   </Link>
                 )
               }
-
 
 
               <div className="bg-[#cecdff] w-40 h-16 px-6 rounded-lg flex flex-col items-center justify-center">
@@ -186,8 +178,8 @@ const JobDetails = () => {
                 onClick={() => setSelected("0")}
                 title="Job Description"
                 containerStyles={`w-full flex items-center justify-center py-3 px-5 outline-none rounded-full text-sm ${selected === "0"
-                    ? "bg-black text-white"
-                    : "bg-white text-black border border-gray-300"
+                  ? "bg-black text-white"
+                  : "bg-white text-black border border-gray-300"
                   }`}
               />
 
@@ -195,8 +187,8 @@ const JobDetails = () => {
                 onClick={() => setSelected("1")}
                 title="Company"
                 containerStyles={`w-full flex items-center justify-center  py-3 px-5 outline-none rounded-full text-sm ${selected === "1"
-                    ? "bg-black text-white"
-                    : "bg-white text-black border border-gray-300"
+                  ? "bg-black text-white"
+                  : "bg-white text-black border border-gray-300"
                   }`}
               />
             </div>
@@ -293,7 +285,6 @@ const JobDetails = () => {
           </div>
         </div>
 
-
       </div>
 
     </div>
@@ -301,3 +292,4 @@ const JobDetails = () => {
 };
 
 export default JobDetails;
+
