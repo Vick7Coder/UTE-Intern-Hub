@@ -5,6 +5,7 @@ import nodemailer from "nodemailer";
 import mongoose from 'mongoose'
 import Seekers from '../models/seekerModel.js'
 import Jobs from '../models/jobModel.js'
+import Recruiters from '../models/recruiterModel.js';
 
 dotenv.config();
 
@@ -451,6 +452,80 @@ export const uploadReportUrl = async (req, res, next) => {
       success: true,
       message: "Report URL uploaded successfully",
       user: updatedUser,
+    });
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+};
+
+export const uploadReviewUrl = async (req, res, next) => {
+  const { review, seekerId } = req.body;
+
+  try {
+    // Retrieve recruiter details based on userId
+    const recruiter = await Recruiters.findById(req.user.userId);
+
+    if (!recruiter) {
+      return res.status(404).json({
+        success: false,
+        message: "Recruiter not found",
+      });
+    }
+
+    // Check if the recruiter is a company
+    if (recruiter.accountType !== 'company') {
+      return res.status(403).json({
+        success: false,
+        message: "Only company users can upload reviews",
+      });
+    }
+
+    if (!seekerId) {
+      return res.status(400).json({
+        success: false,
+        message: "Seeker ID is required",
+      });
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(seekerId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid Seeker ID",
+      });
+    }
+
+    // Check if the seeker is accepted in any of the recruiter's jobs
+    const jobWithAcceptedSeeker = await Jobs.findOne({
+      company: recruiter._id,
+      acceptedApplicants: seekerId
+    });
+
+    if (!jobWithAcceptedSeeker) {
+      return res.status(403).json({
+        success: false,
+        message: "You don't have permission to review this seeker",
+      });
+    }
+
+    // Update the seeker's review
+    const updatedSeeker = await Seekers.findByIdAndUpdate(
+      seekerId,
+      { review },
+      { new: true }
+    );
+
+    if (!updatedSeeker) {
+      return res.status(404).json({
+        success: false,
+        message: "Seeker not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Review uploaded successfully",
+      user: updatedSeeker,
     });
   } catch (err) {
     console.log(err);

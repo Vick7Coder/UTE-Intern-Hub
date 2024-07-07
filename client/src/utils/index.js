@@ -25,14 +25,11 @@ export const apiRequest = async ({ url, token, data, method }) => {
     }
     catch (error) {
 
-
         return error?.response?.data;
-
 
 
     }
 }
-
 
 export const handleFileUpload = async (uploadFile) => {
 
@@ -53,7 +50,6 @@ export const handleFileUpload = async (uploadFile) => {
 
 }
 
-
 export const updateURl = ({
     pageNum,
     query,
@@ -64,7 +60,6 @@ export const updateURl = ({
     jType,
     exp }
 ) => {
-
 
     const params = new URLSearchParams();
 
@@ -94,3 +89,31 @@ export const updateURl = ({
     return newURL;
 
 }
+
+export const updateURlblog = ({
+    pageNum,
+    query,
+    sort,
+    navigate,
+    location,
+}) => {
+    const params = new URLSearchParams();
+
+    if (pageNum && pageNum > 1) {
+        params.set("page", pageNum);
+    }
+    if (query) {
+        params.set("search", query);
+    }
+    if (sort) {
+        params.set("sort", sort);
+    }
+
+    // Chỉ lấy phần query string, không bao gồm pathname
+    const newURL = params.toString() ? `?${params.toString()}` : '';
+
+    // Cập nhật URL mà không thay đổi pathname
+    navigate(`${location.pathname}${newURL}`, { replace: true });
+
+    return newURL;
+};

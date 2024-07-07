@@ -4,7 +4,7 @@ import { HiLocationMarker } from "react-icons/hi";
 import { AiOutlineMail } from "react-icons/ai";
 import { FiPhoneCall } from "react-icons/fi";
 import { NoProfile } from "../assets";
-import { UserForm } from "../components";
+import { UserForm, SendReportForm, SendReviewForm } from "../components";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { apiRequest } from "../utils";
 import { toast } from "react-toastify";
@@ -18,12 +18,13 @@ const UserProfile = () => {
   const { id } = useParams();
 
   const [open, setOpen] = useState(false);
+  const [openReportForm, setOpenReportForm] = useState(false);
+  const [openReviewForm, setOpenReviewForm] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const getUserData = async () => {
-
     const result = await apiRequest({
       url: `/user/get-user-profile/${id}`,
       token: user.token,
@@ -44,9 +45,7 @@ const UserProfile = () => {
   }, [id])
 
   const deleteAccount = async () => {
-
     if (window.confirm("Do you want to delete your account? ")) {
-
       const result = await apiRequest({
         url: `/user/delete-user/${user.id}`,
         token: user.token,
@@ -63,7 +62,6 @@ const UserProfile = () => {
         toast.error("Something Went Wrong")
       }
     }
-
   }
 
   return (
@@ -93,6 +91,18 @@ const UserProfile = () => {
                 <p className="text-blue-700 py-1">Resume</p>
               </Link>
             )}
+
+            {seekerInfo?.reportUrl && (
+              <Link to={seekerInfo?.reportUrl} target="_blank" >
+                <p className="text-blue-700 py-1">Report</p>
+              </Link>
+            )}
+
+            {seekerInfo?.review && (
+              <Link to={seekerInfo?.review} target="_blank" >
+                <p className="text-blue-700 py-1">Review</p>
+              </Link>
+            )}
           </div>
         </div>
 
@@ -118,36 +128,54 @@ const UserProfile = () => {
           </div>
 
           {user.accountType === "seeker" ? (
-            <div className="w-full sm:flex justify-around ">
+            <div className="w-full flex flex-col sm:flex-row justify-between space-y-4 sm:space-y-0 sm:space-x-4 mt-6">
               <button
-                className="w-full sm:w-1/4  bg-blue-600 text-white mt-4 py-2 rounded"
-                onClick={() => setOpen(true)}
-              >
-                Edit Profile
-              </button>
-
-              <button
-                className="w-full sm:w-1/4 bg-red-600 text-white mt-4 py-2 rounded"
+                className="w-full sm:w-1/3 bg-red-600 text-white py-2 rounded order-last sm:order-first"
                 onClick={deleteAccount}
               >
                 Delete Account
               </button>
+
+              <div className="w-full sm:w-2/3 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                <button
+                  className="w-full sm:w-1/2 bg-blue-600 text-white py-2 rounded"
+                  onClick={() => setOpen(true)}
+                >
+                  Edit Profile
+                </button>
+
+                <button
+                  className="w-full sm:w-1/2 bg-blue-600 text-white py-2 rounded"
+                  onClick={() => setOpenReportForm(true)}
+                >
+                  Upload Report
+                </button>
+              </div>
             </div>
-          ) :
-            <div className="flex justify-start">
-              <button className=" bg-blue-600 p-2 rounded text-white"
+          ) : (
+            <div className="flex justify-start space-x-4 mt-6">
+              <button
+                className="bg-blue-600 p-2 rounded text-white"
                 onClick={() => window.location.href = `mailto:${seekerInfo?.email}`}
-              >Contact</button>
-              {/* dùng để ipload file đánh giá sv cho gv thấy */}
-              <button className=" bg-blue-600 p-2 rounded text-white  ml-5"
-              >Upload Valuation Report</button>
-              {/*  */}
+              >
+                Contact
+              </button>
+              {user.accountType === "company" && (
+                <button
+                  className="bg-green-600 p-2 rounded text-white"
+                  onClick={() => setOpenReviewForm(true)}
+                >
+                  Upload Review
+                </button>
+              )}
             </div>
-          }
+          )}
         </div>
       </div>
 
       <UserForm open={open} setOpen={setOpen} />
+      <SendReportForm open={openReportForm} setOpen={setOpenReportForm} />
+      <SendReviewForm open={openReviewForm} setOpen={setOpenReviewForm} seekerInfo={seekerInfo} />
     </div>
   );
 };

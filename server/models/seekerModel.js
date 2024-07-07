@@ -21,8 +21,7 @@ let seekerSchema = new mongoose.Schema({
     headLine: { type: String },
     about: { type: String },
     review: {
-        type: String,
-        default: "N/A"
+        type: String
     },
     reportUrl: { type: String },
     status: {

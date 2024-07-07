@@ -42,7 +42,6 @@ export const updateBlog = async (req, res) => {
     }
 };
 
-
 // Lấy thông tin blog theo ID
 export const getBlogById = async (req, res) => {
     try {
@@ -63,8 +62,53 @@ export const getBlogById = async (req, res) => {
 // Lấy danh sách blog
 export const getBlogPosts = async (req, res) => {
     try {
-        const blogs = await Blog.find().populate('recruiter', 'name email');
-        res.status(200).json(blogs);
+        const { search, sort } = req.query;
+
+        let queryObject = {};
+
+        if (search) {
+            queryObject = {
+                $or: [
+                    { title: { $regex: search, $options: "i" } },
+                    { content: { $regex: search, $options: "i" } },
+                ],
+            };
+        }
+
+        let queryResult = Blog.find(queryObject).populate('recruiter', 'name email');
+
+        // SORTING
+        if (sort === "Newest") {
+            queryResult = queryResult.sort("-createdAt");
+        }
+        if (sort === "Oldest") {
+            queryResult = queryResult.sort("createdAt");
+        }
+        if (sort === "A-Z") {
+            queryResult = queryResult.sort("title");
+        }
+        if (sort === "Z-A") {
+            queryResult = queryResult.sort("-title");
+        }
+
+        // pagination
+        const page = Number(req.query.page) || 1;
+        const limit = Number(req.query.limit) || 8;
+
+        const totalBlogs = await Blog.countDocuments(queryResult);
+        const numOfPage = Math.ceil(totalBlogs / limit);
+
+        queryResult = queryResult.skip((page - 1) * limit).limit(limit);
+
+        const blogs = await queryResult;
+
+        res.status(200).json({
+            success: true,
+            totalBlogs,
+            data: blogs,
+            page,
+            numOfPage,
+        });
     } catch (error) {
         res.status(500).json({ message: "Error fetching blogs", error });
     }

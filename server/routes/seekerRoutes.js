@@ -12,7 +12,8 @@ import {
   getAllSeekers,
   forgetPassword,
   resetPassword,
-  uploadReportUrl
+  uploadReportUrl,
+  uploadReviewUrl
 } from "../controller/seekerController.js";
 import userAuth from "../middleware/authMiddleware.js";
 // Rate limiting prevents the same IP address from making too many requests that will help us prevent attacks like brute force.
@@ -45,7 +46,10 @@ router.get('/get-user-profile/:id', userAuth, getUserById)
 router.put("/update-user", userAuth, updateUser);
 
 // UPLOAD REPORT FOR LECTURER
-router.put("/upload-report", userAuth, updateUser);
+router.put("/upload-report", userAuth, uploadReportUrl);
+
+// COMPANY UPLOAD REVIEW FOR LECTURER
+router.put("/upload-review", userAuth, uploadReviewUrl);
 
 router.get("/", getAllSeekers);
 
