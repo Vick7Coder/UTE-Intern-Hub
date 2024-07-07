@@ -197,31 +197,41 @@ export const getUserById = async (req, res, next) => {
   }
 }
 
+// Trong seekerController.js
 export const applyJob = async (req, res, next) => {
   try {
     const { jobId } = req.params;
     const userId = req.user.userId;
 
-    // Find the job by jobId
-    const job = await Jobs.findById(jobId);
-
-    if (!job) {
-      throw new Error("Job not found");
-    }
-
-    // Update the job's applicants array with userId
-    job.applicants.push(userId);
-    await job.save();
-
-    // Update the seeker's appliedJobs array with jobId
     const seeker = await Seekers.findById(userId);
-
     if (!seeker) {
       throw new Error("Seeker not found");
     }
 
-    seeker.appliedJobs.push(jobId);
-    await seeker.save();
+    // Kiểm tra xem seeker đã được chấp nhận cho một công việc nào chưa
+    if (seeker.acceptedJob) {
+      return res.status(400).json({
+        success: false,
+        message: "You have already been accepted for a job and cannot apply to others.",
+      });
+    }
+
+    // Tìm job và cập nhật
+    const job = await Jobs.findById(jobId);
+    if (!job) {
+      throw new Error("Job not found");
+    }
+
+    if (!job.applicants.includes(userId)) {
+      job.applicants.push(userId);
+      await job.save();
+    }
+
+    // Cập nhật seeker
+    if (!seeker.appliedJobs.includes(jobId)) {
+      seeker.appliedJobs.push(jobId);
+      await seeker.save();
+    }
 
     res.status(200).json({
       success: true,
@@ -232,33 +242,6 @@ export const applyJob = async (req, res, next) => {
     next(err);
   }
 };
-
-// export const applyJob = async (req, res, next) => {
-
-//   try {
-
-//     const { jobId } = req.params;
-//     const id = req.user.userId
-
-//     //pushing the user id to the applicants array and updating the record
-//     const job = await Jobs.findById(jobId);
-
-//     job.applicants.push(id);
-
-//     await Jobs.findByIdAndUpdate(jobId, job, {
-//       new: true,
-//     });
-
-//     res.status(200).json({
-//       message: "Applied Successfully"
-//     })
-//   }
-
-//   catch (err) {
-//     console.log(err)
-//     next(err)
-//   }
-// }
 
 export const deleteUser = async (req, res, next) => {
   try {
@@ -389,6 +372,8 @@ export const getAppliedJobs = async (req, res, next) => {
   }
 };
 
+
+
 export const getAllSeekers = async (req, res, next) => {
   try {
     const { search, sort, location } = req.query;
@@ -443,5 +428,32 @@ export const getAllSeekers = async (req, res, next) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+export const uploadReportUrl = async (req, res, next) => {
+  const { reportUrl } = req.body;
+
+  try {
+    const id = req.user.userId;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new Error(`No User with id: ${id}`);
+    }
+
+    const updatedUser = await Seekers.findByIdAndUpdate(
+      id,
+      { reportUrl },
+      { new: true }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Report URL uploaded successfully",
+      user: updatedUser,
+    });
+  } catch (err) {
+    console.log(err);
+    next(err);
   }
 };

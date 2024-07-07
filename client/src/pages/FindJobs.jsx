@@ -94,8 +94,6 @@ const FindJobs = () => {
       method: "GET"
     })
 
-    // console.log(result);
-
     if (result.status === 200) {
 
       setNumPage(result.data.numOfPage)
