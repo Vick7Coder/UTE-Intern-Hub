@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import Jobs from "../models/jobModel.js";
 import Recruiters from "../models/recruiterModel.js";
-
+import Seekers from '../models/seekerModel.js';
 export const createJob = async (req, res, next) => {
   try {
     const {
@@ -264,22 +264,37 @@ export const acceptApplicant = async (req, res, next) => {
       return res.status(404).json({ message: "Job not found" });
     }
 
-    // Kiểm tra xem người dùng đã được chấp nhận chưa
-    if (job.acceptedApplicants.includes(userId)) {
-      return res.status(400).json({ message: "User already accepted for this job" });
+    const seeker = await Seekers.findById(userId);
+    if (!seeker) {
+      return res.status(404).json({ message: "Seeker not found" });
     }
 
-    // Thêm người dùng vào danh sách đã chấp nhận
-    job.acceptedApplicants.push(userId);
+    // Kiểm tra xem seeker đã được chấp nhận cho một công việc khác chưa
+    if (seeker.acceptedJob) {
+      return res.status(400).json({ message: "Seeker already accepted for another job" });
+    }
 
-    // Xóa người dùng khỏi danh sách ứng viên (nếu có)
-    job.applicants = job.applicants.filter(applicant => applicant.toString() !== userId);
+    // Cập nhật job
+    if (!job.acceptedApplicants.includes(userId)) {
+      job.acceptedApplicants.push(userId);
+      job.applicants = job.applicants.filter(applicant => applicant.toString() !== userId);
+    }
 
-    await job.save();
+    // Cập nhật seeker
+    seeker.acceptedJob = jobId;
+    seeker.appliedJobs = [jobId]; // Chỉ giữ lại job được chấp nhận
+
+    // Lưu các thay đổi
+    await Promise.all([job.save(), seeker.save()]);
+
+    // Xóa ứng viên này khỏi tất cả các job khác
+    await Jobs.updateMany(
+      { _id: { $ne: jobId } },
+      { $pull: { applicants: userId, acceptedApplicants: userId } }
+    );
 
     res.status(200).json({ message: "Applicant accepted successfully" });
   } catch (error) {
     next(error);
   }
 };
-

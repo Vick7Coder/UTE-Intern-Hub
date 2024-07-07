@@ -33,7 +33,13 @@ let seekerSchema = new mongoose.Schema({
     },
     // them de hien thi danh sach job da apply seeker
     appliedJobs: [{ type: Schema.Types.ObjectId, ref: 'Jobs' }],
-
+    acceptedJob: {
+        type: Schema.Types.ObjectId,
+        ref: 'Jobs',
+        default: null
+    },
+    // them truong nay de recruit danh gia ung vien
+    valuationReportUrl: { type: String },
 },
     { timestamps: true }
 )

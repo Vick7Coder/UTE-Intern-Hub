@@ -197,31 +197,41 @@ export const getUserById = async (req, res, next) => {
   }
 }
 
+// Trong seekerController.js
 export const applyJob = async (req, res, next) => {
   try {
     const { jobId } = req.params;
     const userId = req.user.userId;
 
-    // Find the job by jobId
-    const job = await Jobs.findById(jobId);
-
-    if (!job) {
-      throw new Error("Job not found");
-    }
-
-    // Update the job's applicants array with userId
-    job.applicants.push(userId);
-    await job.save();
-
-    // Update the seeker's appliedJobs array with jobId
     const seeker = await Seekers.findById(userId);
-
     if (!seeker) {
       throw new Error("Seeker not found");
     }
 
-    seeker.appliedJobs.push(jobId);
-    await seeker.save();
+    // Kiểm tra xem seeker đã được chấp nhận cho một công việc nào chưa
+    if (seeker.acceptedJob) {
+      return res.status(400).json({
+        success: false,
+        message: "You have already been accepted for a job and cannot apply to others.",
+      });
+    }
+
+    // Tìm job và cập nhật
+    const job = await Jobs.findById(jobId);
+    if (!job) {
+      throw new Error("Job not found");
+    }
+
+    if (!job.applicants.includes(userId)) {
+      job.applicants.push(userId);
+      await job.save();
+    }
+
+    // Cập nhật seeker
+    if (!seeker.appliedJobs.includes(jobId)) {
+      seeker.appliedJobs.push(jobId);
+      await seeker.save();
+    }
 
     res.status(200).json({
       success: true,
@@ -232,7 +242,6 @@ export const applyJob = async (req, res, next) => {
     next(err);
   }
 };
-
 // export const applyJob = async (req, res, next) => {
 
 //   try {

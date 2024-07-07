@@ -12,7 +12,7 @@ import { NoProfile } from "../assets";
 import { toast } from "react-toastify";
 
 const JobDetails = () => {
-  
+
   const { id } = useParams();
 
   const { user } = useSelector((state) => state.user);
@@ -21,51 +21,51 @@ const JobDetails = () => {
 
   const [selected, setSelected] = useState("0");
   const [similarJobs, setSimilarJobs] = useState([]);
-  const [openForm,setOpenForm]  = useState(false)
+  const [openForm, setOpenForm] = useState(false)
 
 
 
-  
-    const getJobDetails = async () => {
-      const result = await apiRequest({
-        url: `/jobs/get-job-detail/${id}`,
-        method: "GET",
-      });
 
-      if (result.status === 200) {
-        setJobData(result.data.data);
-        setSimilarJobs(result.data.similarJobs);
-      }
-      else{
-        console.log(result)
-        toast.error('Something Went Wrong')
-      }
-    };
+  const getJobDetails = async () => {
+    const result = await apiRequest({
+      url: `/jobs/get-job-detail/${id}`,
+      method: "GET",
+    });
 
-
-    //job apply
-    const handleJobApply = async() =>{
-
-      const result  = await apiRequest({
-        url:`/user/apply-job/${id}`,
-        token:user.token,
-        method:"POST"
-      })
-  
-      if (result.status === 200) {
-        toast.success(result.data.message);
-
-        setTimeout(() => {
-          window.location.reload();
-        }, 800);
-
-      } else {
-        console.log(result.data.error);
-      }
+    if (result.status === 200) {
+      setJobData(result.data.data);
+      setSimilarJobs(result.data.similarJobs);
     }
+    else {
+      console.log(result)
+      toast.error('Something Went Wrong')
+    }
+  };
 
 
-    useEffect(() => {
+  //job apply
+  const handleJobApply = async () => {
+
+    const result = await apiRequest({
+      url: `/user/apply-job/${id}`,
+      token: user.token,
+      method: "POST"
+    })
+
+    if (result.status === 200) {
+      toast.success(result.data.message);
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 800);
+
+    } else {
+      console.log(result.data.error);
+    }
+  }
+
+
+  useEffect(() => {
 
     getJobDetails();
 
@@ -82,7 +82,7 @@ const JobDetails = () => {
         method: "DELETE",
       });
 
-     
+
 
       if (result.status === 200) {
         toast.error(result.data.message);
@@ -98,10 +98,10 @@ const JobDetails = () => {
 
   return (
     <div className="container mx-auto">
-        <div className="w-full flex flex-col md:flex-row gap-10">
-      {jobData &&  <>
+      <div className="w-full flex flex-col md:flex-row gap-10">
+        {jobData && <>
 
-        
+
           <div className="w-full h-fit md:w-2/3 2xl:w-2/4 bg-white px-5 py-10 md:px-10 shadow-md">
             <div className="w-full flex items-center justify-between">
               <div className="w-3/4 flex gap-2">
@@ -137,7 +137,7 @@ const JobDetails = () => {
               <div className="bg-[#bdf4c8] w-40 h-16 rounded-lg flex flex-col items-center justify-center">
                 <span className="text-sm">Full Gross</span>
                 <p className="text-lg font-semibold text-gray-700 uppercase">
-                
+
                   {jobData.salary.includes("-")
                     ? `${jobData.salary} VND`
                     : `${jobData.salary} VND`}
@@ -150,21 +150,21 @@ const JobDetails = () => {
                   {jobData.jobType}
                 </p>
               </div>
-
               {
-                user.accountType === 'company' && (
+                jobData.company._id === user.id && (
+                  // user.accountType === 'company' && (
                   <Link to={`/applicants/${id}`} title="View the applicants">
-                  <div className="bg-[#fed0ab] w-40 h-16 px-6 rounded-lg flex flex-col items-center justify-center">
-                    <span className="text-sm">View Applicants</span>
-                    <p className="text-lg font-semibold text-gray-700">
-                      {jobData.applicants.length}
-                    </p>
-                  </div>
+                    <div className="bg-[#fed0ab] w-40 h-16 px-6 rounded-lg flex flex-col items-center justify-center">
+                      <span className="text-sm">View Applicants</span>
+                      <p className="text-lg font-semibold text-gray-700">
+                        {jobData.applicants.length}
+                      </p>
+                    </div>
                   </Link>
                 )
               }
 
-             
+
 
               <div className="bg-[#cecdff] w-40 h-16 px-6 rounded-lg flex flex-col items-center justify-center">
                 <span className="text-sm">No. of Vacancies</span>
@@ -185,21 +185,19 @@ const JobDetails = () => {
               <CustomButton
                 onClick={() => setSelected("0")}
                 title="Job Description"
-                containerStyles={`w-full flex items-center justify-center py-3 px-5 outline-none rounded-full text-sm ${
-                  selected === "0"
-                    ? "bg-black text-white"
-                    : "bg-white text-black border border-gray-300"
-                }`}
+                containerStyles={`w-full flex items-center justify-center py-3 px-5 outline-none rounded-full text-sm ${selected === "0"
+                  ? "bg-black text-white"
+                  : "bg-white text-black border border-gray-300"
+                  }`}
               />
 
               <CustomButton
                 onClick={() => setSelected("1")}
                 title="Company"
-                containerStyles={`w-full flex items-center justify-center  py-3 px-5 outline-none rounded-full text-sm ${
-                  selected === "1"
-                    ? "bg-black text-white"
-                    : "bg-white text-black border border-gray-300"
-                }`}
+                containerStyles={`w-full flex items-center justify-center  py-3 px-5 outline-none rounded-full text-sm ${selected === "1"
+                  ? "bg-black text-white"
+                  : "bg-white text-black border border-gray-300"
+                  }`}
               />
             </div>
 
@@ -241,63 +239,63 @@ const JobDetails = () => {
 
             {user.accountType === "seeker" ?
 
-                jobData.applicants.includes(user.id)  ?  
-                 <div className=" w-1/4 flex justify-center items-center gap-1 text-green-600  py-3 px-5 rounded-full text-lg mx-auto"> 
-                 <IoIosCheckmarkCircle /> 
-                 <p>Applied</p>
-                 </div> :
+              jobData.applicants.includes(user.id) ?
+                <div className=" w-1/4 flex justify-center items-center gap-1 text-green-600  py-3 px-5 rounded-full text-lg mx-auto">
+                  <IoIosCheckmarkCircle />
+                  <p>Applied</p>
+                </div> :
 
-              <CustomButton
-                title="Apply Now"
-                onClick={handleJobApply}
-                containerStyles={`w-44 justify-center text-white bg-black py-3 px-5 outline-none rounded-full text-base`}
-              />
-            : (
-              jobData.company._id === user.id && (
-                <div className="sm:flex gap-3">
-                  <CustomButton
-                    title="Edit Job"
-                    onClick={() => setOpenForm(true)}
-                    containerStyles={` w-full flex items-center justify-center text-white bg-lime-700 py-3 px-5 outline-none rounded-full text-base mb-3 sm:mb-0`}
-                  />
+                <CustomButton
+                  title="Apply Now"
+                  onClick={handleJobApply}
+                  containerStyles={`w-44 justify-center text-white bg-black py-3 px-5 outline-none rounded-full text-base`}
+                />
+              : (
+                jobData.company._id === user.id && (
+                  <div className="sm:flex gap-3">
+                    <CustomButton
+                      title="Edit Job"
+                      onClick={() => setOpenForm(true)}
+                      containerStyles={` w-full flex items-center justify-center text-white bg-lime-700 py-3 px-5 outline-none rounded-full text-base mb-3 sm:mb-0`}
+                    />
 
-                  <CustomButton
-                    title="Delete Job"
-                    onClick={handleDeleteJobPost}
-                    containerStyles={` w-full flex items-center justify-center text-white bg-red-900 py-3 px-5 outline-none rounded-full text-base`}
-                  />
-                </div>
-              )
-            )}
+                    <CustomButton
+                      title="Delete Job"
+                      onClick={handleDeleteJobPost}
+                      containerStyles={` w-full flex items-center justify-center text-white bg-red-900 py-3 px-5 outline-none rounded-full text-base`}
+                    />
+                  </div>
+                )
+              )}
           </div>
 
-          <JobUpdateForm open={openForm} setOpen={setOpenForm} jobDetails={getJobDetails}/>
-          </>
+          <JobUpdateForm open={openForm} setOpen={setOpenForm} jobDetails={getJobDetails} />
+        </>
         }
 
-            {/* right side */}
-          <div className="w-full md:w-1/3 2xl:w-2/4 md:h-[60rem] md:overflow-y-scroll md:no-scrollbar">
-            <div className=" p-5 md:mt-0 ">
-              <p className="text-gray-500 font-semibold mb-2">
-                Similar Job Post
-              </p>
+        {/* right side */}
+        <div className="w-full md:w-1/3 2xl:w-2/4 md:h-[60rem] md:overflow-y-scroll md:no-scrollbar">
+          <div className=" p-5 md:mt-0 ">
+            <p className="text-gray-500 font-semibold mb-2">
+              Similar Job Post
+            </p>
 
-              <div className="w-full flex flex-wrap gap-4">
-                {similarJobs?.slice(0, 6).map((job) => {
-                  const data = {
-                    name: job.company.name,
-                    logo: job.company.profileUrl,
-                    ...job,
-                  };
-                  return<JobCard data={data} key={job._id} />;
-                })}
-              </div>
+            <div className="w-full flex flex-wrap gap-4">
+              {similarJobs?.slice(0, 6).map((job) => {
+                const data = {
+                  name: job.company.name,
+                  logo: job.company.profileUrl,
+                  ...job,
+                };
+                return <JobCard data={data} key={job._id} />;
+              })}
             </div>
           </div>
-
-
         </div>
-     
+
+
+      </div>
+
     </div>
   );
 };

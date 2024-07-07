@@ -1,18 +1,20 @@
-import express  from "express";
-import {rateLimit} from 'express-rate-limit';
-import { recruiterLogin, recruiterRegister,  getCompanies,
-    getCompanyById,
-    getCompanyJobListing,
-    getCompanyProfile,updateCompanyProfile, forgetPassword, resetRecruiterPassword } from "../controller/recruiterController.js";
+import express from "express";
+import { rateLimit } from 'express-rate-limit';
+import {
+  recruiterLogin, recruiterRegister, getCompanies,
+  getCompanyById,
+  getCompanyJobListing,
+  getCompanyProfile, updateCompanyProfile, forgetPassword, resetRecruiterPassword
+} from "../controller/recruiterController.js";
 
 import userAuth from "../middleware/authMiddleware.js";
 
 // Rate limiting prevents the same IP address from making too many requests that will help us prevent attacks like brute force.
 
-const  router = express.Router();
+const router = express.Router();
 
 const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // allow a certain number of requests through this window only for 15 minutes
+  windowMs: 15 * 60 * 1000, // allow a certain number of requests through this window only for 15 minutes
 
   max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
 
@@ -22,7 +24,7 @@ const limiter = rateLimit({
 });
 
 
-router.post('/register',limiter, recruiterRegister);
+router.post('/register', limiter, recruiterRegister);
 
 // here the limiter acts as a traffic controller, ensuring that too many requests don't overload the system.
 
@@ -42,6 +44,6 @@ router.put("/update-company", userAuth, updateCompanyProfile);
 router.post("/forget-password", forgetPassword);
 
 //reset password
-router.post("/reset-password/:token", resetRecruiterPassword );
+router.post("/reset-password/:token", resetRecruiterPassword);
 
-export  default router;
+export default router;
