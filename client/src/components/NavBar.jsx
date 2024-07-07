@@ -39,6 +39,9 @@ const NavBar = () => {
     if (type === "Company") {
       navigate("/companies");
     }
+    if (type === "Seeker") {
+      navigate("/user");
+    }
   };
 
   return (

@@ -4,19 +4,20 @@ import { HiLocationMarker } from "react-icons/hi";
 import { AiOutlineMail } from "react-icons/ai";
 import { FiPhoneCall } from "react-icons/fi";
 import { AdminForm } from "../components";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { apiRequest } from "../utils";
 import { adData } from "../redux/adminSlice";
 import { toast } from "react-toastify";
+import { NoProfile } from "../assets"; // Ensure you have a default profile picture
 
 const AdminProfile = () => {
   const { user } = useSelector((state) => state.user);
   const { adminInfo } = useSelector((state) => state.ad);
-
   const { id } = useParams();
   const [open, setOpen] = useState(false);
-
+  const [isDeleted, setIsDeleted] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const fetchAdminById = async () => {
     const result = await apiRequest({
@@ -26,11 +27,8 @@ const AdminProfile = () => {
     });
 
     if (result.status === 200) {
-      console.log("==============");
-      console.log(result.data.data);
       dispatch(adData(result.data.data));
     } else {
-      console.log(result);
       toast.error("Something Went Wrong");
     }
   };
@@ -38,6 +36,12 @@ const AdminProfile = () => {
   useEffect(() => {
     id && fetchAdminById();
   }, [id]);
+
+  useEffect(() => {
+    if (isDeleted) {
+      window.location.reload(); // Reload the page
+    }
+  }, [isDeleted]);
 
   // Redirect or show error if user is not admin
   if (user?.accountType !== "admin") {
@@ -51,11 +55,11 @@ const AdminProfile = () => {
         token: user.token,
         method: "DELETE",
       });
-      console.log(result);
 
       if (result.status === 200) {
         toast.success(result.data.message);
-        // Logic to handle logout after deletion
+        localStorage.removeItem('user');
+        setIsDeleted(true);
       } else {
         toast.error("Something Went Wrong");
       }
@@ -92,6 +96,14 @@ const AdminProfile = () => {
               <span className="text-base text-justify break-all">
                 {adminInfo?.about ?? "No About Found"}
               </span>
+            </div>
+
+            <div className="w-full md:w-1/3 h-44">
+              <img
+                src={adminInfo?.profileUrl ?? NoProfile}
+                alt={adminInfo?.name ?? user?.name}
+                className="w-full h-48 object-contain rounded-lg"
+              />
             </div>
           </div>
 

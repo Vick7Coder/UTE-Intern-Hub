@@ -46,7 +46,7 @@ const AppRoutes = () => {
 
           <Route
             path="/user"
-            element={user?.accountType == "lecture" && <Seekers />}
+            element={(user?.accountType == "lecture" || user?.accountType == "admin") && <Seekers />}
           />
 
           <Route
@@ -76,7 +76,7 @@ const AppRoutes = () => {
 
           <Route
             path={
-              user?.accountType === "seeker" || user?.accountType === "lecture"
+              user?.accountType === "seeker" || user?.accountType === "lecture" || user?.accountType === "admin"
                 ? "/company-profile/:id"
                 : "/company-profile"
             }
