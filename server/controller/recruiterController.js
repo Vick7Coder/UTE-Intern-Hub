@@ -208,7 +208,7 @@ export const getCompanies = async (req, res, next) => {
 
 
     // records count
-    const total = await Recruiters.countDocuments(queryResult);
+    const total = await Recruiters.countDocuments(queryObject);
     const numOfPage = Math.ceil(total / limit);
 
 
@@ -295,7 +295,7 @@ export const getCompanyById = async (req, res, next) => {
       success: true,
       data: company,
     });
-    
+
   } catch (error) {
     console.log(error);
     next(error)

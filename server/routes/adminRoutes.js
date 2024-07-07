@@ -1,6 +1,16 @@
 import express from "express";
-import {rateLimit} from 'express-rate-limit';
-import { adminLogin, adminRegister, forgetPassword, resetAdminPassword, getAdminProfile, updateAdminProfile, getAdminById } from "../controller/AdminController.js";
+import { rateLimit } from 'express-rate-limit';
+import {
+    adminLogin,
+    adminRegister,
+    forgetPassword,
+    resetAdminPassword,
+    getAdminProfile,
+    updateAdminProfile,
+    getAdminById,
+    deleteAdmin,
+    getAdmins
+} from "../controller/AdminController.js";
 import userAuth from "../middleware/authMiddleware.js";
 
 const router = express.Router();
@@ -16,7 +26,7 @@ const limiter = rateLimit({
 });
 
 
-router.post('/register',limiter, adminRegister);
+router.post('/register', limiter, adminRegister);
 
 // here the limiter acts as a traffic controller, ensuring that too many requests don't overload the system.
 
@@ -28,10 +38,15 @@ router.get("/get-admin/:id", userAuth, getAdminById);
 
 router.put("/update-admin", userAuth, updateAdminProfile);
 
+//Delete User
+router.delete('/delete-admin/:id', userAuth, deleteAdmin)
+//getAllAdmin
+router.get("/", getAdmins);
+
 //forget password
 router.post("/forget-password", forgetPassword);
 
 //reset password
-router.post("/reset-password/:token", resetAdminPassword );
+router.post("/reset-password/:token", resetAdminPassword);
 
 export default router;
