@@ -21,6 +21,7 @@ let LectureSchema = new mongoose.Schema({
     location:{type:String},
     about:{type:String},
     profileUrl:{type:String},
+    studentLists:[{type:Schema.Types.ObjectId, ref:"Seekers" }] , 
     
 },
     {timestamps:true} 

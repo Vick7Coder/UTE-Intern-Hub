@@ -387,3 +387,60 @@ export const getAppliedJobs = async (req, res, next) => {
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
+export const getAllSeekers = async (req, res, next) => {
+  try {
+    const { search, sort, location } = req.query;
+
+    // conditions for searching filters
+    const queryObject = {};
+
+    if (search) {
+      queryObject.name = { $regex: search, $options: "i" };
+    }
+
+    if (location) {
+      queryObject.location = { $regex: location, $options: "i" };
+    }
+
+    let queryResult = Seekers.find(queryObject).select("-password");
+
+    // SORTING
+    if (sort === "Newest") {
+      queryResult = queryResult.sort("-createdAt");
+    }
+    if (sort === "Oldest") {
+      queryResult = queryResult.sort("createdAt");
+    }
+    if (sort === "A-Z") {
+      queryResult = queryResult.sort("name");  // A-Z sorting
+    }
+    if (sort === "Z-A") {
+      queryResult = queryResult.sort("-name");  // Z-A sorting
+    }
+
+    // pagination
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 5;
+
+    // records count
+    const total = await Seekers.countDocuments(queryObject);
+    const numOfPage = Math.ceil(total / limit);
+
+    // apply pagination
+    queryResult = queryResult.skip((page - 1) * limit).limit(limit);
+
+    const seekers = await queryResult;
+
+    res.status(200).json({
+      success: true,
+      total,
+      seekers: seekers,
+      page,
+      numOfPage,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
