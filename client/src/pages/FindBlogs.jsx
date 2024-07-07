@@ -11,7 +11,7 @@ const FindBlogs = () => {
         const fetchBlogs = async () => {
             try {
                 const response = await apiRequest({
-                    url: "/blogs/find-blogs", // Điều chỉnh endpoint tương ứng với backend của bạn
+                    url: "/blogs/find-blogs", 
                     method: "GET",
                 });
                 if (response.status === 200) {
