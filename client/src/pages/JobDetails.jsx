@@ -144,18 +144,16 @@ const JobDetails = () => {
                 </p>
               </div>
 
-              {
-                jobData.company._id === user.id && (
-                  <Link to={`/applicants/${id}`} title="View the applicants">
-                    <div className="bg-[#fed0ab] w-40 h-16 px-6 rounded-lg flex flex-col items-center justify-center">
-                      <span className="text-sm">View Applicants</span>
-                      <p className="text-lg font-semibold text-gray-700">
-                        {jobData.applicants.length}
-                      </p>
-                    </div>
-                  </Link>
-                )
-              }
+              {(jobData.company._id === user.id || user.accountType === "admin") && (
+                <Link to={`/applicants/${id}`} title="View the applicants">
+                  <div className="bg-[#fed0ab] w-40 h-16 px-6 rounded-lg flex flex-col items-center justify-center">
+                    <span className="text-sm">View Applicants</span>
+                    <p className="text-lg font-semibold text-gray-700">
+                      {jobData.applicants.length}
+                    </p>
+                  </div>
+                </Link>
+              )}
 
 
               <div className="bg-[#cecdff] w-40 h-16 px-6 rounded-lg flex flex-col items-center justify-center">
@@ -228,37 +226,37 @@ const JobDetails = () => {
                 </>
               )}
             </div>
-
-            {user.accountType === "seeker" ?
-
-              jobData.applicants.includes(user.id) ?
-                <div className=" w-1/4 flex justify-center items-center gap-1 text-green-600  py-3 px-5 rounded-full text-lg mx-auto">
+            {user.accountType === "seeker" ? (
+              jobData.applicants.includes(user.id) ? (
+                <div className="w-1/4 flex justify-center items-center gap-1 text-green-600 py-3 px-5 rounded-full text-lg mx-auto">
                   <IoIosCheckmarkCircle />
                   <p>Applied</p>
-                </div> :
-
+                </div>
+              ) : (
                 <CustomButton
                   title="Apply Now"
                   onClick={handleJobApply}
                   containerStyles={`w-44 justify-center text-white bg-black py-3 px-5 outline-none rounded-full text-base`}
                 />
-              : (
-                jobData.company._id === user.id && (
-                  <div className="sm:flex gap-3">
-                    <CustomButton
-                      title="Edit Job"
-                      onClick={() => setOpenForm(true)}
-                      containerStyles={` w-full flex items-center justify-center text-white bg-lime-700 py-3 px-5 outline-none rounded-full text-base mb-3 sm:mb-0`}
-                    />
-
-                    <CustomButton
-                      title="Delete Job"
-                      onClick={handleDeleteJobPost}
-                      containerStyles={` w-full flex items-center justify-center text-white bg-red-900 py-3 px-5 outline-none rounded-full text-base`}
-                    />
-                  </div>
-                )
-              )}
+              )
+            ) : (
+              <>
+                {(jobData.company._id === user.id || user.accountType === "admin") && (
+                  <CustomButton
+                    title="Edit Job"
+                    onClick={() => setOpenForm(true)}
+                    containerStyles={`w-full flex items-center justify-center text-white bg-lime-700 py-3 px-5 outline-none rounded-full text-base mb-3 sm:mb-0`}
+                  />
+                )}
+                {jobData.company._id === user.id && (
+                  <CustomButton
+                    title="Delete Job"
+                    onClick={handleDeleteJobPost}
+                    containerStyles={`w-full flex items-center justify-center text-white bg-red-900 py-3 px-5 outline-none rounded-full text-base mt-3`}
+                  />
+                )}
+              </>
+            )}
           </div>
 
           <JobUpdateForm open={openForm} setOpen={setOpenForm} jobDetails={getJobDetails} />

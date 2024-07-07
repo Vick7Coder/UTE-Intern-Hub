@@ -373,8 +373,6 @@ export const getAppliedJobs = async (req, res, next) => {
   }
 };
 
-
-
 export const getAllSeekers = async (req, res, next) => {
   try {
     const { search, sort, location } = req.query;
