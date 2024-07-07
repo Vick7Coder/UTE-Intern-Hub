@@ -291,10 +291,6 @@ export const getCompanyById = async (req, res, next) => {
     if (!company) {
       throw new Error("Company Not Found")
     }
-    console.log('-------------------------');
-    console.log(company);
-
-
     res.status(200).json({
       success: true,
       data: company,

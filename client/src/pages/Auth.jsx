@@ -60,7 +60,7 @@ const Auth = () => {
     if (isForgotPassword) {
       URL = accountType === 'seeker' ? '/user/forget-password' :
         accountType === 'company' ? '/companies/forget-password' :
-          accountType === 'admin' ? '/admin/forget-password' : '/lecturer/forgot-password';
+          accountType === 'admin' ? '/admin/forget-password' : '/lecturer/forget-password';
     } else if (isRegister) {
       URL = accountType === 'seeker' ? '/user/register' :
         accountType === 'company' ? '/companies/register' : '/lecturer/register';

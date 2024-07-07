@@ -8,13 +8,11 @@ import { FiInstagram } from "react-icons/fi";
 const Footer = () => {
   return (
     <footer className='text-white relative w-full bg-[#3586ff] min-h-[100px] py-6 mt-40'>
-
-
-      <div>
-        <div className="wave" id="wave1"></div>
-        <div className="wave" id="wave2"></div>
-        <div className="wave" id="wave3"></div>
-        <div className="wave" id="wave4"></div>
+      <div className="relative z-10">
+        <div className="wave z-20" id="wave1"></div>
+        <div className="wave z-20" id="wave2"></div>
+        <div className="wave z-20" id="wave3"></div>
+        <div className="wave z-20" id="wave4"></div>
       </div>
 
 

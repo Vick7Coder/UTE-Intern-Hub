@@ -128,7 +128,7 @@ const Applicants = () => {
       </div>
 
 
-      {!isAccepted && (
+      {(!isAccepted && user.accountType === 'company') && (
         <CustomButton
           title="Accept"
           containerStyles="w-18 justify-center text-black bg-[#bdf4c8] py-3 px-5 outline-none rounded-full text-base"
