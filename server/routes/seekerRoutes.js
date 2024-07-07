@@ -1,8 +1,20 @@
 import express from "express";
 import { rateLimit } from 'express-rate-limit'
-import { getUser, seekerLogin, seekerRegister, updateUser, applyJob, deleteUser, getUserById, getAppliedJobs, getAllSeekers } from "../controller/seekerController.js";
+import {
+  getUser,
+  seekerLogin,
+  seekerRegister,
+  updateUser,
+  applyJob,
+  deleteUser,
+  getUserById,
+  getAppliedJobs,
+  getAllSeekers,
+  forgetPassword,
+  resetPassword,
+  uploadReportUrl
+} from "../controller/seekerController.js";
 import userAuth from "../middleware/authMiddleware.js";
-import { forgetPassword, resetPassword } from "../controller/seekerController.js";
 // Rate limiting prevents the same IP address from making too many requests that will help us prevent attacks like brute force.
 
 const router = express.Router();
@@ -31,6 +43,9 @@ router.get('/get-user-profile/:id', userAuth, getUserById)
 
 // UPDATE USER 
 router.put("/update-user", userAuth, updateUser);
+
+// UPLOAD REPORT FOR LECTURER
+router.put("/upload-report", userAuth, updateUser);
 
 router.get("/", getAllSeekers);
 
