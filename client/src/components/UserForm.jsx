@@ -221,7 +221,6 @@ const UserForm = ({ open, setOpen }) => {
                     </div>
 
                     <div className='mt-4'>
-
                       {isLoading ? <Loading /> : (
                         <div className="flex justify-between">
                           <CustomButton

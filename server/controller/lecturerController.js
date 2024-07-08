@@ -4,6 +4,7 @@ import bcrypt from 'bcryptjs';
 import mongoose from 'mongoose';
 import nodemailer from "nodemailer";
 import Lecturers from '../models/LecturerModel.js';
+import Seekers from '../models/seekerModel.js';
 
 dotenv.config();
 
@@ -387,4 +388,40 @@ export const getLecturerById = async (req, res, next) => {
         console.log(error);
         res.status(500).json({ message: "Server error", error: error.message });
     }
+};
+
+
+// Controller to add a seeker to the student list of a lecturer
+export const addSeekerToLecturer = async (req, res) => {
+  const { lecturerId, seekerId } = req.body;
+
+  try {
+    // Find the Lecturer by ID
+    const lecturer = await Lecturers.findById(lecturerId);
+    if (!lecturer) {
+      return res.status(404).json({ message: 'Lecturer not found' });
+    }
+
+    // Find the Seeker by ID
+    const seeker = await Seekers.findById(seekerId);
+    if (!seeker) {
+      return res.status(404).json({ message: 'Seeker not found' });
+    }
+
+    // Check if the seeker is already in the student list
+    if (lecturer.studentLists.includes(seekerId)) {
+      return res.status(400).json({ message: 'Seeker is already in the student list' });
+    }
+
+    // Add the seeker to the studentLists array
+    lecturer.studentLists.push(seekerId);
+
+    // Save the updated lecturer document
+    await lecturer.save();
+
+    return res.status(200).json({ message: 'Seeker added to the lecturer\'s student list successfully', lecturer });
+  } catch (error) {
+    console.error('Error adding seeker to lecturer:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
 };

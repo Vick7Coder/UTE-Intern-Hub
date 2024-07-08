@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { AiOutlineMail } from "react-icons/ai";
 import { FiPhoneCall, FiEdit3 } from "react-icons/fi";
 import { Link, useParams } from "react-router-dom";
-import { CustomButton, SeekerCard, LecturerForm } from "../components";
+import { CustomButton, SeekerCard, LecturerForm, SeekerSquareCard } from "../components";
 import { useDispatch, useSelector } from "react-redux";
 import { apiRequest } from "../utils";
 import { ltData } from "../redux/lecturerSlice";
@@ -42,7 +42,7 @@ const LecturerProfile = () => {
               {user?.accountType === 'lecture' ? (
                 <>Welcome, {lecturerInfo?.name ?? user.name}</>
               ) : (
-                <>{lecturerInfo?.name  ?? "No Name"}</>
+                <>{lecturerInfo?.name ?? "No Name"}</>
               )}
             </h2>
             {lecturerInfo?.lecId ? (
@@ -85,7 +85,7 @@ const LecturerProfile = () => {
           </p>
 
           <div className='flex flex-col items-center mt-3.5 md:mt-0'>
-            <span className='text-xl'>{lecturerInfo?.seekers?.length ?? 0}</span>
+            <span className='text-xl'>{lecturerInfo?.studentLists?.length ?? 0}</span>
             <p className='text-blue-600'>Students</p>
           </div>
         </div>
@@ -103,14 +103,16 @@ const LecturerProfile = () => {
         <p className="text-center sm:text-left">Managed Students</p>
 
         <div className='flex flex-wrap justify-center sm:justify-normal gap-6'>
-          {lecturerInfo?.seekers?.map((seeker) => {
+          {lecturerInfo?.studentLists?.map((seeker) => {
             const data = {
-              lecturerName: lecturerInfo?.name,
-              lecturerEmail: lecturerInfo?.email,
-              lecturerProfileUrl: lecturerInfo?.profileUrl,
+              name: lecturerInfo?.name,
+              email: lecturerInfo?.email,
+              profileUrl: lecturerInfo?.profileUrl,
               ...seeker,
             };
-            return <SeekerCard data={data} key={seeker._id} />;
+            console.log('------------------')
+            console.log(data)
+            return <SeekerCard seeker={data} key={seeker._id} />;
           })}
         </div>
       </div>

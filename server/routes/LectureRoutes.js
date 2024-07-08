@@ -9,7 +9,8 @@ import {
     getLecturerSeekerListing,
     getLecturers,
     getLecturerById,
-    updateLecturerProfile
+    updateLecturerProfile,
+    addSeekerToLecturer
 } from "../controller/lecturerController.js";
 import userAuth from "../middleware/authMiddleware.js";
 
@@ -43,5 +44,8 @@ router.get("/get-lecturer/:id", userAuth, getLecturerById);
 
 // Cập nhật thông tin
 router.put("/update-lecturer", userAuth, updateLecturerProfile);
+
+// route to add a seeker to a lecturer's student lists
+router.post("/add-seeker-to-lecturer", userAuth, addSeekerToLecturer);
 
 export default router;

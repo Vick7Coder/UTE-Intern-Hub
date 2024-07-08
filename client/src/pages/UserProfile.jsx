@@ -4,7 +4,7 @@ import { HiLocationMarker } from "react-icons/hi";
 import { AiOutlineMail } from "react-icons/ai";
 import { FiPhoneCall } from "react-icons/fi";
 import { NoProfile } from "../assets";
-import { UserForm, SendReportForm, SendReviewForm } from "../components";
+import { UserForm, SendReportForm, SendReviewForm, AddToStudentListForm } from "../components";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { apiRequest } from "../utils";
 import { toast } from "react-toastify";
@@ -20,6 +20,7 @@ const UserProfile = () => {
   const [open, setOpen] = useState(false);
   const [openReportForm, setOpenReportForm] = useState(false);
   const [openReviewForm, setOpenReviewForm] = useState(false);
+  const [openAddToStudentList, setOpenAddToStudentList] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -178,6 +179,15 @@ const UserProfile = () => {
                   Upload Review
                 </button>
               )}
+
+              {user.accountType === "admin" && (
+                <button
+                  className="bg-green-600 p-2 rounded text-white"
+                  onClick={() => setOpenAddToStudentList(true)}
+                >
+                  Add to Student Lists
+                </button>
+              )}
             </div>
           )}
         </div>
@@ -186,6 +196,11 @@ const UserProfile = () => {
       <UserForm open={open} setOpen={setOpen} />
       <SendReportForm open={openReportForm} setOpen={setOpenReportForm} />
       <SendReviewForm open={openReviewForm} setOpen={setOpenReviewForm} seekerInfo={seekerInfo} />
+      <AddToStudentListForm
+        open={openAddToStudentList}
+        setOpen={setOpenAddToStudentList}
+        seekerId={id} // Pass the id from useParams() here
+      />
     </div>
   );
 };
