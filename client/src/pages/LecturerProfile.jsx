@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { HiLocationMarker } from "react-icons/hi";
 import { AiOutlineMail } from "react-icons/ai";
 import { FiPhoneCall, FiEdit3 } from "react-icons/fi";
 import { Link, useParams } from "react-router-dom";
@@ -17,7 +16,7 @@ const LecturerProfile = () => {
 
   const fetchLecturerById = async () => {
     const result = await apiRequest({
-      url: `/lecturers/get-lecturer/${id}`,
+      url: `/lecturer/get-lecturer/${id}`,
       method: "GET",
       token: user.token
     });
@@ -38,16 +37,27 @@ const LecturerProfile = () => {
     <div className='container mx-auto p-5'>
       <div>
         <div className='w-full flex flex-col md:flex-row gap-3 justify-between'>
-          <h2 className='text-gray-600 text-xl font-semibold'>
-            {user?.accountType === 'lecture' ? (
-              <>Welcome, {lecturerInfo?.name ?? user.name}</>
+          <div>
+            <h2 className='text-gray-600 text-xl font-semibold'>
+              {user?.accountType === 'lecture' ? (
+                <>Welcome, {lecturerInfo?.name ?? user.name}</>
+              ) : (
+                <>{lecturerInfo?.name  ?? "No Name"}</>
+              )}
+            </h2>
+            {lecturerInfo?.lecId ? (
+              <p className='text-gray-500 text-sm'>
+                ID: {lecturerInfo.lecId}
+              </p>
             ) : (
-              <>{lecturerInfo?.name}</>
+              <p className='text-gray-500 text-sm'>
+                ID: Not updated yet
+              </p>
             )}
-          </h2>
+          </div>
 
           {user?.accountType === 'lecture' && (id ? id === user.id : !id) && (
-            <div className='flex items-center justifu-center py-5 md:py-0 gap-4'>
+            <div className='flex items-center justify-center py-5 md:py-0 gap-4'>
               <CustomButton
                 onClick={() => setOpenForm(true)}
                 iconRight={<FiEdit3 />}
@@ -65,18 +75,18 @@ const LecturerProfile = () => {
 
         <div className='w-full flex flex-col md:flex-row justify-start md:justify-between mt-4 md:mt-8 text-base'>
           <p className='flex gap-1 items-center px-3 py-1 text-slate-600'>
-            <HiLocationMarker /> {lecturerInfo?.location ?? "No Location"}
+            Department: {lecturerInfo?.location ?? "No Department"}
           </p>
           <p className='flex gap-1 items-center px-3 py-1 text-slate-600'>
-            <AiOutlineMail /> {lecturerInfo?.email ?? user.email}
+            <AiOutlineMail /> {lecturerInfo?.email ?? "No Email"}
           </p>
           <p className='flex gap-1 items-center px-3 py-1 text-slate-600'>
             <FiPhoneCall /> {lecturerInfo?.contact ?? "No Contact"}
           </p>
 
           <div className='flex flex-col items-center mt-3.5 md:mt-0'>
-            <span className='text-xl'>{lecturerInfo?.seekers?.length}</span>
-            <p className='text-blue-600'>Seekers</p>
+            <span className='text-xl'>{lecturerInfo?.seekers?.length ?? 0}</span>
+            <p className='text-blue-600'>Students</p>
           </div>
         </div>
 
@@ -90,7 +100,7 @@ const LecturerProfile = () => {
       </div>
 
       <div className='w-full mt-20 flex flex-col gap-2'>
-        <p className="text-center sm:text-left">Managed Seekers</p>
+        <p className="text-center sm:text-left">Managed Students</p>
 
         <div className='flex flex-wrap justify-center sm:justify-normal gap-6'>
           {lecturerInfo?.seekers?.map((seeker) => {

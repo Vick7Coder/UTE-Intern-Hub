@@ -106,7 +106,7 @@ const CompanyProfile = () => {
           </p>
 
           <div className='flex flex-col items-center mt-3.5 md:mt-0'>
-            <span className='text-xl'>{companyInfo?.jobPosts?.length}</span>
+            <span className='text-xl'>{companyInfo?.jobPosts?.length ?? 0}</span>
             <p className='text-blue-600 '>Job Post</p>
           </div>
         </div>

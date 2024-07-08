@@ -72,9 +72,19 @@ const UserProfile = () => {
             {seekerInfo?.name ?? user.name}
           </h1>
 
-          <h5 className="text-blue-700 text-base font-bold">
+          <h4 className="text-blue-700 text-base font-bold">
             {seekerInfo?.headLine || "No Head Line"}
-          </h5>
+          </h4>
+
+          {seekerInfo?.stuId ? (
+            <p className='text-gray-500 text-sm'>
+              Student ID: {seekerInfo.stuId}
+            </p>
+          ) : (
+            <p className='text-gray-500 text-sm'>
+              Student ID: Not updated yet
+            </p>
+          )}
 
           <div className="w-full flex flex-wrap lg:flex-row justify-between mt-8 text-sm">
             <p className="flex gap-1 items-center justify-center  px-3 py-1 text-slate-600 rounded-full">

@@ -106,6 +106,7 @@ export const seekerLogin = async (req, res, next) => {
 export const updateUser = async (req, res, next) => {
   const {
     name,
+    stuId,
     email,
     contact,
     location,
@@ -125,6 +126,7 @@ export const updateUser = async (req, res, next) => {
 
     const updatedUser = {
       name,
+      stuId,
       email,
       contact,
       location,

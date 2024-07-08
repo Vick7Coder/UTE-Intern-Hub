@@ -32,7 +32,7 @@ const CompanyCard = ({ cmp }) => {
       </div>
 
       <div className=" max-[340px]:hidden w-1/4 h-full md:flex flex-col items-center md:mt-[20px] text-center">
-        <p className="text-blue-600 font-semibold">{cmp?.jobPosts?.length}</p>
+        <p className="text-blue-600 font-semibold">{cmp?.jobPosts?.length ?? 0}</p>
         <span className="text-xs md:tex-base font-normal text-gray-600">
           Jobs Posted
         </span>

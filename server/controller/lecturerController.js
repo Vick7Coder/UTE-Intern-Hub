@@ -164,7 +164,7 @@ export const resetLecturerPassword = async (req, res, next) => {
 };
 //Update Lecturer Information
 export const updateLecturerProfile = async (req, res, next) => {
-    const { name, contact, location, profileUrl, about } = req.body;
+    const { name, lecId, contact, location, profileUrl, about } = req.body;
 
     try {
         const id = req.user.userId;  // jwt decoded
@@ -176,6 +176,7 @@ export const updateLecturerProfile = async (req, res, next) => {
             name,
             contact,
             location,
+            lecId,
             profileUrl,
             about,
             _id: id,
@@ -272,7 +273,6 @@ export const getLecturers = async (req, res, next) => {
         queryResult = queryResult.skip((page - 1) * limit).limit(limit);
 
         const lecturers = await queryResult;
-
         res.status(200).json({
             success: true,
             total,
@@ -332,6 +332,7 @@ export const getLecturerSeekerListing = async (req, res, next) => {
             lecturer: {
                 _id: queryResult._id,
                 name: queryResult.name,
+                lecId: queryResult.lecId,
                 email: queryResult.email,
                 contact: queryResult.contact,
                 location: queryResult.location,
@@ -372,6 +373,7 @@ export const getLecturerById = async (req, res, next) => {
             data: {
                 _id: lecturer._id,
                 name: lecturer.name,
+                lecId: lecturer.lecId,
                 email: lecturer.email,
                 contact: lecturer.contact,
                 location: lecturer.location,

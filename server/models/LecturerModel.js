@@ -17,6 +17,7 @@ let LectureSchema = new mongoose.Schema({
         type:String,
         default:"lecture"
     },
+    lecId:{type:String},
     contact:{type:String},
     location:{type:String},
     about:{type:String},

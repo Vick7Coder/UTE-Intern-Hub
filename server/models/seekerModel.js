@@ -14,6 +14,7 @@ let seekerSchema = new mongoose.Schema({
         type: String,
         default: "seeker"
     },
+    stuId: { type: String },
     contact: { type: String },
     location: { type: String },
     profileUrl: { type: String },
@@ -31,7 +32,6 @@ let seekerSchema = new mongoose.Schema({
         type: Schema.Types.ObjectId,
         ref: "recruiter"
     },
-    // them de hien thi danh sach job da apply seeker
     appliedJobs: [{ type: Schema.Types.ObjectId, ref: 'Jobs' }],
     acceptedJob: {
         type: Schema.Types.ObjectId,

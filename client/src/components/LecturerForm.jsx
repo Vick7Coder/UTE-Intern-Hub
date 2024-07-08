@@ -3,7 +3,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { useSelector } from 'react-redux';
 import { CustomButton, TextInput, Loading } from "../components";
 import { apiRequest, handleFileUpload } from "../utils";
-import * as yup from 'yup'
+import * as yup from 'yup';
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
@@ -13,40 +13,40 @@ const LecturerForm = ({ open, setOpen }) => {
 
     const updateSchema = yup.object().shape({
         name: yup.string().min(6, 'At least 6 Characters').required(),
-        specialization: yup.string().min(4, 'At least 4 Characters').required(),
+        location: yup.string().min(4, 'At least 4 Characters').required(),
         contact: yup.string().min(10, 'Enter a valid contact').required(),
+        lecId: yup.string().required('Lecture ID is required'),
         about: yup.string().min(80, 'Tell us about yourself').required(),
-    })
+    });
 
-    const { register, handleSubmit, formState: { errors }, } =
-        useForm({
-            mode: "onChange",
-            defaultValues: { ...user },
-            resolver: yupResolver(updateSchema)
-        });
+    const { register, handleSubmit, formState: { errors } } = useForm({
+        mode: "onChange",
+        defaultValues: { ...user },
+        resolver: yupResolver(updateSchema)
+    });
 
     const [profileImage, setProfileImage] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
     const onSubmit = async (data) => {
-        setIsLoading(true)
+        setIsLoading(true);
 
-        const profileURL = profileImage && (await handleFileUpload(profileImage))
+        const profileURL = profileImage && (await handleFileUpload(profileImage));
 
-        const updatedData = profileURL ? { ...data, profileUrl: profileURL } : data
+        const updatedData = profileURL ? { ...data, profileUrl: profileURL } : data;
 
         const result = await apiRequest({
             url: '/lecturer/update-lecturer',
             token: user.token,
             data: updatedData,
             method: "PUT"
-        })
+        });
 
         if (result.status === 200) {
-            setIsLoading(false)
-            toast.success(result.data.message)
+            setIsLoading(false);
+            toast.success(result.data.message);
 
-            let storeData = JSON.parse(localStorage.getItem('user'))
+            let storeData = JSON.parse(localStorage.getItem('user'));
             storeData.name = data.name;
             localStorage.setItem("user", JSON.stringify(storeData));
 
@@ -54,9 +54,9 @@ const LecturerForm = ({ open, setOpen }) => {
                 window.location.reload();
             }, 900);
         } else {
-            console.log(result)
-            setIsLoading(false)
-            toast.error("Error occurred")
+            console.log(result);
+            setIsLoading(false);
+            toast.error("Error occurred");
         }
     };
 
@@ -110,12 +110,20 @@ const LecturerForm = ({ open, setOpen }) => {
                                         />
 
                                         <TextInput
-                                            name='specialization'
-                                            label='Specialization'
+                                            name='location'
+                                            label='Location'
                                             placeholder='e.g. Computer Science'
                                             type='text'
-                                            register={register("specialization")}
-                                            error={errors.specialization && errors.specialization.message}
+                                            register={register("location")}
+                                            error={errors.location && errors.location.message}
+                                        />
+
+                                        <TextInput
+                                            name='lecId'
+                                            label='Lecturer ID'
+                                            type='text'
+                                            register={register("lecId")}
+                                            error={errors.lecId && errors.lecId.message}
                                         />
 
                                         <div className='w-full flex items-center gap-2'>

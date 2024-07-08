@@ -20,7 +20,8 @@ import {
   Applicants,
   AppliedJobs,
   LecturerProfile,
-  Seekers  // Import AppliedJobs component
+  Seekers,
+  Lecturers
 } from "../pages";
 import { useSelector } from "react-redux";
 
@@ -50,6 +51,11 @@ const AppRoutes = () => {
           />
 
           <Route
+            path="/lecturer"
+            element={(user?.accountType == "admin") && <Lecturers />}
+          />
+
+          <Route
             path="/Companies"
             element={user?.accountType !== "company" && <Companies />}
           />
@@ -66,12 +72,12 @@ const AppRoutes = () => {
           />
 
           <Route
-            path={
-              user?.accountType === "lecture"
-                ? "/lecturer-profile"
-                : "/lecturer-profile/:id"
-            }
-            element={<LecturerProfile />}
+            path="/lecturer-profile"
+            element={user?.accountType === "lecture" ? <LecturerProfile /> : <Navigate to="/" replace />}
+          />
+          <Route
+            path="/lecturer-profile/:id"
+            element={user?.accountType === "admin" ? <LecturerProfile /> : <Navigate to="/" replace />}
           />
 
           <Route

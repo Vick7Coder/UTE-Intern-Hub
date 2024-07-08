@@ -101,7 +101,6 @@ const Companies = () => {
 
         <div className='w-full flex flex-col gap-6'>
           {data?.map((cmp, index) => (
-
             <CompanyCard cmp={cmp} key={index} />
           ))}
 
