@@ -94,9 +94,6 @@ const NavBar = () => {
                     <Link to="/">Jobs</Link>
                   </li>
                   <li>
-                    <Link to="/upload-job">Upload Job</Link>
-                  </li>
-                  <li>
                     <Link to="/blogs">Blogs</Link>
                   </li>
                   <li>
@@ -216,9 +213,6 @@ const NavBar = () => {
               <>
                 <Link to="/" onClick={() => setIsOpen(false)}>
                   Jobs
-                </Link>
-                <Link to="/upload-job" onClick={() => setIsOpen(false)}>
-                  Upload Job
                 </Link>
                 <Link to="/blogs" onClick={() => setIsOpen(false)}>
                   Blogs

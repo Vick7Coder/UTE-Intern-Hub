@@ -33,7 +33,7 @@ const Seekers = () => {
         const newURL = updateURl({
             pageNum: pageNum,
             query: searchQuery,
-            seekerLoc: seekerLocation,
+            cmpLoc: seekerLocation,
             sort: sortOption,
             navigate: navigate,
             location: location,
