@@ -53,7 +53,7 @@ export const handleFileUpload = async (uploadFile) => {
 export const updateURl = ({
     pageNum,
     query,
-    cmpLoc, //company location
+    cmpLoc, 
     sort,
     navigate,
     location,
