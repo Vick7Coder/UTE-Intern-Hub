@@ -38,6 +38,10 @@ let seekerSchema = new mongoose.Schema({
         ref: 'Jobs',
         default: null
     },
+    isAssignedToLecturer: {
+        type: Boolean,
+        default: false
+    },
 
 },
     { timestamps: true }

@@ -39,7 +39,7 @@ const NavBar = () => {
     if (type === "Company") {
       navigate("/companies");
     }
-    if (type === "Seeker") {
+    if (type === "Student") {
       navigate("/user");
     }
     if (type === "Lecturer") {
@@ -109,8 +109,8 @@ const NavBar = () => {
                     {isUserDropdownOpen && (
                       <ul className="absolute bg-white shadow-lg rounded-lg mt-2">
                         <li>
-                          <button className="block px-4 py-2" onClick={() => handleUserTypeSelect("Seeker")}>
-                            Seeker
+                          <button className="block px-4 py-2" onClick={() => handleUserTypeSelect("Student")}>
+                            Student
                           </button>
                         </li>
                         <li>
@@ -230,8 +230,8 @@ const NavBar = () => {
                   {isUserDropdownOpen && (
                     <ul className="absolute bg-white shadow-lg rounded-lg mt-2">
                       <li>
-                        <button className="block px-4 py-2" onClick={() => handleUserTypeSelect("Seeker")}>
-                          Seeker
+                        <button className="block px-4 py-2" onClick={() => handleUserTypeSelect("Student")}>
+                          Student
                         </button>
                       </li>
                       <li>

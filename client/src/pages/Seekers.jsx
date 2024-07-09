@@ -71,7 +71,7 @@ const Seekers = () => {
     return (
         <div className='w-full'>
             <Header
-                title='Discover Talented Job Seekers!'
+                title='Discover Talented Students!'
                 type
                 handleClick={handleSearchSubmit}
                 searchQuery={searchQuery}
