@@ -10,7 +10,8 @@ import {
     getLecturers,
     getLecturerById,
     updateLecturerProfile,
-    addSeekerToLecturer
+    addSeekerToLecturer,
+    getLecturerStudents
 } from "../controller/lecturerController.js";
 import userAuth from "../middleware/authMiddleware.js";
 
@@ -47,5 +48,7 @@ router.put("/update-lecturer", userAuth, updateLecturerProfile);
 
 // route to add a seeker to a lecturer's student lists
 router.post("/add-seeker-to-lecturer", userAuth, addSeekerToLecturer);
+
+router.get("/lecturer-students", userAuth, getLecturerStudents);
 
 export default router;

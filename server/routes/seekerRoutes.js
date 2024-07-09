@@ -51,7 +51,8 @@ router.put("/upload-report", userAuth, uploadReportUrl);
 // COMPANY UPLOAD REVIEW FOR LECTURER
 router.put("/upload-review", userAuth, uploadReviewUrl);
 
-router.get("/", getAllSeekers);
+//Get ALL Seekers
+router.get("/", userAuth, getAllSeekers);
 
 //Apply Job
 router.post("/apply-job/:jobId", userAuth, applyJob);
