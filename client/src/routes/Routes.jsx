@@ -21,7 +21,8 @@ import {
   AppliedJobs,
   LecturerProfile,
   Seekers,
-  Lecturers
+  Lecturers,
+  Admins
 } from "../pages";
 import { useSelector } from "react-redux";
 
@@ -53,6 +54,10 @@ const AppRoutes = () => {
           <Route
             path="/lecturer"
             element={(user?.accountType == "admin") && <Lecturers />}
+          />
+          <Route
+            path="/admin"
+            element={(user?.accountType == "admin") && <Admins />}
           />
 
           <Route

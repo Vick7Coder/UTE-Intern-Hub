@@ -45,6 +45,9 @@ const NavBar = () => {
     if (type === "Lecturer") {
       navigate("/lecturer");
     }
+    if (type === "Admin") {
+      navigate("/admin");
+    }
   };
 
   return (

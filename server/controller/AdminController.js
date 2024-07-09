@@ -23,7 +23,7 @@ export const adminRegister = async (req, res, next) => {
   try {
     const existingAdmin = await Admins.findOne({ email });
     if (existingAdmin) {
-      return res.status(400).json({ success: false, message: "Email đã tồn tại" });
+      return res.status(400).json({ success: false, message: "An account exist with this email!" });
     }
 
     const hashedPassword = bcrypt.hashSync(password, 10);
@@ -31,7 +31,7 @@ export const adminRegister = async (req, res, next) => {
     const admin = new Admins({ name, email, password: hashedPassword });
     await admin.save();
 
-    const adminRegToken = createToken(admin._id);
+    // const adminRegToken = createToken(admin._id);
 
     res.status(201).json({
       success: true,
@@ -42,7 +42,7 @@ export const adminRegister = async (req, res, next) => {
         email: admin.email,
         accountType: admin.accountType
       },
-      token: adminRegToken
+      // token: adminRegToken
     });
   } catch (err) {
     next(err);
@@ -227,30 +227,6 @@ export const getAdminProfile = async (req, res, next) => {
 };
 
 
-//getting user Data using id
-export const getAdminById = async (req, res, next) => {
-  try {
-
-    const { id } = req.params;
-    const ad = await Admins.findById(id);
-
-    if (!ad) {
-      throw new Error("Admin Not Found")
-    }
-
-
-    res.status(200).json({
-      success: true,
-      data: ad,
-    });
-
-  }
-  catch (err) {
-    console.log(err);
-    next(err)
-  }
-}
-
 export const deleteAdmin = async (req, res, next) => {
   try {
 
@@ -269,13 +245,6 @@ export const deleteAdmin = async (req, res, next) => {
   }
 }
 
-
-
-
-// UPDATE ADMIN PROFILE (tương tự updateCompanyProfile)
-// GET ADMIN PROFILE (tương tự getCompanyProfile)
-
-// GET ALL ADMINS 
 //GET ALL COMPANIES
 export const getAdmins = async (req, res, next) => {
 
@@ -337,4 +306,36 @@ export const getAdmins = async (req, res, next) => {
   }
 };
 
-// GET ADMIN BY ID (chỉ dành cho admin khác)
+
+
+export const getAdminById = async (req, res, next) => {
+  try {
+      const { id } = req.params;
+
+      const admin = await Admins.findById(id).select("-password");
+
+      if (!admin) {
+          return res.status(404).json({
+              success: false,
+              message: "Admin Not Found"
+          });
+      }
+
+      res.status(200).json({
+          success: true,
+          data: {
+              _id: admin._id,
+              name: admin.name,
+              email: admin.email,
+              contact: admin.contact,
+              location: admin.location,
+              about: admin.about,
+              profileUrl: admin.profileUrl
+          },
+      });
+
+  } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
