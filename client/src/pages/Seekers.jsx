@@ -83,7 +83,7 @@ const Seekers = () => {
             <div className='container mx-auto flex flex-col gap-5 2xl:gap-10 px-5 py-6'>
                 <div className='flex items-center justify-between mb-4'>
                     <p className='text-sm md:text-base'>
-                        Total number of seekers: <span className='font-semibold'>{recordsCount}</span> Seekers
+                        Total number of students: <span className='font-semibold'>{recordsCount}</span> Students
                         Available
                     </p>
 
