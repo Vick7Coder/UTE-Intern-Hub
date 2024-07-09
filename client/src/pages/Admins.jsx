@@ -1,28 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { SeekerCard, CustomButton, Header, Loading, SortBox } from "../components";
+import { AdminCard, CustomButton, Header, Loading, SortBox, AdminRegisterForm } from "../components";
 import { apiRequest, updateURl } from "../utils";
-import { ltData } from "../redux/lecturerSlice";
-import { useDispatch, useSelector } from "react-redux";
 
-const Seekers = () => {
-    const { user } = useSelector((state) => state.user);
+const Admins = () => {
     const [page, setPage] = useState(1);
     const [numPage, setNumPage] = useState(1);
     const [recordsCount, setRecordsCount] = useState(0);
     const [data, setData] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
-    const [seekerLocation, setSeekerLocation] = useState("");
+    const [adminLocation, setAdminLocation] = useState("");
     const [sort, setSort] = useState("Newest");
     const [isFetching, setIsFetching] = useState(false);
+    const [openRegisterForm, setOpenRegisterForm] = useState(false);
 
     const navigate = useNavigate();
     const location = useLocation();
 
     const handleSearchSubmit = async (e) => {
         e.preventDefault();
-        setPage(1);
-        await fetchingSeekers(1, sort);
+        setPage(1);  // Reset page to 1
+        await fetchingAdmins();
     };
 
     const handleShowMore = async (e) => {
@@ -30,14 +28,14 @@ const Seekers = () => {
         setPage((prev) => prev + 1);
     };
 
-    const fetchingSeekers = async (pageNum = page, sortOption = sort) => {
+    const fetchingAdmins = async () => {
         setIsFetching(true);
 
         const newURL = updateURl({
-            pageNum: pageNum,
+            pageNum: page,
             query: searchQuery,
-            cmpLoc: seekerLocation,
-            sort: sortOption,
+            cmpLoc: adminLocation,
+            sort: sort,
             navigate: navigate,
             location: location,
         });
@@ -45,60 +43,75 @@ const Seekers = () => {
         try {
             const res = await apiRequest({
                 url: newURL,
-                token: user.token,
-                method: "GET"
+                method: "GET",
             });
+            console.log(res);
 
-            if (pageNum === 1) {
-                setData(res.data.seekers);
-            } else {
-                setData((prev) => [...prev, ...res.data.seekers]);
-            }
             setNumPage(res.data.numOfPage);
             setRecordsCount(res.data.total);
+
+            // Always replace the entire data set
+            setData(res.data.admins);
+
             setIsFetching(false);
-        }
-        catch (err) {
+        } catch (err) {
             console.log(err);
             setIsFetching(false);
         }
     };
 
     useEffect(() => {
-        fetchingSeekers(page, sort);
-    }, [page, sort]);
+        fetchingAdmins();
+    }, [page]);
+
+    useEffect(() => {
+        if (page !== 1) {
+            setPage(1);
+        } else {
+            fetchingAdmins();
+        }
+    }, [sort]);
 
     return (
         <div className='w-full'>
             <Header
-                title='Discover Talented Students!'
+                title='Our Administrative Team'
                 type
                 handleClick={handleSearchSubmit}
                 searchQuery={searchQuery}
                 setSearchQuery={setSearchQuery}
-                location={seekerLocation}
-                setLocation={setSeekerLocation}
+                location={adminLocation}
+                setLocation={setAdminLocation}
             />
 
             <div className='container mx-auto flex flex-col gap-5 2xl:gap-10 px-5 py-6'>
                 <div className='flex items-center justify-between mb-4'>
                     <p className='text-sm md:text-base'>
-                        Total number of students: <span className='font-semibold'>{recordsCount}</span> Students
-                        Available
+                        Total number of admins: <span className='font-semibold'>{recordsCount}</span> Available
                     </p>
 
                     <div className='flex flex-col md:flex-row gap-0 md:gap-2 md:items-center'>
                         <p className='text-sm md:text-base'>Sort By:</p>
-
                         <SortBox sort={sort} setSort={setSort} />
                     </div>
                 </div>
 
-                <div className='w-full flex flex-col gap-6'>
-                    {data?.map((seeker, index) => (
-                        <SeekerCard seeker={seeker} key={index} />
-                    ))}
+                <div className='w-full flex justify-end mb-4'>
+                    <CustomButton
+                        onClick={() => setOpenRegisterForm(true)}
+                        title='Register New Admin'
+                        containerStyles={`bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700`}
+                    />
+                </div>
 
+                <div className='w-full flex flex-col gap-6'>
+                    {data && data.length > 0 ? (
+                        data.map((admin, index) => (
+                            <AdminCard admin={admin} key={admin._id || index} />
+                        ))
+                    ) : (
+                        <p>No admins available</p>
+                    )}
                     <p className='text-sm text-right'>
                         {data?.length} records out of {recordsCount}
                     </p>
@@ -110,7 +123,7 @@ const Seekers = () => {
                     </div>
                 )}
 
-                {numPage > page && (
+                {numPage > page && !isFetching && (
                     <div className='w-full flex items-center justify-center pt-16'>
                         <CustomButton
                             onClick={handleShowMore}
@@ -120,8 +133,10 @@ const Seekers = () => {
                     </div>
                 )}
             </div>
+
+            <AdminRegisterForm open={openRegisterForm} setOpen={setOpenRegisterForm} />
         </div>
     );
 };
 
-export default Seekers;
+export default Admins;

@@ -1,88 +1,68 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { Fragment, useState } from "react";
 import { useSelector } from "react-redux";
-import { CustomButton, Loading, TextInput } from ".";
+import { CustomButton, Loading } from ".";
 import { apiRequest } from "../utils";
 import { toast } from "react-toastify";
 
 const AddToStudentListForm = ({ open, setOpen, seekerId }) => {
   const { user } = useSelector((state) => state.user);
-  const [allLecturers, setAllLecturers] = useState([]);
-  const [filteredLecturers, setFilteredLecturers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [lecId, setLecId] = useState("");
-  const [selectedLecturerId, setSelectedLecturerId] = useState("");
-  const [inputMode, setInputMode] = useState("input"); // "input" or "select"
+  const [lecturerInfo, setLecturerInfo] = useState(null);
 
-  const { register, handleSubmit, setError, clearErrors, formState: { errors } } = useForm();
-
-  useEffect(() => {
-    const fetchLecturers = async () => {
+  const checkLecturerInfo = async () => {
+    setIsLoading(true);
+    try {
       const result = await apiRequest({
-        url: '/lecturer',
+        url: `/lecturer/get-lecturer-i4/${lecId}`,
         token: user.token,
         method: "GET"
       });
 
       if (result.status === 200) {
-        setAllLecturers(result.data.lecturers);
-        setFilteredLecturers(result.data.lecturers);
+        setLecturerInfo(result.data);
       } else {
-        toast.error("Failed to fetch lecturers");
+        toast.error(result.message || "Failed to fetch lecturer information");
       }
-    };
-
-    fetchLecturers();
-  }, [user.token]);
-
-  useEffect(() => {
-    if (lecId) {
-      const filtered = allLecturers.filter(lecturer =>
-        lecturer.lecId.toLowerCase().includes(lecId.toLowerCase())
-      );
-      setFilteredLecturers(filtered);
-      clearErrors('lecturerId');
-    } else {
-      setFilteredLecturers(allLecturers);
+    } catch (error) {
+      toast.error(error.message || "An error occurred while fetching lecturer information");
+    } finally {
+      setIsLoading(false);
     }
-  }, [lecId, allLecturers, clearErrors]);
+  };
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (e) => {
+    e.preventDefault();
     setIsLoading(true);
 
-    let lecturerIdToSubmit = "";
+    const trimmedLecId = lecId.trim();
 
-    if (lecId) {
-      // Nếu có giá trị trong TextInput, sử dụng nó trực tiếp
-      lecturerIdToSubmit = lecId;
-    } else if (selectedLecturerId) {
-      lecturerIdToSubmit = selectedLecturerId;
-    }
-
-    if (!lecturerIdToSubmit) {
-      setError("lecturerId", {
-        type: "manual",
-        message: "Please select a lecturer or enter a Lecturer ID"
-      });
+    if (!trimmedLecId) {
+      toast.error("Please enter a Lecturer ID");
       setIsLoading(false);
       return;
     }
 
-    const result = await apiRequest({
-      url: '/lecturer/add-seeker-to-lecturer',
-      token: user.token,
-      data: { lecturerId: lecturerIdToSubmit, seekerId },
-      method: "POST"
-    });
+    try {
+      const result = await apiRequest({
+        url: '/lecturer/add-seeker-to-lecturer',
+        token: user.token,
+        data: { lecturerId: trimmedLecId, seekerId },
+        method: "POST"
+      });
 
-    if (result.status === 200) {
-      toast.success("User added to student list successfully");
-      setOpen(false);
-    } else {
-      toast.error("Failed to add user to student list");
+      if (result.status === 200) {
+        toast.success("User added to student list successfully");
+        setOpen(false);
+      } else {
+        toast.error(result.message || "Failed to add user to student list");
+      }
+    } catch (error) {
+      toast.error(error.message || "An error occurred while processing your request");
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   return (
@@ -118,68 +98,43 @@ const AddToStudentListForm = ({ open, setOpen, seekerId }) => {
                 >
                   Add to Student List
                 </Dialog.Title>
-                <form onSubmit={handleSubmit(onSubmit)} className='mt-2'>
-                  <div className='mb-4'>
-                    <label className='block text-gray-700 text-sm font-bold mb-2' htmlFor='mode'>
-                      Select Mode
+                <form onSubmit={onSubmit} className='mt-4'>
+                  <div className='mb-6'>
+                    <label htmlFor='lecId' className='block text-sm font-medium text-gray-700'>
+                      Enter Lecturer ID
                     </label>
-                    <div className='flex'>
-                      <button
-                        type='button'
-                        onClick={() => setInputMode("input")}
-                        className={`mr-2 py-2 px-4 rounded ${inputMode === "input" ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
-                      >
-                        Input ID
-                      </button>
-                      <button
-                        type='button'
-                        onClick={() => setInputMode("select")}
-                        className={`py-2 px-4 rounded ${inputMode === "select" ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
-                      >
-                        Select Lecturer
-                      </button>
-                    </div>
-                  </div>
-                  {inputMode === "input" ? (
-                    <div className='mb-4'>
-                      <TextInput
+                    <div className="mt-2 flex rounded-md shadow-sm">
+                      <input
+                        id='lecId'
                         name='lecId'
-                        label='Enter Lecturer ID'
-                        placeholder='Enter Lecturer ID'
                         type='text'
+                        placeholder='Enter Lecturer ID'
                         value={lecId}
                         onChange={(e) => {
                           setLecId(e.target.value);
-                          setSelectedLecturerId("");
                         }}
+                        required
+                        className='flex-1 block w-full rounded-l-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+                      />
+                      <CustomButton
+                        type='button'
+                        containerStyles='bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-r-md focus:outline-none focus:shadow-outline'
+                        title='Check Info'
+                        onClick={checkLecturerInfo}
                       />
                     </div>
-                  ) : (
-                    <div className='mb-4'>
-                      <label className='block text-gray-700 text-sm font-bold mb-2' htmlFor='lecturer'>
-                        Select Lecturer
-                      </label>
-                      <select
-                        {...register("lecturerId")}
-                        className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
-                        value={selectedLecturerId}
-                        onChange={(e) => {
-                          setSelectedLecturerId(e.target.value);
-                          setLecId("");
-                        }}
-                      >
-                        <option value="">Select a lecturer</option>
-                        {filteredLecturers.map((lecturer) => (
-                          <option key={lecturer._id} value={lecturer._id}>
-                            {lecturer.name} (ID: {lecturer.lecId})
-                          </option>
-                        ))}
-                      </select>
-                      {errors.lecturerId && (
-                        <p className='text-red-500 text-xs italic'>{errors.lecturerId.message}</p>
-                      )}
+                  </div>
+
+                  {lecturerInfo && (
+                    <div className="mb-6 p-4 bg-gray-100 rounded-md">
+                      <h4 className="font-bold">Lecturer Information:</h4>
+                      <p>Name: {lecturerInfo.name}</p>
+                      <p>Email: {lecturerInfo.email}</p>
+                      <p>Fal: {lecturerInfo.location}</p>
+                      <p>Students: {lecturerInfo.studentLists.length}</p>
                     </div>
                   )}
+
                   <div className='flex items-center justify-between'>
                     {isLoading ? (
                       <Loading />

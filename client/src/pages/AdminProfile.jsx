@@ -8,7 +8,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { apiRequest } from "../utils";
 import { adData } from "../redux/adminSlice";
 import { toast } from "react-toastify";
-import { NoProfile } from "../assets"; // Ensure you have a default profile picture
+import { NoProfile } from "../assets";
 
 const AdminProfile = () => {
   const { user } = useSelector((state) => state.user);
@@ -34,16 +34,19 @@ const AdminProfile = () => {
   };
 
   useEffect(() => {
-    id && fetchAdminById();
+    if (id) {
+      fetchAdminById();
+    } else {
+      console.error("ID param is undefined");
+    }
   }, [id]);
 
   useEffect(() => {
     if (isDeleted) {
-      window.location.reload(); // Reload the page
+      window.location.reload();
     }
   }, [isDeleted]);
 
-  // Redirect or show error if user is not admin
   if (user?.accountType !== "admin") {
     return <div>Access Denied. Only admins can view this page.</div>;
   }
@@ -65,6 +68,10 @@ const AdminProfile = () => {
       }
     }
   };
+
+  const isOwnProfile = String(user.id) === String(id);
+  console.log("User ID:", user.id);
+  console.log("Profile ID:", id);
 
   return (
     <div className="container mx-auto flex items-center justify-center py-10">
@@ -107,21 +114,23 @@ const AdminProfile = () => {
             </div>
           </div>
 
-          <div className="w-full sm:flex justify-around">
-            <button
-              className="w-full sm:w-1/4 bg-blue-600 text-white mt-4 py-2 rounded"
-              onClick={() => setOpen(true)}
-            >
-              Edit Profile
-            </button>
+          {isOwnProfile && (
+            <div className="w-full sm:flex justify-around">
+              <button
+                className="w-full sm:w-1/4 bg-blue-600 text-white mt-4 py-2 rounded"
+                onClick={() => setOpen(true)}
+              >
+                Edit Profile
+              </button>
 
-            <button
-              className="w-full sm:w-1/4 bg-red-600 text-white mt-4 py-2 rounded"
-              onClick={deleteAccount}
-            >
-              Delete Account
-            </button>
-          </div>
+              <button
+                className="w-full sm:w-1/4 bg-red-600 text-white mt-4 py-2 rounded"
+                onClick={deleteAccount}
+              >
+                Delete Account
+              </button>
+            </div>
+          )}
         </div>
       </div>
 

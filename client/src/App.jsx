@@ -9,6 +9,7 @@ const App = () => {
     <>
       <ToastContainer autoClose={3000} closeOnClick={true} pauseOnHover={false} />
       <AppRoutes />
+    
     </>
 
   )

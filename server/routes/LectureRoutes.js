@@ -11,7 +11,9 @@ import {
     getLecturerById,
     updateLecturerProfile,
     addSeekerToLecturer,
-    getLecturerStudents
+    getLecturerStudents,
+    getLecturerByLecId,
+    removeSeekerFromLecturer
 } from "../controller/lecturerController.js";
 import userAuth from "../middleware/authMiddleware.js";
 
@@ -42,6 +44,7 @@ router.get("/get-lecturer-profile", userAuth, getLecturerProfile);
 router.get("/get-lecturer-seekerlisting", userAuth, getLecturerSeekerListing);
 router.get("/", getLecturers);
 router.get("/get-lecturer/:id", userAuth, getLecturerById);
+router.get("/get-lecturer-i4/:lecId", userAuth, getLecturerByLecId);
 
 // Cập nhật thông tin
 router.put("/update-lecturer", userAuth, updateLecturerProfile);
@@ -50,5 +53,8 @@ router.put("/update-lecturer", userAuth, updateLecturerProfile);
 router.post("/add-seeker-to-lecturer", userAuth, addSeekerToLecturer);
 
 router.get("/lecturer-students", userAuth, getLecturerStudents);
+
+router.post('/remove-seeker', userAuth, removeSeekerFromLecturer);
+
 
 export default router;

@@ -404,8 +404,8 @@ export const addSeekerToLecturer = async (req, res) => {
     const { lecturerId, seekerId } = req.body;
 
     try {
-        // Find the Lecturer by ID
-        const lecturer = await Lecturers.findById(lecturerId);
+        // Find the Lecturer by lecId
+        const lecturer = await Lecturers.findOne({ lecId: lecturerId });
         if (!lecturer) {
             return res.status(404).json({ message: 'Lecturer not found' });
         }
@@ -416,16 +416,20 @@ export const addSeekerToLecturer = async (req, res) => {
             return res.status(404).json({ message: 'Seeker not found' });
         }
 
-        // Check if the seeker is already in the student list
-        if (lecturer.studentLists.includes(seekerId)) {
-            return res.status(400).json({ message: 'Seeker is already in the student list' });
+        // Check if the seeker is already assigned to any lecturer
+        if (seeker.isAssignedToLecturer) {
+            return res.status(400).json({ message: 'Seeker is already assigned to a lecturer' });
         }
 
-        // Add the seeker to the studentLists array
+        // Add the seeker to the studentLists array of the lecturer
         lecturer.studentLists.push(seekerId);
 
-        // Save the updated lecturer document
+        // Mark the seeker as assigned to a lecturer
+        seeker.isAssignedToLecturer = true;
+
+        // Save the updated lecturer and seeker documents
         await lecturer.save();
+        await seeker.save();
 
         return res.status(200).json({ message: 'Seeker added to the lecturer\'s student list successfully', lecturer });
     } catch (error) {
@@ -442,7 +446,7 @@ export const getLecturerStudents = async (req, res, next) => {
         if (!lecturer) {
             return res.status(404).json({ success: false, message: "Lecturer not found" });
         }
-    
+
         let queryObject = { _id: { $in: lecturer.studentLists } };
 
         if (search) {
@@ -491,5 +495,64 @@ export const getLecturerStudents = async (req, res, next) => {
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: "Server error", error: error.message });
+    }
+};
+
+export const getLecturerByLecId = async (req, res) => {
+    try {
+        const { lecId } = req.params;
+        const lecturer = await Lecturers.findOne({ lecId })
+            .select('-password')
+            .populate('studentLists', 'name email');
+
+        if (!lecturer) {
+            return res.status(404).json({ message: 'Not Found Lecturer!' });
+        }
+
+        res.status(200).json(lecturer);
+    } catch (error) {
+        console.error('Lỗi khi lấy thông tin giảng viên:', error);
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+
+// Controller to remove a seeker from the student list of a lecturer
+export const removeSeekerFromLecturer = async (req, res) => {
+    const { seekerId } = req.body;
+    const lecturerId = req.user.userId;
+
+    try {
+        // Find the Lecturer by lecId
+        const lecturer = await Lecturers.findById(lecturerId);
+        if (!lecturer) {
+            return res.status(404).json({ message: 'Lecturer not found' });
+        }
+
+        // Find the Seeker by ID
+        const seeker = await Seekers.findById(seekerId);
+        if (!seeker) {
+            return res.status(404).json({ message: 'Seeker not found' });
+        }
+
+        // Check if the seeker is part of the lecturer's student list
+        const seekerIndex = lecturer.studentLists.indexOf(seekerId);
+        if (seekerIndex === -1) {
+            return res.status(400).json({ message: 'Seeker is not assigned to this lecturer' });
+        }
+
+        // Remove the seeker from the studentLists array of the lecturer
+        lecturer.studentLists.splice(seekerIndex, 1);
+
+        // Mark the seeker as not assigned to a lecturer
+        seeker.isAssignedToLecturer = false;
+
+        // Save the updated lecturer and seeker documents
+        await lecturer.save();
+        await seeker.save();
+
+        return res.status(200).json({ message: 'Seeker removed from the lecturer\'s student list successfully', lecturer });
+    } catch (error) {
+        console.error('Error removing seeker from lecturer:', error);
+        return res.status(500).json({ message: 'Internal server error' });
     }
 };
