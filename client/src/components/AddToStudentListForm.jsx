@@ -54,12 +54,8 @@ const AddToStudentListForm = ({ open, setOpen, seekerId }) => {
     let lecturerIdToSubmit = "";
 
     if (lecId) {
-      const foundLecturer = filteredLecturers.find(
-        (lecturer) => lecturer.lecId.toLowerCase() === lecId.toLowerCase()
-      );
-      if (foundLecturer) {
-        lecturerIdToSubmit = foundLecturer._id;
-      }
+      // Nếu có giá trị trong TextInput, sử dụng nó trực tiếp
+      lecturerIdToSubmit = lecId;
     } else if (selectedLecturerId) {
       lecturerIdToSubmit = selectedLecturerId;
     }
@@ -67,7 +63,7 @@ const AddToStudentListForm = ({ open, setOpen, seekerId }) => {
     if (!lecturerIdToSubmit) {
       setError("lecturerId", {
         type: "manual",
-        message: "Please select a lecturer or enter a valid Lecturer ID"
+        message: "Please select a lecturer or enter a Lecturer ID"
       });
       setIsLoading(false);
       return;

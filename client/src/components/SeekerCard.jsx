@@ -4,32 +4,34 @@ import { NoProfile } from "../assets";
 
 const SeekerCard = ({ seeker }) => {
     return (
-        <div className="w-full h-16 flex gap-4 items-center justify-between bg-white shadow-md rounded">
-            <Link to={`/user-profile/${seeker?._id}`}>
-                <div className="w-3/4 md:w-2/4 flex gap-4 items-center pl-3">
+        <div className="w-full flex items-center justify-between bg-white shadow-md rounded p-4">
+            <div className="flex items-center space-x-4 w-1/3">
+                <Link to={`/user-profile/${seeker?._id}`} className="flex items-center space-x-4">
                     <img
                         src={seeker?.profileUrl ?? NoProfile}
                         alt={seeker?.name}
-                        className="w-8 md:w-12 h-8 md:h-12 rounded"
+                        className="w-12 h-12 rounded-full object-cover"
                     />
-                    <div className="h-full flex flex-col">
-                        <p className="text-base md:text-lg font-semibold text-gray-600 truncate">
+                    <div className="flex flex-col">
+                        <p className="text-base font-semibold text-gray-600 truncate">
                             {seeker?.name}
                         </p>
-                        <span className="text-sm text-blue-600">{seeker?.email}</span>
+                        <span className="text-sm text-blue-600 truncate">{seeker?.email}</span>
                     </div>
-                </div>
-            </Link>
-
-            <div className="hidden w-1/4 h-full md:flex items-center">
-                <p className="text-base text-start">{seeker?.location}</p>
+                </Link>
             </div>
 
-            <div className="max-[340px]:hidden w-1/4 h-full md:flex flex-col items-center md:mt-[20px] text-center">
+            <div className="w-1/4 truncate">
+                <p className="text-base text-gray-600">{seeker?.location || "N/A"}</p>
+            </div>
+
+            <div className="w-1/4 truncate">
+                <p className="text-base text-gray-600">{seeker?.stuId || "N/A"}</p>
+            </div>
+
+            <div className="w-1/6 text-center">
                 <p className="text-blue-600 font-semibold">{seeker?.appliedJobs?.length || 0}</p>
-                <span className="text-xs md:text-base font-normal text-gray-600">
-                    Jobs Applied
-                </span>
+                <span className="text-xs text-gray-600">Jobs Applied</span>
             </div>
         </div>
     );
