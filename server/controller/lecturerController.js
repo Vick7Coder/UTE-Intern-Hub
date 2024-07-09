@@ -438,17 +438,11 @@ export const getLecturerStudents = async (req, res, next) => {
     try {
         const lecturerId = req.user.userId; // Giả sử bạn đã có middleware xác thực
         const { search, sort, location } = req.query;
-
-        console.log('===============================What the fuck??------------------------------');
-   
-
         const lecturer = await Lecturers.findById(lecturerId);
         if (!lecturer) {
-            console.log('===============================What the fuck??------------------------------');
             return res.status(404).json({ success: false, message: "Lecturer not found" });
         }
-        console.log('===============================Ditcumay------------------------------');
-        console.log(lecturer);
+    
         let queryObject = { _id: { $in: lecturer.studentLists } };
 
         if (search) {
@@ -460,9 +454,6 @@ export const getLecturerStudents = async (req, res, next) => {
         }
 
         let queryResult = Seekers.find(queryObject).select("-password");
-
-    console.log('===============================Ditcumay------------------------------');
-    console.log(queryResult);
 
         // Sorting
         if (sort === "Newest") {
