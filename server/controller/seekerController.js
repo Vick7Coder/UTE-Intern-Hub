@@ -6,6 +6,8 @@ import mongoose from 'mongoose'
 import Seekers from '../models/seekerModel.js'
 import Jobs from '../models/jobModel.js'
 import Recruiters from '../models/recruiterModel.js';
+import Lecturers from '../models/LecturerModel.js';
+import Admins from '../models/AdminModel.js';
 
 dotenv.config();
 
@@ -378,14 +380,40 @@ export const getAppliedJobs = async (req, res, next) => {
 export const getAllSeekers = async (req, res, next) => {
   try {
     const { search, sort, location } = req.query;
+    const userId = req.user.userId;
+
+    let userRole = '';
+    const lecturer = await Lecturers.findById(userId);
+    const admin = await Admins.findById(userId);
+
+    if (lecturer) {
+      userRole = 'lecturer';
+    } else if (admin) {
+      userRole = 'admin';
+    } else {
+      return res.status(403).json({ success: false, message: "Unauthorized access" });
+    }
 
     // conditions for searching filters
-    const queryObject = {};
+    let queryObject = {};
+
+    // If user is a lecturer, only get students in their list
+    if (userRole === 'lecturer') {
+      if (!lecturer.studentLists || lecturer.studentLists.length === 0) {
+        return res.status(200).json({
+          success: true,
+          total: 0,
+          seekers: [],
+          page: 1,
+          numOfPage: 0,
+        });
+      }
+      queryObject._id = { $in: lecturer.studentLists };
+    }
 
     if (search) {
       queryObject.name = { $regex: search, $options: "i" };
     }
-
     if (location) {
       queryObject.location = { $regex: location, $options: "i" };
     }
@@ -395,15 +423,12 @@ export const getAllSeekers = async (req, res, next) => {
     // SORTING
     if (sort === "Newest") {
       queryResult = queryResult.sort("-createdAt");
-    }
-    if (sort === "Oldest") {
+    } else if (sort === "Oldest") {
       queryResult = queryResult.sort("createdAt");
-    }
-    if (sort === "A-Z") {
-      queryResult = queryResult.sort("name");  // A-Z sorting
-    }
-    if (sort === "Z-A") {
-      queryResult = queryResult.sort("-name");  // Z-A sorting
+    } else if (sort === "A-Z") {
+      queryResult = queryResult.sort("name");
+    } else if (sort === "Z-A") {
+      queryResult = queryResult.sort("-name");
     }
 
     // pagination

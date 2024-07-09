@@ -163,7 +163,6 @@ export const resetLecturerPassword = async (req, res, next) => {
         next(error);
     }
 };
-//Update Lecturer Information
 export const updateLecturerProfile = async (req, res, next) => {
     const { name, lecId, contact, location, profileUrl, about } = req.body;
 
@@ -172,6 +171,15 @@ export const updateLecturerProfile = async (req, res, next) => {
 
         if (!mongoose.Types.ObjectId.isValid(id))
             throw new Error(`No Lecturer with id: ${id}`);
+
+        // Kiểm tra xem lecId mới có bị trùng không
+        const existingLecturer = await Lecturers.findOne({ lecId, _id: { $ne: id } });
+        if (existingLecturer) {
+            return res.status(400).json({
+                success: false,
+                message: "Lecturer ID already exists"
+            });
+        }
 
         const updatedLecturer = {
             name,
@@ -393,35 +401,104 @@ export const getLecturerById = async (req, res, next) => {
 
 // Controller to add a seeker to the student list of a lecturer
 export const addSeekerToLecturer = async (req, res) => {
-  const { lecturerId, seekerId } = req.body;
+    const { lecturerId, seekerId } = req.body;
 
-  try {
-    // Find the Lecturer by ID
-    const lecturer = await Lecturers.findById(lecturerId);
-    if (!lecturer) {
-      return res.status(404).json({ message: 'Lecturer not found' });
+    try {
+        // Find the Lecturer by ID
+        const lecturer = await Lecturers.findById(lecturerId);
+        if (!lecturer) {
+            return res.status(404).json({ message: 'Lecturer not found' });
+        }
+
+        // Find the Seeker by ID
+        const seeker = await Seekers.findById(seekerId);
+        if (!seeker) {
+            return res.status(404).json({ message: 'Seeker not found' });
+        }
+
+        // Check if the seeker is already in the student list
+        if (lecturer.studentLists.includes(seekerId)) {
+            return res.status(400).json({ message: 'Seeker is already in the student list' });
+        }
+
+        // Add the seeker to the studentLists array
+        lecturer.studentLists.push(seekerId);
+
+        // Save the updated lecturer document
+        await lecturer.save();
+
+        return res.status(200).json({ message: 'Seeker added to the lecturer\'s student list successfully', lecturer });
+    } catch (error) {
+        console.error('Error adding seeker to lecturer:', error);
+        return res.status(500).json({ message: 'Internal server error' });
     }
+};
+//Get Student of Lecturer
+export const getLecturerStudents = async (req, res, next) => {
+    try {
+        const lecturerId = req.user.userId; // Giả sử bạn đã có middleware xác thực
+        const { search, sort, location } = req.query;
 
-    // Find the Seeker by ID
-    const seeker = await Seekers.findById(seekerId);
-    if (!seeker) {
-      return res.status(404).json({ message: 'Seeker not found' });
+        console.log('===============================What the fuck??------------------------------');
+   
+
+        const lecturer = await Lecturers.findById(lecturerId);
+        if (!lecturer) {
+            console.log('===============================What the fuck??------------------------------');
+            return res.status(404).json({ success: false, message: "Lecturer not found" });
+        }
+        console.log('===============================Ditcumay------------------------------');
+        console.log(lecturer);
+        let queryObject = { _id: { $in: lecturer.studentLists } };
+
+        if (search) {
+            queryObject.name = { $regex: search, $options: "i" };
+        }
+
+        if (location) {
+            queryObject.location = { $regex: location, $options: "i" };
+        }
+
+        let queryResult = Seekers.find(queryObject).select("-password");
+
+    console.log('===============================Ditcumay------------------------------');
+    console.log(queryResult);
+
+        // Sorting
+        if (sort === "Newest") {
+            queryResult = queryResult.sort("-createdAt");
+        }
+        if (sort === "Oldest") {
+            queryResult = queryResult.sort("createdAt");
+        }
+        if (sort === "A-Z") {
+            queryResult = queryResult.sort("name");
+        }
+        if (sort === "Z-A") {
+            queryResult = queryResult.sort("-name");
+        }
+
+        // Pagination
+        const page = Number(req.query.page) || 1;
+        const limit = Number(req.query.limit) || 5;
+        const skip = (page - 1) * limit;
+
+        const total = await Seekers.countDocuments(queryObject);
+        const numOfPage = Math.ceil(total / limit);
+
+        queryResult = queryResult.skip(skip).limit(limit);
+
+        const seekers = await queryResult;
+
+        res.status(200).json({
+            success: true,
+            total,
+            seekers: seekers,
+            page,
+            numOfPage,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Server error", error: error.message });
     }
-
-    // Check if the seeker is already in the student list
-    if (lecturer.studentLists.includes(seekerId)) {
-      return res.status(400).json({ message: 'Seeker is already in the student list' });
-    }
-
-    // Add the seeker to the studentLists array
-    lecturer.studentLists.push(seekerId);
-
-    // Save the updated lecturer document
-    await lecturer.save();
-
-    return res.status(200).json({ message: 'Seeker added to the lecturer\'s student list successfully', lecturer });
-  } catch (error) {
-    console.error('Error adding seeker to lecturer:', error);
-    return res.status(500).json({ message: 'Internal server error' });
-  }
 };

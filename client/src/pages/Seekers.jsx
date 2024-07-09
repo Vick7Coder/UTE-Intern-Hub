@@ -2,8 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { SeekerCard, CustomButton, Header, Loading, SortBox } from "../components";
 import { apiRequest, updateURl } from "../utils";
+import { ltData } from "../redux/lecturerSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const Seekers = () => {
+    const { user } = useSelector((state) => state.user);
     const [page, setPage] = useState(1);
     const [numPage, setNumPage] = useState(1);
     const [recordsCount, setRecordsCount] = useState(0);
@@ -42,6 +45,7 @@ const Seekers = () => {
         try {
             const res = await apiRequest({
                 url: newURL,
+                token: user.token,
                 method: "GET"
             });
 
