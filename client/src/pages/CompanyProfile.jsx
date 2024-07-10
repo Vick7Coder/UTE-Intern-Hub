@@ -46,7 +46,6 @@ const CompanyProfile = () => {
 
     else {
       console.log(result)
-      // alert(result.error)
       toast.error("Error Occured")
 
     }
