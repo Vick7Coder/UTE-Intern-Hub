@@ -26,7 +26,7 @@ const JobCard = ({ data, user }) => {
         </div>
 
         <div className='py-2'>
-          <p className='text-sm break-all text-justify'> {data?.detail?.description?.slice(0, 120) + "..."}  </p>
+          <p className='text-sm text-justify break-words whitespace-pre-wrap'> {data?.detail?.description?.slice(0, 120) + "..."}  </p>
         </div>
 
         <div className='flex items-center justify-between'>
