@@ -69,9 +69,7 @@ const AdminProfile = () => {
     }
   };
 
-  const isOwnProfile = String(user.id) === String(id);
-  console.log("User ID:", user.id);
-  console.log("Profile ID:", id);
+ 
 
   return (
     <div className="container mx-auto flex items-center justify-center py-10">
@@ -114,7 +112,7 @@ const AdminProfile = () => {
             </div>
           </div>
 
-          {isOwnProfile && (
+          {((user?.accountType === 'admin' && (id ? id === user.id : !id))) && (
             <div className="w-full sm:flex justify-around">
               <button
                 className="w-full sm:w-1/4 bg-blue-600 text-white mt-4 py-2 rounded"
@@ -131,6 +129,8 @@ const AdminProfile = () => {
               </button>
             </div>
           )}
+
+         
         </div>
       </div>
 
