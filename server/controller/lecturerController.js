@@ -66,7 +66,6 @@ export const lecturerLogin = async (req, res, next) => {
 
         const lectureLogToken = createToken(lecture._id);
 
-        console.log('-----------------------------OK-----------------------');
 
         res.status(200).json({
             success: true,

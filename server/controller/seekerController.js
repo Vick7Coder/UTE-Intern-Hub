@@ -358,7 +358,13 @@ export const getAppliedJobs = async (req, res, next) => {
 
     console.log("Fetching applied jobs for user:", userId);  // Thêm log này
 
-    const seeker = await Seekers.findById(userId).populate('appliedJobs');
+    const seeker = await Seekers.findById(userId).populate({
+      path: 'appliedJobs',
+      populate: {
+        path: 'company',
+        model: 'Recruiters'
+      }
+    });
 
     if (!seeker) {
       console.log("User not found");  // Thêm log này
