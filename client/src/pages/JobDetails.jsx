@@ -191,19 +191,19 @@ const JobDetails = () => {
               />
             </div>
 
-            <div className="my-6 break-all">
+            <div className="my-6">
               {selected === "0" ? (
                 <>
                   <p className="text-xl font-semibold">Job Decsription</p>
 
-                  <span className="text-base">
+                  <span className="text-base text-justify break-words whitespace-pre-wrap">
                     {jobData.detail.description}
                   </span>
 
                   {jobData.detail.requirements && (
                     <>
                       <p className="text-xl font-semibold mt-8">Requirements</p>
-                      <span className="text-base">
+                      <span className="text-base text-justify break-words whitespace-pre-wrap">
                         {jobData.detail.requirements}
                       </span>
                     </>
@@ -222,7 +222,7 @@ const JobDetails = () => {
                   </div>
 
                   <p className="text-xl font-semibold">About Company</p>
-                  <span>{jobData.company.about}</span>
+                  <span className="text-base text-justify break-words whitespace-pre-wrap">{jobData.company.about}</span>
                 </>
               )}
             </div>

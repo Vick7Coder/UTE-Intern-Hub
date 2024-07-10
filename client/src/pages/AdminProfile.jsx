@@ -98,7 +98,7 @@ const AdminProfile = () => {
           <div className="w-full flex flex-col-reverse items-center md:flex-row gap-8 py-6">
             <div className="w-full md:w-2/3 flex flex-col gap-4 text-lg text-slate-600 mt-20 md:mt-0">
               <p className="text-[#0536e7] font-semibold text-2xl">ABOUT</p>
-              <span className="text-base text-justify break-all">
+              <span className="text-base text-justify break-words whitespace-pre-wrap">
                 {adminInfo?.about ?? "No About Found"}
               </span>
             </div>
