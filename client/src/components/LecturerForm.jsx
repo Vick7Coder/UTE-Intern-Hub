@@ -111,7 +111,7 @@ const LecturerForm = ({ open, setOpen }) => {
 
                                         <TextInput
                                             name='location'
-                                            label='Location'
+                                            label='Department or field'
                                             placeholder='e.g. Computer Science'
                                             type='text'
                                             register={register("location")}

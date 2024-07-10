@@ -19,8 +19,8 @@ const jobSchema = new mongoose.Schema(
     detail: { description: { type: String }, requirements: { type: String } },
 
     applicants: [{ type: Schema.Types.ObjectId, ref: "Seekers" }],
-    // Thêm cái này cho accepted applicant
-    acceptedApplicants: [{ type: Schema.Types.ObjectId, ref: "Seekers" }], // Thêm trường này
+
+    acceptedApplicants: [{ type: Schema.Types.ObjectId, ref: "Seekers" }], 
   },
   { timestamps: true }
 );

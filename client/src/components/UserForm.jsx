@@ -151,8 +151,8 @@ const UserForm = ({ open, setOpen }) => {
                       <div className='w-full sm:w-1/2'>
                         <TextInput
                           name='location'
-                          label='Location'
-                          placeholder='Location'
+                          label='Department or field'
+                          placeholder='e.g. FIT'
                           type='text'
                           register={register("location")}
                           error={

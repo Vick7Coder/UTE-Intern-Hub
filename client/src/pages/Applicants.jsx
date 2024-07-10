@@ -48,6 +48,57 @@ const Applicants = () => {
     }
   };
 
+  const handleRemoveApplicant = async (userId) => {
+    if (window.confirm("Are you sure you want to remove this applicant?")) {
+      try {
+        const result = await apiRequest({
+          url: `/jobs/remove-applicant/${id}/${userId}`,
+          method: "DELETE",
+          token: user.token,
+        });
+
+        if (result.status === 200) {
+          toast.success("Applicant removed successfully");
+          setApplicantData((prev) =>
+            prev.filter((profile) => profile.data.user._id !== userId)
+          );
+          setApplicants((prev) => prev.filter((applicantId) => applicantId !== userId));
+        } else {
+          toast.error(result.data.message || "Failed to remove applicant");
+        }
+      } catch (error) {
+        console.error("Error removing applicant:", error);
+        toast.error("An error occurred while removing the applicant");
+      }
+    }
+  };
+
+  const handleRemoveAcceptedApplicant = async (userId) => {
+    if (window.confirm("Are you sure you want to remove this accepted applicant?")) {
+      try {
+        const result = await apiRequest({
+          url: `/jobs/remove-accepted-applicant/${userId}`,
+          method: "DELETE",
+          token: user.token,
+          data: { jobId: id },
+        });
+
+        if (result.status === 200) {
+          toast.success("Accepted applicant removed successfully");
+          setAcceptedApplicantData((prev) =>
+            prev.filter((profile) => profile.data.user._id !== userId)
+          );
+          setAcceptedApplicants((prev) => prev.filter((applicantId) => applicantId !== userId));
+        } else {
+          toast.error(result.data.message || "Failed to remove accepted applicant");
+        }
+      } catch (error) {
+        console.error("Error removing accepted applicant:", error);
+        toast.error("An error occurred while removing the accepted applicant");
+      }
+    }
+  };
+
   const getJobData = async () => {
     try {
       const result = await apiRequest({
@@ -127,14 +178,29 @@ const Applicants = () => {
         <p>{profile.data.user.headLine ?? "No Headline"}</p>
       </div>
 
-
       {(!isAccepted && user.accountType === 'company') && (
-        <CustomButton
-          title="Accept"
-          containerStyles="w-18 justify-center text-black bg-[#bdf4c8] py-3 px-5 outline-none rounded-full text-base"
-          onClick={() => handleAcceptApplicant(profile.data.user._id)}
-        />
+        <div className="flex gap-2">
+          <CustomButton
+            title="Accept"
+            containerStyles="w-18 justify-center text-black bg-[#bdf4c8] py-3 px-5 outline-none rounded-full text-base"
+            onClick={() => handleAcceptApplicant(profile.data.user._id)}
+          />
+          <CustomButton
+            title="Remove"
+            containerStyles="w-18 justify-center text-white bg-red-500 py-3 px-5 outline-none rounded-full text-base"
+            onClick={() => handleRemoveApplicant(profile.data.user._id)}
+          />
+        </div>
       )}
+      {(isAccepted && user.accountType === 'company') && (
+      <div className="flex gap-2">
+        <CustomButton
+          title="Remove"
+          containerStyles="w-18 justify-center text-white bg-red-500 py-3 px-5 outline-none rounded-full text-base"
+          onClick={() => handleRemoveAcceptedApplicant(profile.data.user._id)}
+        />
+      </div>
+    )}
     </div>
   );
 

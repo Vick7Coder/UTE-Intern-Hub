@@ -62,6 +62,22 @@ const SeekerCard = ({ seeker, onSeekerRemoved }) => {
                     </p>
                 </div>
             </div>
+            <div className="w-1/6 truncate">
+                {seeker?.acceptedJob ? (
+                    <Link to={`/job-details/${seeker.acceptedJob}`} className="hover:underline">
+                        <p className="text-sm font-semibold text-green-600">
+                            Accepted Job
+                        </p>
+                    </Link>
+                ) : (
+                    <div className="flex items-center space-x-2">
+                        <span className="w-3 h-3 rounded-full bg-yellow-500"></span>
+                        <p className="text-sm font-semibold text-yellow-500">
+                            Seeking Job
+                        </p>
+                    </div>
+                )}
+            </div>
             <div className="w-1/6 text-center">
                 <p className="text-blue-600 font-semibold">{seeker?.appliedJobs?.length || 0}</p>
                 <span className="text-xs text-gray-600">Jobs Applied</span>

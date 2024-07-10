@@ -89,6 +89,11 @@ const Admins = () => {
                     <p className='text-sm md:text-base'>
                         Total number of admins: <span className='font-semibold'>{recordsCount}</span> Available
                     </p>
+                    <CustomButton
+                        onClick={() => setOpenRegisterForm(true)}
+                        title='+ New'
+                        containerStyles={`bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-all duration-300 ease-in-out shadow-md hover:shadow-lg transform hover:-translate-y-1 text-sm md:text-base font-semibold`}
+                    />
 
                     <div className='flex flex-col md:flex-row gap-0 md:gap-2 md:items-center'>
                         <p className='text-sm md:text-base'>Sort By:</p>
@@ -96,13 +101,7 @@ const Admins = () => {
                     </div>
                 </div>
 
-                <div className='w-full flex justify-end mb-4'>
-                    <CustomButton
-                        onClick={() => setOpenRegisterForm(true)}
-                        title='Register New Admin'
-                        containerStyles={`bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700`}
-                    />
-                </div>
+
 
                 <div className='w-full flex flex-col gap-6'>
                     {data && data.length > 0 ? (

@@ -63,7 +63,7 @@ const LecturerProfile = () => {
                 iconRight={<FiEdit3 />}
                 containerStyles={`py-1.5 px-3 md:px-5 focus:outline-none bg-blue-600 hover:bg-blue-700 text-white rounded text-sm md:text-base border border-blue-600`}
               />
-              <Link to='/manage-seekers'>
+              <Link to='/user'>
                 <CustomButton
                   title='Manage Seekers'
                   containerStyles={`text-blue-600 py-1.5 px-3 md:px-5 focus:outline-none rounded text-sm md:text-base border border-blue-600`}

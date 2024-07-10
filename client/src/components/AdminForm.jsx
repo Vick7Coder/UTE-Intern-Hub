@@ -111,8 +111,8 @@ const AdminForm = ({ open, setOpen }) => {
 
                     <TextInput
                       name='location'
-                      label='Location'
-                      placeholder='e.g. New York'
+                      label='Department or field'
+                      placeholder='e.g. IT_UTE'
                       type='text'
                       register={register("location")}
                       error={errors.location && errors.location.message}

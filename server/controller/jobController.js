@@ -248,7 +248,7 @@ export const deleteJobPost = async (req, res, next) => {
   }
 };
 
-// Thêm cái này cho accepted applicant
+// Company accepted applicant
 export const acceptApplicant = async (req, res, next) => {
   try {
     const { jobId } = req.body;
@@ -294,3 +294,71 @@ export const acceptApplicant = async (req, res, next) => {
   }
 };
 
+export const removeSeekerFromApplicants = async (req, res) => {
+  try {
+    const { jobId, seekerId } = req.params;
+
+    // Tìm job và cập nhật danh sách applicants
+    const updatedJob = await Jobs.findByIdAndUpdate(
+      jobId,
+      { $pull: { applicants: seekerId } },
+      { new: true }
+    );
+
+    if (!updatedJob) {
+      return res.status(404).json({ message: "Job not found" });
+    }
+
+    // Cập nhật danh sách appliedJobs của seeker
+    await Seekers.findByIdAndUpdate(
+      seekerId,
+      { $pull: { appliedJobs: jobId } }
+    );
+
+    res.status(200).json({
+      message: "Seeker removed from applicants successfully",
+      updatedJob
+    });
+  } catch (error) {
+    console.error("Error in removeSeekerFromApplicants:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+// Company removes seeker from acceptedApplicants
+export const removeAcceptedApplicant = async (req, res, next) => {
+  try {
+    const { jobId } = req.body;
+    const userId = req.params.userId;
+
+    const job = await Jobs.findById(jobId);
+    if (!job) {
+      return res.status(404).json({ message: "Job not found" });
+    }
+
+    const seeker = await Seekers.findById(userId);
+    if (!seeker) {
+      return res.status(404).json({ message: "Seeker not found" });
+    }
+
+    // Remove seeker from job's acceptedApplicants
+    job.acceptedApplicants = job.acceptedApplicants.filter(
+      applicant => applicant.toString() !== userId
+    );
+
+    // Remove job from seeker's acceptedJob
+    seeker.acceptedJob = null;
+
+    // Remove job from seeker's appliedJobs
+    seeker.appliedJobs = seeker.appliedJobs.filter(
+      appliedJob => appliedJob.toString() !== jobId
+    );
+
+    // Save the changes
+    await Promise.all([job.save(), seeker.save()]);
+
+    res.status(200).json({ message: "Accepted applicant removed successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
