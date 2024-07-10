@@ -102,9 +102,6 @@ const NavBar = () => {
                   <li>
                     <Link to="/insights">Insights</Link>
                   </li>
-                  <li>
-                    <Link to="/upload-insight">Upload Insight</Link>
-                  </li>
                   <li className="relative">
                     <button onClick={toggleUserDropdown} className="focus:outline-none">
                       {selectedUserType}
@@ -222,9 +219,6 @@ const NavBar = () => {
                 </Link>
                 <Link to="/insights" onClick={() => setIsOpen(false)}>
                   Insights
-                </Link>
-                <Link to="/upload-insight" onClick={() => setIsOpen(false)}>
-                  Upload Insight
                 </Link>
                 <div className="relative">
                   <button onClick={toggleUserDropdown} className="block focus:outline-none">

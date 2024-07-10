@@ -76,7 +76,7 @@ const ChatForm = () => {
     <>
       <button
         onClick={() => toggleChat()}
-        className="fixed bottom-4 right-4 z-50 inline-flex items-center justify-center text-sm font-medium disabled:pointer-events-none disabled:opacity-50 border rounded-full w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-md hover:shadow-lg transform hover:-translate-y-1 transition-all duration-300 ease-in-out m-0 cursor-pointer border-none p-0 normal-case leading-5"
+        className="fixed bottom-4 right-4 z-[1000] inline-flex items-center justify-center text-sm font-medium disabled:pointer-events-none disabled:opacity-50 border rounded-full w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-md hover:shadow-lg transform hover:-translate-y-1 transition-all duration-300 ease-in-out m-0 cursor-pointer border-none p-0 normal-case leading-5"
         type="button"
         aria-haspopup="dialog"
         aria-expanded={isOpen}
@@ -92,12 +92,12 @@ const ChatForm = () => {
       {isOpen && (
         <>
           <div
-            className="fixed inset-0 bg-black bg-opacity-50 z-[55]"
+            className="fixed inset-0 bg-black bg-opacity-50 z-[1005]"
             onClick={toggleChat}
           ></div>
           <div
             style={{ boxShadow: "0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05)" }}
-            className="fixed bottom-[calc(4rem+1.5rem)] right-0 mr-4 bg-white rounded-lg border border-[#e5e7eb] w-[440px] h-[634px] z-[60] flex flex-col"
+            className="fixed bottom-[calc(4rem+1.5rem)] right-0 mr-4 bg-white rounded-lg border border-[#e5e7eb] w-[440px] h-[634px] z-[1010] flex flex-col"
           >
             {/* Heading */}
             <div className="flex flex-col space-y-1.5 p-6">

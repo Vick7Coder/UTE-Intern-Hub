@@ -47,19 +47,19 @@ const AppliedJobs = () => {
     }
 
     return (
-        <div className='container mx-auto p-5'>
+        <div className='container mx-auto p-5 mb-20'>
             <h2 className='text-2xl font-semibold mb-4'>APPLIED JOBS</h2>
-            <br />
-            {appliedJobs.length === 0 ? (
-                <p className='text-gray-600'>You haven't applied to any jobs yet.</p>
-            ) : (
-                <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'>
-                    {appliedJobs.map((job) => (
-                        <JobCard key={job._id} data={job} />
-                    ))}
-                </div>
-            )}
-            <br /><br />
+            <div className='mb-8'>
+                {appliedJobs.length === 0 ? (
+                    <p className='text-gray-600'>You haven't applied to any jobs yet.</p>
+                ) : (
+                    <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'>
+                        {appliedJobs.map((job) => (
+                            <JobCard key={job._id} data={job} />
+                        ))}
+                    </div>
+                )}
+            </div>
         </div>
     );
 };
