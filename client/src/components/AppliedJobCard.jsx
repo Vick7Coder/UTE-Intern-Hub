@@ -3,17 +3,18 @@ import moment from "moment"; //job posted time
 import { Link } from "react-router-dom";
 import { NoProfile } from "../assets";
 
-const JobCard = ({ data, user }) => {
+const AppliedJobCard = ({ data, user }) => {
 
   return (
     <Link to={user ? `/applicants/${data?._id}` : `/job-details/${data?._id}`} >
       <div className=' relative w-[17rem] xl:w-[20rem] 2xl:w-[18rem] h-[16rem] bg-white flex flex-col shadow-lg rounded-md px-3 py-5 gap-4 overflow-hidden' >
         <div className='flex gap-6'>
-          <img
-            src={data?.logo ?? NoProfile}
-            alt={data?.name}
-            className='w-14 h-14'
-          />
+          <img 
+                src={data?.company?.profileUrl || 'default-image-url.jpg'} 
+                alt={data?.company?.name || 'Company'} 
+                className="w-14 h-14 rounded-full object-cover" 
+            />
+
           <div >
             <p className='text-lg font-semibold'>{data?.jobTitle?.length > 20 ? data?.jobTitle.slice(0, 20) + "..." : data?.jobTitle}</p>
             <span className='flex gap-2 items-center break-all'>
@@ -43,4 +44,4 @@ const JobCard = ({ data, user }) => {
   )
 };
 
-export default JobCard;
+export default AppliedJobCard;

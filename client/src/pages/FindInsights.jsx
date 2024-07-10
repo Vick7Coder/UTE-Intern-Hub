@@ -113,6 +113,10 @@ const FindInsights = () => {
                         ))}
                     </div>
 
+                    <p className='text-sm text-right'>
+                        {insights?.length} records out of {recordCount}
+                    </p>
+
                     {isLoading && (
                         <div className='py-10 flex justify-center'>
                             <Loading />
