@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import InsightCard from "../components/InsightCard";
 import { apiRequest, updateURlinsight } from "../utils";
 import { toast } from "react-toastify";
-import { Header, SortBox, CustomButton, Loading } from '../components';
+import { Header, SortBox, CustomButton, StyledButton, Loading } from '../components';
+import UploadInsightForm from "../components/UploadInsightForm";
 
 const FindInsights = () => {
     const [insights, setInsights] = useState([]);
@@ -13,9 +15,11 @@ const FindInsights = () => {
     const [page, setPage] = useState(1);
     const [numPage, setNumPage] = useState(1);
     const [recordCount, setRecordCount] = useState(0);
+    const [isUploadFormOpen, setIsUploadFormOpen] = useState(false);
 
     const navigate = useNavigate();
     const location = useLocation();
+    const { user } = useSelector((state) => state.user);
 
     const fetchInsights = async (reset = false) => {
         setIsLoading(true);
@@ -83,10 +87,19 @@ const FindInsights = () => {
 
             <div className="container mx-auto px-4 py-6">
                 <div className="max-w-4xl mx-auto">
+
                     <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
                         <p className="text-base mb-2 sm:mb-0">
                             Total number of insights: <span className="font-semibold">{recordCount}</span>
                         </p>
+
+                        {user?.accountType === "admin" && (
+                            <StyledButton
+                                onClick={() => setIsUploadFormOpen(true)}
+                                title="+ New"
+                                containerStyles=""
+                            />
+                        )}
 
                         <div className="flex items-center gap-2">
                             <p className="text-base">Sort By:</p>
@@ -117,6 +130,8 @@ const FindInsights = () => {
                     )}
                 </div>
             </div>
+
+            <UploadInsightForm open={isUploadFormOpen} setOpen={setIsUploadFormOpen} />
         </>
     );
 };

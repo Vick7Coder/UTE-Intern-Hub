@@ -16,7 +16,6 @@ import {
   AdminProfile,
   InsightDetails,
   FindInsights,
-  UploadInsight,
   Applicants,
   AppliedJobs,
   LecturerProfile,
@@ -97,10 +96,6 @@ const AppRoutes = () => {
           <Route
             path={"/upload-job"}
             element={user?.accountType !== "seeker" && <UploadJob />}
-          />
-          <Route
-            path={"/upload-insight"}
-            element={user?.accountType !== "seeker" && <UploadInsight />}
           />
           <Route path={"/job-details/:id"} element={<JobDetails />} />
 

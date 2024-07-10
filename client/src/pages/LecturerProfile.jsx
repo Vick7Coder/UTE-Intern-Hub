@@ -6,6 +6,7 @@ import { CustomButton, SeekerCard, LecturerForm, SeekerSquareCard } from "../com
 import { useDispatch, useSelector } from "react-redux";
 import { apiRequest } from "../utils";
 import { ltData } from "../redux/lecturerSlice";
+import { NoProfile } from "../assets"; // Đảm bảo bạn có import này
 
 const LecturerProfile = () => {
   const { user } = useSelector((state) => state.user);
@@ -36,24 +37,31 @@ const LecturerProfile = () => {
   return (
     <div className='container mx-auto p-5'>
       <div>
-        <div className='w-full flex flex-col md:flex-row gap-3 justify-between'>
-          <div>
-            <h2 className='text-gray-600 text-xl font-semibold'>
-              {user?.accountType === 'lecture' ? (
-                <>Welcome, {lecturerInfo?.name ?? user.name}</>
+        <div className='w-full flex flex-col md:flex-row gap-3 justify-between items-center'>
+          <div className="flex items-center gap-4">
+            <img
+              src={lecturerInfo?.profileUrl || NoProfile}
+              alt={lecturerInfo?.name || "Lecturer"}
+              className="w-24 h-24 rounded-full object-cover"
+            />
+            <div>
+              <h2 className='text-gray-600 text-xl font-semibold'>
+                {user?.accountType === 'lecture' ? (
+                  <>Welcome, {lecturerInfo?.name ?? user.name}</>
+                ) : (
+                  <>{lecturerInfo?.name ?? "No Name"}</>
+                )}
+              </h2>
+              {lecturerInfo?.lecId ? (
+                <p className='text-gray-500 text-sm'>
+                  ID: {lecturerInfo.lecId}
+                </p>
               ) : (
-                <>{lecturerInfo?.name ?? "No Name"}</>
+                <p className='text-gray-500 text-sm'>
+                  ID: Not updated yet
+                </p>
               )}
-            </h2>
-            {lecturerInfo?.lecId ? (
-              <p className='text-gray-500 text-sm'>
-                ID: {lecturerInfo.lecId}
-              </p>
-            ) : (
-              <p className='text-gray-500 text-sm'>
-                ID: Not updated yet
-              </p>
-            )}
+            </div>
           </div>
 
           {user?.accountType === 'lecture' && (id ? id === user.id : !id) && (
@@ -90,32 +98,22 @@ const LecturerProfile = () => {
           </div>
         </div>
 
-        {lecturerInfo?.about &&
-
+        {lecturerInfo?.about && (
           <div>
             <p className="text-base text-justify break-words whitespace-pre-wrap text-slate-600 py-2.5 px-5 my-3.5 md:mx-auto w-full  md:w-8/12 border-dashed border-2 border-[#c9b7b7] rounded-xl">
-
               {lecturerInfo?.about}
-
             </p>
           </div>
-
-        }
+        )}
       </div>
 
       <div className='w-full mt-20 flex flex-col gap-2'>
         <p className="text-center sm:text-left">Managed Students</p>
 
         <div className='flex flex-wrap justify-center sm:justify-normal gap-6'>
-          {lecturerInfo?.studentLists?.map((seeker) => {
-            const data = {
-              name: lecturerInfo?.name,
-              email: lecturerInfo?.email,
-              profileUrl: lecturerInfo?.profileUrl,
-              ...seeker,
-            };
-            return <SeekerCard seeker={data} key={seeker._id} />;
-          })}
+          {lecturerInfo?.studentLists?.map((seeker) => (
+            <SeekerCard seeker={seeker} key={seeker._id} />
+          ))}
         </div>
       </div>
       <LecturerForm open={openForm} setOpen={setOpenForm} />
