@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-const API_URL = 'http://ute-intern-hub.up.railway.app/api';
+const API_URL = 'https://ute-intern-hub.up.railway.app/api';
+// const API_URL ='https://worknity.onrender.com/api';
 
 export const API = axios.create({
     baseURL: API_URL,
