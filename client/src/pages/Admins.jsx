@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { AdminCard, CustomButton, Header, Loading, SortBox, AdminRegisterForm } from "../components";
+import { AdminCard, CustomButton, Header, Loading, SortBox, AdminRegisterForm, StyledButton } from "../components";
 import { apiRequest, updateURl } from "../utils";
 
 const Admins = () => {
@@ -89,10 +89,10 @@ const Admins = () => {
                     <p className='text-sm md:text-base'>
                         Total number of admins: <span className='font-semibold'>{recordsCount}</span> Available
                     </p>
-                    <CustomButton
+                    <StyledButton
                         onClick={() => setOpenRegisterForm(true)}
                         title='+ New'
-                        containerStyles={`bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-all duration-300 ease-in-out shadow-md hover:shadow-lg transform hover:-translate-y-1 text-sm md:text-base font-semibold`}
+                        containerStyles=""
                     />
 
                     <div className='flex flex-col md:flex-row gap-0 md:gap-2 md:items-center'>
