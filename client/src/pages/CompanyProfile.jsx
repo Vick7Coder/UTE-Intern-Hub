@@ -112,7 +112,11 @@ const CompanyProfile = () => {
 
         {companyInfo?.about &&
           <div>
-            <p className="text-base text-slate-600 py-2.5 px-5 my-3.5 md:mx-auto w-full  md:w-8/12 text-justify break-all border-dashed border-2 border-[#c9b7b7] rounded-xl">{companyInfo?.about}</p>
+            <p className="text-base text-justify break-words whitespace-pre-wrap text-slate-600 py-2.5 px-5 my-3.5 md:mx-auto w-full  md:w-8/12 border-dashed border-2 border-[#c9b7b7] rounded-xl">
+            
+            {companyInfo?.about}
+            
+            </p>
           </div>
         }
 
