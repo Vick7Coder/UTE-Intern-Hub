@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = 'ute-intern-hub.up.railway.app/api';
+const API_URL = 'http://ute-intern-hub.up.railway.app/api';
 
 export const API = axios.create({
     baseURL: API_URL,
