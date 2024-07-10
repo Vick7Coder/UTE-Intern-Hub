@@ -114,8 +114,6 @@ const LecturerProfile = () => {
               profileUrl: lecturerInfo?.profileUrl,
               ...seeker,
             };
-            console.log('------------------')
-            console.log(data)
             return <SeekerCard seeker={data} key={seeker._id} />;
           })}
         </div>
