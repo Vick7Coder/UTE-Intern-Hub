@@ -7,13 +7,13 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { apiRequest } from "../utils";
 import { toast } from "react-toastify";
 
-const UploadBlog = () => {
+const UploadInsight = () => {
     const { user } = useSelector(state => state.user);
 
     // Schema for form validation
     const schema = yup.object().shape({
-        title: yup.string().required("Tiêu đề blog là bắt buộc"),
-        content: yup.string().required("Nội dung blog là bắt buộc"),
+        title: yup.string().required("Tiêu đề insight là bắt buộc"),
+        content: yup.string().required("Nội dung insight là bắt buộc"),
     });
 
     // React Hook Form setup
@@ -29,9 +29,9 @@ const UploadBlog = () => {
                 recruiter: user.id // Assuming user.id is the recruiter's ID
             };
 
-            // API request to upload blog
+            // API request to upload insight
             const result = await apiRequest({
-                url: '/blogs/upload-blog',
+                url: '/insights/upload-insight',
                 method: 'POST',
                 data: newData,
                 token: user.token,
@@ -45,15 +45,15 @@ const UploadBlog = () => {
                 console.log(result);
             }
         } catch (error) {
-            console.error("Error creating blog:", error.message);
-            toast.error("Failed to create blog. Please try again later.");
+            console.error("Error creating insight:", error.message);
+            toast.error("Failed to create insight. Please try again later.");
         }
     };
 
     return (
         <div className='flex justify-center items-center h-screen'>
             <div className='w-full max-w-2xl bg-white px-5 py-10 md:px-10 shadow-md'>
-                <p className='text-gray-500 font-semibold text-2xl mb-6 text-center'>Blog Post</p>
+                <p className='text-gray-500 font-semibold text-2xl mb-6 text-center'>Insight Post</p>
 
                 <form
                     className='w-full mt-2 flex flex-col gap-3.5 sm:gap-6'
@@ -61,7 +61,7 @@ const UploadBlog = () => {
                 >
                     <TextInput
                         name='title'
-                        label='Title Blog'
+                        label='Title insight'
                         placeholder='eg. What is IT?'
                         type='text'
                         required={true}
@@ -71,7 +71,7 @@ const UploadBlog = () => {
 
                     <div className='flex flex-col'>
                         <label className='text-gray-600 text-sm mb-1'>
-                            Content Blog
+                            Content Insight
                         </label>
                         <textarea
                             className='rounded border border-gray-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-base px-4 py-2 resize-none'
@@ -98,4 +98,4 @@ const UploadBlog = () => {
     );
 };
 
-export default UploadBlog;
+export default UploadInsight;

@@ -1,4 +1,4 @@
-// src/components/BlogUpdateForm.jsx
+// src/components/InsightUpdateForm.jsx
 import React, { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { useSelector } from 'react-redux';
@@ -10,7 +10,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
-const BlogUpdateForm = ({ open, setOpen, blogDetails }) => {
+const InsightUpdateForm = ({ open, setOpen, insightDetails }) => {
     const { user } = useSelector((state) => state.user);
     const { id } = useParams();
 
@@ -29,7 +29,7 @@ const BlogUpdateForm = ({ open, setOpen, blogDetails }) => {
         setIsLoading(true);
 
         const result = await apiRequest({
-            url: `/blogs/update-blog/${id}`,
+            url: `/insights/update-insight/${id}`,
             token: user.token,
             data: data,
             method: 'PUT'
@@ -49,7 +49,7 @@ const BlogUpdateForm = ({ open, setOpen, blogDetails }) => {
     useEffect(() => {
         if (isSubmitSuccessful) {
             reset();
-            blogDetails();
+            insightDetails();
             setOpen(false);
         }
     }, [isSubmitSuccessful]);
@@ -84,7 +84,7 @@ const BlogUpdateForm = ({ open, setOpen, blogDetails }) => {
                         >
                             <Dialog.Panel className='w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all'>
                                 <Dialog.Title as='h3' className='text-lg font-semibold leading-6 text-gray-900'>
-                                    Edit Blog Post
+                                    Edit Insight Post
                                 </Dialog.Title>
 
                                 <form className='w-full mt-2 flex flex-col gap-3.5 sm:gap-6' onSubmit={handleSubmit(onSubmit)}>
@@ -139,4 +139,4 @@ const BlogUpdateForm = ({ open, setOpen, blogDetails }) => {
     );
 };
 
-export default BlogUpdateForm;
+export default InsightUpdateForm;

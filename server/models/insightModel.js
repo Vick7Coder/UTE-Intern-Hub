@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 
-// Định nghĩa Blog Schema
-const blogSchema = new mongoose.Schema(
+// Định nghĩa Insight Schema
+const insightSchema = new mongoose.Schema(
     {
         title: { type: String, required: true },
         content: { type: String, required: true },
@@ -10,7 +10,7 @@ const blogSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-// Tạo Blog Model
-const Blog = mongoose.model("Blog", blogSchema);
+// Tạo Insight Model
+const Insight = mongoose.model("Insight", insightSchema);
 
-export default Blog;
+export default Insight;

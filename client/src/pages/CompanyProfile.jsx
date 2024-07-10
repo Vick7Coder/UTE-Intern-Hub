@@ -72,7 +72,7 @@ const CompanyProfile = () => {
               )
             }
           </h2>
-          {((user?.accountType === 'company' && (id ? id === user.id : !id)) ) && (
+          {((user?.accountType === 'company' && (id ? id === user.id : !id))) && (
             <div className='flex items-center justifu-center py-5 md:py-0 gap-4'>
               <CustomButton
                 onClick={() => setOpenForm(true)}
@@ -113,9 +113,9 @@ const CompanyProfile = () => {
         {companyInfo?.about &&
           <div>
             <p className="text-base text-justify break-words whitespace-pre-wrap text-slate-600 py-2.5 px-5 my-3.5 md:mx-auto w-full  md:w-8/12 border-dashed border-2 border-[#c9b7b7] rounded-xl">
-            
-            {companyInfo?.about}
-            
+
+              {companyInfo?.about}
+
             </p>
           </div>
         }
@@ -124,9 +124,10 @@ const CompanyProfile = () => {
       </div>
 
       <div className='w-full mt-20 flex flex-col gap-2'>
-        <p className="text-center sm:text-left"> Jobs Posted</p>
+        <p className="text-center font-bold text-xl uppercase mb-4"> Jobs Posted</p>
 
-        <div className='flex flex-wrap justify-center sm:justify-normal gap-6'>
+        <div className='flex flex-wrap justify-center gap-6'>
+
 
           {companyInfo?.jobPosts?.map((job) => {
 

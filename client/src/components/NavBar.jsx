@@ -73,7 +73,7 @@ const NavBar = () => {
                     <Link to="/companies">Companies</Link>
                   </li>
                   <li>
-                    <Link to="/blogs">Blogs</Link>
+                    <Link to="/insights">Insights</Link>
                   </li>
                   <li>
                     <Link to="/applied-jobs">Applied Jobs</Link>
@@ -90,7 +90,7 @@ const NavBar = () => {
                     <Link to="/upload-job">Upload Job</Link>
                   </li>
                   <li>
-                    <Link to="/blogs">Blogs</Link>
+                    <Link to="/insights">Insights</Link>
                   </li>
                 </>
               )}
@@ -100,10 +100,10 @@ const NavBar = () => {
                     <Link to="/">Jobs</Link>
                   </li>
                   <li>
-                    <Link to="/blogs">Blogs</Link>
+                    <Link to="/insights">Insights</Link>
                   </li>
                   <li>
-                    <Link to="/upload-blog">Upload Blog</Link>
+                    <Link to="/upload-insight">Upload Insight</Link>
                   </li>
                   <li className="relative">
                     <button onClick={toggleUserDropdown} className="focus:outline-none">
@@ -145,7 +145,7 @@ const NavBar = () => {
                     <Link to="/companies">Companies</Link>
                   </li>
                   <li>
-                    <Link to="/blogs">Blogs</Link>
+                    <Link to="/insights">Insights</Link>
                   </li>
                   <li>
                     <Link to="/user">Student</Link>
@@ -194,8 +194,8 @@ const NavBar = () => {
                 <Link to="/companies" onClick={() => setIsOpen(false)}>
                   Companies
                 </Link>
-                <Link to="/blogs" onClick={() => setIsOpen(false)}>
-                  Blogs
+                <Link to="/insights" onClick={() => setIsOpen(false)}>
+                  Insights
                 </Link>
                 <Link to="/applied-jobs" onClick={() => setIsOpen(false)}>
                   Applied Jobs
@@ -210,8 +210,8 @@ const NavBar = () => {
                 <Link to="/upload-job" onClick={() => setIsOpen(false)}>
                   Upload Job
                 </Link>
-                <Link to="/blogs" onClick={() => setIsOpen(false)}>
-                  Blogs
+                <Link to="/insights" onClick={() => setIsOpen(false)}>
+                  Insights
                 </Link>
               </>
             )}
@@ -220,11 +220,11 @@ const NavBar = () => {
                 <Link to="/" onClick={() => setIsOpen(false)}>
                   Jobs
                 </Link>
-                <Link to="/blogs" onClick={() => setIsOpen(false)}>
-                  Blogs
+                <Link to="/insights" onClick={() => setIsOpen(false)}>
+                  Insights
                 </Link>
-                <Link to="/upload-blog" onClick={() => setIsOpen(false)}>
-                  Upload Blog
+                <Link to="/upload-insight" onClick={() => setIsOpen(false)}>
+                  Upload Insight
                 </Link>
                 <div className="relative">
                   <button onClick={toggleUserDropdown} className="block focus:outline-none">
@@ -265,8 +265,8 @@ const NavBar = () => {
                 <Link to="/companies" onClick={() => setIsOpen(false)}>
                   Companies
                 </Link>
-                <Link to="/blogs" onClick={() => setIsOpen(false)}>
-                  Blogs
+                <Link to="/insights" onClick={() => setIsOpen(false)}>
+                  Insights
                 </Link>
                 <Link to="/students" onClick={() => setIsOpen(false)}>
                   Student

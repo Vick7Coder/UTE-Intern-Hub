@@ -48,7 +48,8 @@ const AppliedJobs = () => {
 
     return (
         <div className='container mx-auto p-5'>
-            <h2 className='text-2xl font-semibold mb-4'>Applied Jobs</h2>
+            <h2 className='text-2xl font-semibold mb-4'>APPLIED JOBS</h2>
+            <br />
             {appliedJobs.length === 0 ? (
                 <p className='text-gray-600'>You haven't applied to any jobs yet.</p>
             ) : (
@@ -58,6 +59,7 @@ const AppliedJobs = () => {
                     ))}
                 </div>
             )}
+            <br /><br />
         </div>
     );
 };
