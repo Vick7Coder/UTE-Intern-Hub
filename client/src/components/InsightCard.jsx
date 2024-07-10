@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const BlogCard = ({ data }) => {
+const InsightCard = ({ data }) => {
     return (
-        <Link to={`/blog-details/${data?._id}`}>
+        <Link to={`/insight-details/${data?._id}`}>
             <div className="w-[17rem] xl:w-[20rem] 2xl:w-[18rem] h-[12rem] bg-white flex flex-col shadow-lg rounded-md px-3 py-5 gap-4 overflow-hidden">
                 <div className="flex gap-5">
 
@@ -26,4 +26,4 @@ const BlogCard = ({ data }) => {
     );
 };
 
-export default BlogCard;
+export default InsightCard;

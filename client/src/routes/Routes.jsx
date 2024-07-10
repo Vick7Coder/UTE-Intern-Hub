@@ -14,9 +14,9 @@ import {
   UserProfile,
   ResetPassword,
   AdminProfile,
-  BlogDetails,
-  FindBlogs,
-  UploadBlog,
+  InsightDetails,
+  FindInsights,
+  UploadInsight,
   Applicants,
   AppliedJobs,
   LecturerProfile,
@@ -64,8 +64,8 @@ const AppRoutes = () => {
             path="/Companies"
             element={user?.accountType !== "company" && <Companies />}
           />
-          <Route path="/blogs" element={<FindBlogs />} />
-          <Route path={"/blog-details/:id"} element={<BlogDetails />} />
+          <Route path="/insights" element={<FindInsights />} />
+          <Route path={"/insight-details/:id"} element={<InsightDetails />} />
 
           <Route
             path={
@@ -99,8 +99,8 @@ const AppRoutes = () => {
             element={user?.accountType !== "seeker" && <UploadJob />}
           />
           <Route
-            path={"/upload-blog"}
-            element={user?.accountType !== "seeker" && <UploadBlog />}
+            path={"/upload-insight"}
+            element={user?.accountType !== "seeker" && <UploadInsight />}
           />
           <Route path={"/job-details/:id"} element={<JobDetails />} />
 

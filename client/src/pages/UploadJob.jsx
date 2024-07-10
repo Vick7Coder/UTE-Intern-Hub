@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import {useSelector} from 'react-redux'
+import { useSelector } from 'react-redux'
 import { CustomButton, JobCard, JobTypes, TextInput } from "../components";
 
 
@@ -12,51 +12,51 @@ import { toast } from "react-toastify";
 
 const UploadJob = () => {
 
-  const {user} = useSelector(state=>state.user);
-  const {companyInfo} = useSelector(state=>state.cmp);
+  const { user } = useSelector(state => state.user);
+  const { companyInfo } = useSelector(state => state.cmp);
 
   const schema = yup.object().shape({
-    jobTitle:yup.string().required(),
-    salary:yup.string().required(),
+    jobTitle: yup.string().required(),
+    salary: yup.string().required(),
 
-    vacancies:yup.number()
-    .typeError('Vacancies must be a number')
-    .positive('Vacancies must be a positive number')
-    .integer('Vacancies must be an integer')
-    .required(),
+    vacancies: yup.number()
+      .typeError('Vacancies must be a number')
+      .positive('Vacancies must be a positive number')
+      .integer('Vacancies must be an integer')
+      .required(),
 
     experience: yup.string().required(),
-    location:yup.string().required(),
-    description:yup.string().required(),
-    requirements:yup.string().required()
+    location: yup.string().required(),
+    description: yup.string().required(),
+    requirements: yup.string().required()
   })
 
-  const {register,handleSubmit,formState: { errors , isSubmitSuccessful}, reset } = useForm({
+  const { register, handleSubmit, formState: { errors, isSubmitSuccessful }, reset } = useForm({
     mode: "onChange",
     defaultValues: {},
-    resolver:yupResolver(schema)
+    resolver: yupResolver(schema)
   });
 
-  const [jobType, setJobType] = useState("Full-Time");
+  const [jobType, setJobType] = useState("Hybrid Internship");
   const [recentJobs, setRecentJobs] = useState([])
 
 
   const onSubmit = async (data) => {
 
-    let newData = {...data,jobType}
-    
+    let newData = { ...data, jobType }
+
     const result = await apiRequest({
       url: '/jobs/upload-job',
       token: user.token,
-      data:newData,
-      method:'POST'
+      data: newData,
+      method: 'POST'
     })
 
-    if(result.status === 200){
+    if (result.status === 200) {
       // console.log(result)
       toast.success(result.data.message)
     }
-    else{
+    else {
       console.log(result)
       toast.error("Error Occured")
     }
@@ -65,34 +65,34 @@ const UploadJob = () => {
 
 
 
-  const getRecentJobs = async()=>{
+  const getRecentJobs = async () => {
 
     const id = user.id;
 
     const result = await apiRequest({
-      url:'/companies/get-company/' + id,
-      token:user.token,
-      method:"GET"
+      url: '/companies/get-company/' + id,
+      token: user.token,
+      method: "GET"
     })
 
     result.status === 200 ? (
 
-      setRecentJobs(result.data.data.jobPosts) ) : 
+      setRecentJobs(result.data.data.jobPosts)) :
 
       console.log(result)
 
   }
 
-   // clear form data after successfull submission
-   useEffect(()=>{
+  // clear form data after successfull submission
+  useEffect(() => {
 
-    if(isSubmitSuccessful){
+    if (isSubmitSuccessful) {
 
       reset()
     }
     getRecentJobs()
-  },[isSubmitSuccessful])
- 
+  }, [isSubmitSuccessful])
+
 
   return (
     <div className=' mx-auto flex flex-col md:flex-row gap-8 2xl:gap-14 bg-[#f7fdfd] px-5'>
@@ -111,7 +111,7 @@ const UploadJob = () => {
               type='text'
               required={true}
               register={register("jobTitle")}
-              error={errors.jobTitle && errors.jobTitle?.message }
+              error={errors.jobTitle && errors.jobTitle?.message}
             />
 
             <div className='w-full sm:flex gap-4'>
@@ -127,7 +127,7 @@ const UploadJob = () => {
                   placeholder='eg: 10.000.000VND  or Agreement'
                   type='text'
                   register={register("salary")}
-                  error={errors.salary && errors.salary?.message }
+                  error={errors.salary && errors.salary?.message}
                 />
               </div>
             </div>
@@ -140,7 +140,7 @@ const UploadJob = () => {
                   placeholder='vacancies'
                   type='text'
                   register={register("vacancies")}
-                  error={errors.vacancies && errors.vacancies?.message }
+                  error={errors.vacancies && errors.vacancies?.message}
                 />
               </div>
 
@@ -148,10 +148,10 @@ const UploadJob = () => {
                 <TextInput
                   name='experience'
                   label='Years of university study'
-                  placeholder='0 - 2'
+                  placeholder='1 - 4'
                   type='text'
                   register={register("experience")}
-                  error={errors.experience && errors.experience?.message }
+                  error={errors.experience && errors.experience?.message}
                 />
               </div>
             </div>
@@ -159,10 +159,10 @@ const UploadJob = () => {
             <TextInput
               name='location'
               label='Job Location'
-              placeholder='eg. New York'
+              placeholder='eg. Thu Duc'
               type='text'
               register={register("location")}
-              error={errors.location && errors.location?.message }
+              error={errors.location && errors.location?.message}
             />
             <div className='flex flex-col'>
               <label className='text-gray-600 text-sm mb-1'>
@@ -173,7 +173,7 @@ const UploadJob = () => {
                 rows={4}
                 cols={6}
                 {...register("description")}
-                />
+              />
               {errors.description && (
                 <span className='text-xs text-red-500 mt-0.5'>
                   {errors.description?.message}
@@ -183,7 +183,7 @@ const UploadJob = () => {
 
             <div className='flex flex-col'>
               <label className='text-gray-600 text-sm mb-1'>
-               Requirements
+                Requirements
               </label>
               <textarea
                 className='rounded border border-gray-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-base px-4 py-2 resize-none'
@@ -191,14 +191,14 @@ const UploadJob = () => {
                 cols={6}
                 {...register("requirements")}
               />
-                {errors.requirements && (
-              <span className='text-xs text-red-500 mt-0.5'>
-                {errors.requirements.message}
-              </span>
-            )}
+              {errors.requirements && (
+                <span className='text-xs text-red-500 mt-0.5'>
+                  {errors.requirements.message}
+                </span>
+              )}
             </div>
 
-          
+
             <div className='mt-2'>
               <CustomButton
                 type='submit'
@@ -217,14 +217,14 @@ const UploadJob = () => {
         <div className='w-full flex flex-wrap gap-6'>
           {recentJobs.slice(0, 4).map((job) => {
 
-           const data = {
-            name: companyInfo?.name,
-            email: companyInfo?.email,
-            logo: companyInfo?.profileUrl,
-            ...job,
-          };
+            const data = {
+              name: companyInfo?.name,
+              email: companyInfo?.email,
+              logo: companyInfo?.profileUrl,
+              ...job,
+            };
 
-            return<JobCard data={data}  key={job._id}/>;
+            return <JobCard data={data} key={job._id} />;
           })}
         </div>
       </div>

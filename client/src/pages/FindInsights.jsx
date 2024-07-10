@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
-import BlogCard from "../components/BlogCard";
-import { apiRequest, updateURlblog } from "../utils";
+import InsightCard from "../components/InsightCard";
+import { apiRequest, updateURlinsight } from "../utils";
 import { toast } from "react-toastify";
 import { Header, SortBox, CustomButton, Loading } from '../components';
 
-const FindBlogs = () => {
-    const [blogs, setBlogs] = useState([]);
+const FindInsights = () => {
+    const [insights, setInsights] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState("");
     const [sort, setSort] = useState("Newest");
@@ -17,10 +17,10 @@ const FindBlogs = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const fetchBlogs = async (reset = false) => {
+    const fetchInsights = async (reset = false) => {
         setIsLoading(true);
         try {
-            const newUrl = updateURlblog({
+            const newUrl = updateURlinsight({
                 pageNum: page,
                 query: searchQuery,
                 sort: sort,
@@ -29,19 +29,19 @@ const FindBlogs = () => {
             });
 
             const response = await apiRequest({
-                url: "/blogs/find-blogs" + newUrl,
+                url: "/insights/find-insights" + newUrl,
                 method: "GET",
             });
-            console.log("API URL:", "/blogs/find-blogs" + newUrl);
+            console.log("API URL:", "/insights/find-insights" + newUrl);
             if (response.status === 200) {
-                setBlogs(prevBlogs => reset ? response.data.data : [...prevBlogs, ...response.data.data]);
+                setInsights(prevInsights => reset ? response.data.data : [...prevInsights, ...response.data.data]);
                 setNumPage(response.data.numOfPage);
-                setRecordCount(response.data.totalBlogs);
+                setRecordCount(response.data.totalInsights);
             } else {
-                toast.error("Failed to fetch blogs.");
+                toast.error("Failed to fetch insights.");
             }
         } catch (error) {
-            console.error("Error fetching blogs:", error);
+            console.error("Error fetching insights:", error);
             toast.error("Something went wrong.");
         } finally {
             setIsLoading(false);
@@ -50,21 +50,21 @@ const FindBlogs = () => {
 
     useEffect(() => {
         setPage(1);
-        fetchBlogs(true);
+        fetchInsights(true);
     }, [searchQuery, sort]);
 
     useEffect(() => {
         if (page === 1) {
-            fetchBlogs(true);
+            fetchInsights(true);
         } else {
-            fetchBlogs();
+            fetchInsights();
         }
     }, [page]);
 
     const handleSearchSubmit = (e) => {
         e.preventDefault();
         setPage(1);
-        fetchBlogs(true);
+        fetchInsights(true);
     };
 
     const handleShowMore = () => {
@@ -74,7 +74,7 @@ const FindBlogs = () => {
     return (
         <>
             <Header
-                title='Discover Insightful Blogs'
+                title='Discover Insightful Insights'
                 type='Home'
                 handleClick={handleSearchSubmit}
                 searchQuery={searchQuery}
@@ -85,7 +85,7 @@ const FindBlogs = () => {
                 <div className="max-w-4xl mx-auto">
                     <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
                         <p className="text-base mb-2 sm:mb-0">
-                            Total number of blogs: <span className="font-semibold">{recordCount}</span>
+                            Total number of insights: <span className="font-semibold">{recordCount}</span>
                         </p>
 
                         <div className="flex items-center gap-2">
@@ -95,8 +95,8 @@ const FindBlogs = () => {
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
-                        {blogs.map((blog, index) => (
-                            <BlogCard key={`${blog._id}-${index}`} data={blog} />
+                        {insights.map((insight, index) => (
+                            <InsightCard key={`${insight._id}-${index}`} data={insight} />
                         ))}
                     </div>
 
@@ -121,4 +121,4 @@ const FindBlogs = () => {
     );
 };
 
-export default FindBlogs;
+export default FindInsights;

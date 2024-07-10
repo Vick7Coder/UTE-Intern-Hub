@@ -7,7 +7,7 @@ const JobCard = ({ data, user }) => {
 
   return (
     <Link to={user ? `/applicants/${data?._id}` : `/job-details/${data?._id}`} >
-      <div className=' w-[17rem] xl:w-[20rem] 2xl:w-[18rem] h-[18rem] bg-white flex flex-col shadow-lg rounded-md px-3 py-5 gap-4 overflow-hidden' >
+      <div className=' relative w-[17rem] xl:w-[20rem] 2xl:w-[18rem] h-[16rem] bg-white flex flex-col shadow-lg rounded-md px-3 py-5 gap-4 overflow-hidden' >
         <div className='flex gap-6'>
 
           <img
@@ -26,17 +26,20 @@ const JobCard = ({ data, user }) => {
         </div>
 
         <div className='py-2'>
-          <p className='text-sm text-justify break-words whitespace-pre-wrap'> {data?.detail?.description?.slice(0, 120) + "..."}  </p>
+          <p className='text-sm break-all text-justify'> {data?.detail?.description?.slice(0, 120) + "..."}  </p>
         </div>
 
-        <div className='flex items-center justify-between'>
+        <div className='absolute bottom-2 left-2'>
           <p className='bg-[#1d4fd826] text-[#1d4fd8] py-0.5 px-1.5 rounded font-semibold text-sm'>
             {data?.jobType}
           </p>
+        </div>
+        <div className='absolute bottom-2 right-2'>
           <span className='text-gray-500 text-sm'>
             {moment(data?.createdAt).fromNow()}
           </span>
         </div>
+
       </div>
     </Link>
   )

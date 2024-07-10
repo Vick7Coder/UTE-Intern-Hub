@@ -2,7 +2,7 @@ import { Fragment, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { BsCheck2, BsChevronExpand } from "react-icons/bs";
 
-const types = ["Full-Time", "Part-Time", "Contract", "Intern"];
+const types = ["Remote Internship", "Hybrid Internship", "Onsite Internship"];
 
 export default function JobTypes({ jobType, setJobType }) {
   return (
@@ -29,8 +29,7 @@ export default function JobTypes({ jobType, setJobType }) {
                 <Listbox.Option
                   key={index}
                   className={({ active }) =>
-                    `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                      active ? "bg-amber-100 text-amber-900" : "text-gray-900"
+                    `relative cursor-default select-none py-2 pl-10 pr-4 ${active ? "bg-amber-100 text-amber-900" : "text-gray-900"
                     }`
                   }
                   value={type}
@@ -38,9 +37,8 @@ export default function JobTypes({ jobType, setJobType }) {
                   {({ selected }) => (
                     <>
                       <span
-                        className={`block truncate ${
-                          selected ? "font-medium" : "font-normal"
-                        }`}
+                        className={`block truncate ${selected ? "font-medium" : "font-normal"
+                          }`}
                       >
                         {type}
                       </span>
