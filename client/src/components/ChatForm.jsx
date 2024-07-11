@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import axios from 'axios';
-import { StyledButton } from '.'
+import { StyledButton } from '.';
+import ReactMarkdown from 'react-markdown';
 
 const ChatForm = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -129,10 +130,10 @@ const ChatForm = () => {
                       )}
                     </div>
                   </span>
-                  <p className="leading-relaxed">
+                  <div className="leading-relaxed">
                     <span className="block font-bold text-gray-700">{message.role === 'user' ? 'You' : 'AI'} </span>
-                    {message.content}
-                  </p>
+                    <ReactMarkdown>{message.content}</ReactMarkdown>
+                  </div>
                 </div>
               ))}
               {isLoading && (
