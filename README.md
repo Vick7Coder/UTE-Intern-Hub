@@ -54,8 +54,9 @@ Start the server
 
 
 ## Demo
-
-`https://ute-intern-hub.vercel.app/`
+```bash
+https://ute-intern-hub.vercel.app/
+```
 
 
 ## Tech Stack
