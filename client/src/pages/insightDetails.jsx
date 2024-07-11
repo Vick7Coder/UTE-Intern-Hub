@@ -3,24 +3,27 @@ import { useParams, useNavigate } from "react-router-dom";
 import { apiRequest } from "../utils";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
-import InsightUpdateForm from "../components/InsightUpdateForm"; // Import InsightUpdateForm
+import InsightUpdateForm from "../components/InsightUpdateForm";
+import ReactMarkdown from 'react-markdown';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { solarizedlight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 const InsightDetails = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const { user } = useSelector((state) => state.user); // Get user info from Redux store
+    const { user } = useSelector((state) => state.user);
     const [insightData, setInsightData] = useState(null);
-    const [isEditOpen, setIsEditOpen] = useState(false); // State to manage edit modal visibility
+    const [isEditOpen, setIsEditOpen] = useState(false);
 
     useEffect(() => {
         const fetchInsightDetails = async () => {
             try {
                 const response = await apiRequest({
-                    url: `/insights/get-insight-detail/${id}`, // Adjust endpoint as per your backend
+                    url: `/insights/get-insight-detail/${id}`,
                     method: "GET",
                 });
                 if (response.status === 200) {
-                    setInsightData(response.data); // Save insight data to state
+                    setInsightData(response.data);
                 } else {
                     toast.error("Failed to fetch insight details.");
                 }
@@ -37,13 +40,13 @@ const InsightDetails = () => {
         if (window.confirm("Delete Insight Post?")) {
             try {
                 const response = await apiRequest({
-                    url: `/insights/delete-insight/${id}`, // Adjust endpoint as per your backend
+                    url: `/insights/delete-insight/${id}`,
                     method: "DELETE",
-                    token: user.token, // Pass token if needed
+                    token: user.token,
                 });
                 if (response.status === 200) {
                     toast.success("Insight deleted successfully");
-                    navigate("/"); // Navigate to home or other page after successful deletion
+                    navigate("/");
                 } else {
                     toast.error("Failed to delete insight.");
                 }
@@ -55,24 +58,46 @@ const InsightDetails = () => {
     };
 
     useEffect(() => {
-        console.log('User:', user); // Debug log for user data
-        console.log('Insight Data:', insightData); // Debug log for insight data
+        console.log('User:', user);
+        console.log('Insight Data:', insightData);
     }, [user, insightData]);
 
     if (!insightData) {
-        return <div>Loading...</div>; // Show loading while fetching data
+        return <div>Loading...</div>;
     }
 
-    // Check if the logged-in user is a recruiter/company and the author of the insight
-
-    // const canEdit = user?.accountType === "company" && insightData?.recruiter?._id === user?.id;
     const canEdit = user?.accountType === "admin";
+
     return (
         <div className="container mx-auto">
             <div className="w-full bg-white px-5 py-10 shadow-md">
                 <div className="my-6">
                     <p className="text-2xl font-semibold">{insightData?.title}</p>
-                    <div className="text-base mt-4">{insightData?.content}</div>
+                    <div className="text-base mt-4">
+                        <ReactMarkdown
+                            components={{
+                                code({node, inline, className, children, ...props}) {
+                                    const match = /language-(\w+)/.exec(className || '')
+                                    return !inline && match ? (
+                                        <SyntaxHighlighter
+                                            style={solarizedlight}
+                                            language={match[1]}
+                                            PreTag="div"
+                                            {...props}
+                                        >
+                                            {String(children).replace(/\n$/, '')}
+                                        </SyntaxHighlighter>
+                                    ) : (
+                                        <code className={className} {...props}>
+                                            {children}
+                                        </code>
+                                    )
+                                }
+                            }}
+                        >
+                            {insightData?.content}
+                        </ReactMarkdown>
+                    </div>
                 </div>
                 {canEdit && (
                     <div className="mt-4 flex space-x-4">
@@ -92,12 +117,10 @@ const InsightDetails = () => {
                 )}
             </div>
 
-            {/* Render InsightUpdateForm modal */}
             <InsightUpdateForm
                 open={isEditOpen}
                 setOpen={setIsEditOpen}
                 insightDetails={() => {
-                    // Callback to refresh insight details after update
                     const fetchInsightDetails = async () => {
                         try {
                             const response = await apiRequest({

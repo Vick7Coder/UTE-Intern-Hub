@@ -5,12 +5,12 @@ export const createInsight = async (req, res) => {
     try {
 
         const { title, content } = req.body;
-        const recruiter = req.user.userId; // Lấy ID của người viết insight từ đăng nhập
+        const admin = req.user.userId; // Lấy ID của người viết insight từ đăng nhập
 
         const newInsight = new Insight({
             title,
             content,
-            recruiter,
+            admin,
         });
 
         await newInsight.save();
@@ -47,7 +47,7 @@ export const getInsightById = async (req, res) => {
     try {
         const { id } = req.params;
 
-        const insight = await Insight.findById(id).populate('recruiter', 'name email');
+        const insight = await Insight.findById(id).populate('admin', 'name email');
 
         if (!insight) {
             return res.status(404).json({ message: "Insight not found" });
@@ -75,7 +75,7 @@ export const getInsightPosts = async (req, res) => {
             };
         }
 
-        let queryResult = Insight.find(queryObject).populate('recruiter', 'name email');
+        let queryResult = Insight.find(queryObject).populate('admin', 'name email');
 
         // SORTING
         if (sort === "Newest") {
@@ -126,7 +126,7 @@ export const deleteInsightPost = async (req, res) => {
         }
 
         // Check if the logged-in user is the author
-        if (insight.recruiter.toString() !== userId) {
+        if (insight.admin.toString() !== userId) {
             return res.status(403).json({ message: "You are not authorized to delete this insight" });
         }
 

@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState, useCallback, Suspense } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { useSelector } from 'react-redux';
 import { CustomButton, TextInput } from "../components";
@@ -8,25 +8,35 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { apiRequest } from "../utils";
 import { toast } from "react-toastify";
 
+const MDEditor = React.lazy(() => import('@uiw/react-md-editor'));
+
 const UploadInsightForm = ({ open, setOpen }) => {
     const { user } = useSelector(state => state.user);
+    const [content, setContent] = useState('');
 
     // Schema for form validation
     const schema = yup.object().shape({
-        title: yup.string().required("Tiêu đề insight là bắt buộc"),
-        content: yup.string().required("Nội dung insight là bắt buộc"),
+        title: yup.string().required("Title is required"),
+        content: yup.string().required("Content is required"),
     });
 
     // React Hook Form setup
-    const { register, handleSubmit, formState: { errors }, reset } = useForm({
+    const { register, handleSubmit, formState: { errors }, reset, setValue } = useForm({
         resolver: yupResolver(schema),
     });
+
+    // Function to handle content change
+    const handleContentChange = useCallback((value) => {
+        setContent(value || '');
+        setValue('content', value); // This updates react-hook-form
+    }, [setValue]);
 
     // Function to handle form submission
     const onSubmit = async (data) => {
         try {
             const newData = {
                 ...data,
+                content: content,
                 recruiter: user.id
             };
 
@@ -40,6 +50,7 @@ const UploadInsightForm = ({ open, setOpen }) => {
             if (result.status === 201) {
                 toast.success(result.data.message);
                 reset();
+                setContent('');
                 setOpen(false);
                 window.location.reload();
             } else {
@@ -104,11 +115,12 @@ const UploadInsightForm = ({ open, setOpen }) => {
                                         <label className='text-gray-600 text-sm mb-1'>
                                             Content Insight
                                         </label>
-                                        <textarea
-                                            className='rounded border border-gray-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-base px-4 py-2 resize-none'
-                                            rows={8}
-                                            {...register("content")}
-                                        />
+                                        <Suspense fallback={<div>Loading editor...</div>}>
+                                            <MDEditor
+                                                value={content}
+                                                onChange={handleContentChange}
+                                            />
+                                        </Suspense>
                                         {errors.content && (
                                             <span className='text-xs text-red-500 mt-0.5'>
                                                 {errors.content.message}
