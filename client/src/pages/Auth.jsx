@@ -82,6 +82,7 @@ const Auth = () => {
       if (!isForgotPassword) {
         const info = { token: userData.token, ...userData.user }
         dispatch(login(info));
+        localStorage.setItem('user', JSON.stringify(info)); 
       }
     } else {
       console.log(result);
