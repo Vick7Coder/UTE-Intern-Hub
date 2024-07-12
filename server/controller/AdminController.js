@@ -193,7 +193,7 @@ export const updateAdminProfile = async (req, res, next) => {
 
     res.status(200).json({
       success: true,
-      message: "Admin Profile Updated SUccessfully",
+      message: "Admin Profile Updated Successfully",
       admin: ad
     });
 

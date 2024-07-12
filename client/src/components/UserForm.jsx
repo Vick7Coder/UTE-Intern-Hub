@@ -1,5 +1,5 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { CustomButton, Loading, TextInput } from ".";
@@ -10,74 +10,75 @@ import { apiRequest, handleFileUpload } from "../utils";
 import { toast } from "react-toastify";
 
 
-const UserForm = ({ open, setOpen }) => {
-
+const UserForm = ({ open, setOpen, currentUserData }) => {
   const { user } = useSelector((state) => state.user);
 
-
   const schema = yup.object().shape({
-    name: yup.string().min(6, 'Atleast 6 Characters').required(),
-    location: yup.string().min(4, 'Atleast 4 Characters').required(),
+    name: yup.string().min(6, 'At least 6 Characters').required(),
+    location: yup.string().min(4, 'At least 4 Characters').required(),
     contact: yup.string().min(10, 'Enter a valid contact').required(),
-    headLine: yup.string().min(6, 'Atleast 6 Characters').required(),
+    headLine: yup.string().min(6, 'At least 6 Characters').required(),
     stuId: yup.string().required('Student ID is required'),
     about: yup.string().min(80, 'Write a little bit about yourself and your projects').required(),
-  })
+  });
 
-  const { register, handleSubmit, formState: { errors } } =
-    useForm({
-      mode: "onChange",
-      defaultValues: { ...user },
-      resolver: yupResolver(schema)
-    });
-
+  const { register, handleSubmit, formState: { errors }, setValue } = useForm({
+    mode: "onChange",
+    resolver: yupResolver(schema)
+  });
 
   const [profileImage, setProfileImage] = useState("");
   const [uploadCv, setUploadCv] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  useEffect(() => {
+    if (currentUserData) {
+      setValue("name", currentUserData.name);
+      setValue("location", currentUserData.location);
+      setValue("contact", currentUserData.contact);
+      setValue("headLine", currentUserData.headLine);
+      setValue("stuId", currentUserData.stuId);
+      setValue("about", currentUserData.about);
+    }
+  }, [currentUserData, setValue]);
+
   const onSubmit = async (data) => {
+    setIsLoading(true);
 
     const logoURL = profileImage && (await handleFileUpload(profileImage));
-    const cvURL = uploadCv && (await handleFileUpload(uploadCv))
+    const cvURL = uploadCv && (await handleFileUpload(uploadCv));
 
-    const updatedData = logoURL ? {
+    const updatedData = {
       ...data,
-      profileUrl: logoURL, resumeUrl: cvURL
-    } : data;
+      profileUrl: logoURL || currentUserData.profileUrl,
+      resumeUrl: cvURL || currentUserData.resumeUrl
+    };
 
     const result = await apiRequest({
       url: '/user/update-user',
       token: user.token,
       data: updatedData,
       method: "PUT"
-    })
+    });
 
     if (result.status === 200) {
-      setIsLoading(false)
+      setIsLoading(false);
 
-      // console.log(result)
-
-      //changing local storage name value if user changes name.
-      let storeData = JSON.parse(localStorage.getItem('user'))
+      let storeData = JSON.parse(localStorage.getItem('user'));
       storeData.name = data.name;
-
       localStorage.setItem("user", JSON.stringify(storeData));
 
+      toast.success("Profile updated successfully");
+      setOpen(false);
+
       setTimeout(() => {
-
         window.location.reload();
-
-      }, 900);
-
+      }, 1000);
+    } else {
+      console.log(result);
+      setIsLoading(false);
+      toast.error("An error occurred");
     }
-
-    else {
-      console.log(result)
-      setIsLoading(false)
-      toast.error("error ocurred")
-    }
-
   };
 
   const closeModal = () => setOpen(false);

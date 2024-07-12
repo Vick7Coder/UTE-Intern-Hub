@@ -116,7 +116,7 @@ const LecturerProfile = () => {
           ))}
         </div>
       </div>
-      <LecturerForm open={openForm} setOpen={setOpenForm} />
+      <LecturerForm open={openForm} setOpen={setOpenForm} currentLecturerData={lecturerInfo} />
     </div>
   );
 };

@@ -143,8 +143,7 @@ const CompanyProfile = () => {
         </div>
       </div>
       <br /><br /> <br /><br /><br /><br />
-
-      <CompanyForm open={openForm} setOpen={setOpenForm} />
+      <CompanyForm open={openForm} setOpen={setOpenForm} currentCompanyData={companyInfo} />
     </div>
   );
 };

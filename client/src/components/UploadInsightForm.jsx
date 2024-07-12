@@ -5,33 +5,29 @@ import { CustomButton, TextInput } from "../components";
 import * as yup from 'yup';
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { apiRequest } from "../utils";
+import { apiRequest, handleFileUpload } from "../utils";
 import { toast } from "react-toastify";
 
-const MDEditor = React.lazy(() => import('@uiw/react-md-editor'));
+import MDEditor, { commands as defaultCommands } from '@uiw/react-md-editor';
 
 const UploadInsightForm = ({ open, setOpen }) => {
     const { user } = useSelector(state => state.user);
     const [content, setContent] = useState('');
 
-    // Schema for form validation
     const schema = yup.object().shape({
         title: yup.string().required("Title is required"),
         content: yup.string().required("Content is required"),
     });
 
-    // React Hook Form setup
     const { register, handleSubmit, formState: { errors }, reset, setValue } = useForm({
         resolver: yupResolver(schema),
     });
 
-    // Function to handle content change
     const handleContentChange = useCallback((value) => {
         setContent(value || '');
-        setValue('content', value); // This updates react-hook-form
+        setValue('content', value);
     }, [setValue]);
 
-    // Function to handle form submission
     const onSubmit = async (data) => {
         try {
             const newData = {
@@ -62,6 +58,54 @@ const UploadInsightForm = ({ open, setOpen }) => {
             toast.error("Failed to create insight. Please try again later.");
         }
     };
+
+    const imageUploadCommand = {
+        name: 'custom-image-upload',
+        keyCommand: 'custom-image-upload',
+        buttonProps: { 'aria-label': 'Upload and insert image' },
+        icon: (
+            <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            >
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="17 8 12 3 7 8" />
+                <line x1="12" y1="3" x2="12" y2="15" />
+            </svg>
+        ),
+        execute: async (state, api) => {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.onchange = async (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    try {
+                        const imageUrl = await handleFileUpload(file);
+                        if (imageUrl) {
+                            const imageMarkdown = `![${file.name}](${imageUrl})`;
+                            api.replaceSelection(imageMarkdown);
+                        }
+                    } catch (error) {
+                        console.error('Error uploading image:', error);
+                        toast.error("Failed to upload image. Please try again.");
+                    }
+                }
+            };
+            input.click();
+        },
+    };
+
+    const allCommands = [
+        ...defaultCommands.getCommands(),
+        imageUploadCommand
+    ];
 
     return (
         <Transition appear show={open} as={Fragment}>
@@ -119,6 +163,7 @@ const UploadInsightForm = ({ open, setOpen }) => {
                                             <MDEditor
                                                 value={content}
                                                 onChange={handleContentChange}
+                                                commands={allCommands}
                                             />
                                         </Suspense>
                                         {errors.content && (

@@ -259,7 +259,12 @@ const JobDetails = () => {
             )}
           </div>
 
-          <JobUpdateForm open={openForm} setOpen={setOpenForm} jobDetails={getJobDetails} />
+          <JobUpdateForm
+            open={openForm}
+            setOpen={setOpenForm}
+            jobDetails={getJobDetails}
+            currentJobData={jobData}  // Thêm dòng này
+          />
         </>
         }
 

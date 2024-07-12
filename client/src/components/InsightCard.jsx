@@ -4,9 +4,18 @@ import removeMd from "remove-markdown";
 import { format } from 'date-fns';
 
 const InsightCard = ({ data }) => {
-    // Hàm để loại bỏ Markdown và cắt ngắn nội dung
+    // Hàm để loại bỏ Markdown, tên file ảnh và cắt ngắn nội dung
     const getPlainTextContent = (content) => {
-        const plainText = removeMd(content || "");
+        // Loại bỏ Markdown
+        let plainText = removeMd(content || "");
+
+        // Loại bỏ tên file ảnh
+        plainText = plainText.replace(/\S+\.(jpg|jpeg|png|gif|bmp|webp)\b/gi, '');
+
+        // Loại bỏ khoảng trắng dư thừa
+        plainText = plainText.replace(/\s+/g, ' ').trim();
+
+        // Cắt ngắn nội dung
         return plainText.length > 120 ? plainText.slice(0, 120) + "..." : plainText;
     };
 

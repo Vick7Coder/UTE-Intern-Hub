@@ -91,7 +91,7 @@ export const updateJob = async (req, res, next) => {
 
     res.status(200).json({
       success: true,
-      message: "Job Post Updated SUccessfully",
+      message: "Job Post Updated Successfully",
       updatedPost,
     });
   } catch (err) {

@@ -193,7 +193,7 @@ const UserProfile = () => {
         </div>
       </div>
 
-      <UserForm open={open} setOpen={setOpen} />
+      <UserForm open={open} setOpen={setOpen} currentUserData={seekerInfo} />
       <SendReportForm open={openReportForm} setOpen={setOpenReportForm} />
       <SendReviewForm open={openReviewForm} setOpen={setOpenReviewForm} seekerInfo={seekerInfo} />
       <AddToStudentListForm

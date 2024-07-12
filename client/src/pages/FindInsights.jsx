@@ -101,7 +101,7 @@ const FindInsights = () => {
                             />
                         )}
 
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 relative z-10">
                             <p className="text-base">Sort By:</p>
                             <SortBox sort={sort} setSort={setSort} />
                         </div>

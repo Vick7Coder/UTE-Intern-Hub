@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { useSelector } from 'react-redux';
 import { CustomButton, TextInput, Loading } from ".";
@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
 
-const AdminForm = ({ open, setOpen }) => {
+const AdminForm = ({ open, setOpen, currentAdminData, fetchAdminById }) => {
   const { user } = useSelector((state) => state.user);
 
   const updateSchema = yup.object().shape({
@@ -18,15 +18,23 @@ const AdminForm = ({ open, setOpen }) => {
     about: yup.string().min(80, 'Tell us about yourself').required(),
   })
 
-  const { register, handleSubmit, formState: { errors }, } =
+  const { register, handleSubmit, formState: { errors }, setValue } =
     useForm({
       mode: "onChange",
-      defaultValues: { ...user },
       resolver: yupResolver(updateSchema)
     });
 
   const [profileImage, setProfileImage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (currentAdminData) {
+      setValue("name", currentAdminData.name);
+      setValue("location", currentAdminData.location);
+      setValue("contact", currentAdminData.contact);
+      setValue("about", currentAdminData.about);
+    }
+  }, [currentAdminData, setValue]);
 
   const onSubmit = async (data) => {
     setIsLoading(true)
@@ -50,9 +58,8 @@ const AdminForm = ({ open, setOpen }) => {
       storeData.name = data.name;
       localStorage.setItem("user", JSON.stringify(storeData));
 
-      setTimeout(() => {
-        window.location.reload();
-      }, 900);
+      fetchAdminById();  // Refresh admin data after update
+      setOpen(false);  // Close the form after successful update
     } else {
       console.log(result)
       setIsLoading(false)

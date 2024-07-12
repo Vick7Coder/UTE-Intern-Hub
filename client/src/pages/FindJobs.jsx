@@ -33,7 +33,6 @@ const FindJobs = () => {
 
   const filterJobs = (val) => {
 
-    // we are checking, if the value is already exists in the state,and if we click again the ckeckbox (un tick), it removes it
     if (filterJobTypes?.includes(val)) {
       setFilterJobTypes(filterJobTypes.filter((el) => el != val));
     }
@@ -161,8 +160,6 @@ const FindJobs = () => {
             </div>
           </div>
 
-          {/* Experience */}
-
           <div className="py-2 mt-4">
             <div className="flex justify-between mb-3">
               <p className="flex items-center gap-2 font-semibold break-alls">
@@ -193,29 +190,25 @@ const FindJobs = () => {
         </div>
 
         <div className="w-full md:w-5/6 px-5 md:px-0">
-
-          <div className="flex items-center justify-between flex-col sm:flex-row mb-4">
+          <div className="flex items-center justify-between mb-4">
             <p className="text-base">
               Total number of jobs: <span className="font-semibold">{recordCount}</span> Jobs
               Available
             </p>
 
-            <div className="flex gap-2 items-center ">
-              <p className="text-base mt-[6px]">Sort By:</p>
-
-              <SortBox sort={sort} setSort={setSort} />
+            <div className="flex items-center gap-2 relative z-10">
+                <p className="text-base">Sort By:</p>
+                <SortBox sort={sort} setSort={setSort} />
             </div>
           </div>
 
           <div className="w-full flex flex-wrap gap-4 max-[600px]:justify-center">
             {data.map((job) => {
-
               let jobData = {
                 name: job.company.name,
                 logo: job.company.profileUrl,
                 ...job
               }
-
               return <JobCard data={jobData} key={job._id} />
             })}
           </div>
@@ -238,10 +231,6 @@ const FindJobs = () => {
         </div>
 
       </div>
-
-
-
-
     </>
   )
 }

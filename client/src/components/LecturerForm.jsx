@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { useSelector } from 'react-redux';
 import { CustomButton, TextInput, Loading } from "../components";
@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
 
-const LecturerForm = ({ open, setOpen }) => {
+const LecturerForm = ({ open, setOpen, currentLecturerData }) => {
     const { user } = useSelector((state) => state.user);
 
     const updateSchema = yup.object().shape({
@@ -19,21 +19,33 @@ const LecturerForm = ({ open, setOpen }) => {
         about: yup.string().min(80, 'Tell us about yourself').required(),
     });
 
-    const { register, handleSubmit, formState: { errors } } = useForm({
+    const { register, handleSubmit, formState: { errors }, setValue } = useForm({
         mode: "onChange",
-        defaultValues: { ...user },
         resolver: yupResolver(updateSchema)
     });
 
     const [profileImage, setProfileImage] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
+    useEffect(() => {
+        if (currentLecturerData) {
+            setValue("name", currentLecturerData.name);
+            setValue("location", currentLecturerData.location);
+            setValue("contact", currentLecturerData.contact);
+            setValue("lecId", currentLecturerData.lecId);
+            setValue("about", currentLecturerData.about);
+        }
+    }, [currentLecturerData, setValue]);
+
     const onSubmit = async (data) => {
         setIsLoading(true);
 
         const profileURL = profileImage && (await handleFileUpload(profileImage));
 
-        const updatedData = profileURL ? { ...data, profileUrl: profileURL } : data;
+        const updatedData = {
+            ...data,
+            profileUrl: profileURL || currentLecturerData.profileUrl
+        };
 
         const result = await apiRequest({
             url: '/lecturer/update-lecturer',
@@ -50,9 +62,11 @@ const LecturerForm = ({ open, setOpen }) => {
             storeData.name = data.name;
             localStorage.setItem("user", JSON.stringify(storeData));
 
+            setOpen(false);
+
             setTimeout(() => {
                 window.location.reload();
-            }, 900);
+            }, 1000);
         } else {
             console.log(result);
             setIsLoading(false);
