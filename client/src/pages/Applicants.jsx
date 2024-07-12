@@ -193,14 +193,14 @@ const Applicants = () => {
         </div>
       )}
       {(isAccepted && user.accountType === 'company') && (
-      <div className="flex gap-2">
-        <CustomButton
-          title="Remove"
-          containerStyles="w-18 justify-center text-white bg-red-500 py-3 px-5 outline-none rounded-full text-base"
-          onClick={() => handleRemoveAcceptedApplicant(profile.data.user._id)}
-        />
-      </div>
-    )}
+        <div className="flex gap-2">
+          <CustomButton
+            title="Remove"
+            containerStyles="w-18 justify-center text-white bg-red-500 py-3 px-5 outline-none rounded-full text-base"
+            onClick={() => handleRemoveAcceptedApplicant(profile.data.user._id)}
+          />
+        </div>
+      )}
     </div>
   );
 
@@ -239,8 +239,8 @@ const Applicants = () => {
                 <span className="text-sm">Salary</span>
                 <p className="text-lg font-semibold text-gray-700 uppercase">
                   {jobData.salary.includes("-")
-                    ? `₹ ${jobData.salary} `
-                    : `₹ ${jobData.salary} / m`}
+                    ? `${jobData.salary} VND`
+                    : `${jobData.salary} VND`}
                 </p>
               </div>
               <div className="bg-[#bae5f4] w-40 h-16 rounded-lg flex flex-col items-center justify-center">
