@@ -16,7 +16,7 @@ const JobCard = ({ data, user }) => {
           />
           <div >
             <p className='text-lg font-semibold'>{data?.jobTitle?.length > 20 ? data?.jobTitle.slice(0, 20) + "..." : data?.jobTitle}</p>
-            <span className='flex gap-2 items-center break-all'>
+            <span className='flex gap-2 items-center break-words'>
               <GoLocation className='text-slate-900 text-sm' />
               {data?.location}
             </span>
@@ -24,7 +24,7 @@ const JobCard = ({ data, user }) => {
         </div>
 
         <div className='py-2'>
-          <p className='text-sm break-all text-justify'> {data?.detail?.description?.slice(0, 120) + "..."}  </p>
+          <p className='text-base gap-2 break-words'> {data?.detail?.description?.slice(0, 120) + "..."}  </p>
         </div>
 
         <div className='absolute bottom-2 left-2'>
