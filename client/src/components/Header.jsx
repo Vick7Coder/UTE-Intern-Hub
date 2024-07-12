@@ -13,14 +13,13 @@ const Header = ({
   setLocation,
 }) => {
   return (
-    <div className="bg-[#f7fdfd] ">
+    <div className="bg-[#f7fdfd]">
       <div
-        className={` max-[330px]:pt-[9rem]  container mx-auto px-5 ${type ? "h-[500px]" : "h-[400px]"
-          } flex items-center relative `}
+        className={`container mx-auto px-5 ${type ? "h-[300px]" : "h-[200px]"} flex items-center relative`}
       >
-        <div className="w-full z-10 mb-12">
-          <div className="mb-20">
-            <p className="text-slate-700 font-bold text-4xl sm:w-[64%] lg:w-full "
+        <div className="w-full z-10 mb-4">
+          <div className="mb-6">
+            <p className="text-slate-700 font-bold text-4xl sm:w-[64%] lg:w-full"
               style={{ color: "#0047AB", textAlign: "center", textTransform: "uppercase" }}>{title}</p>
           </div>
 
@@ -45,7 +44,7 @@ const Header = ({
                 onClick={handleClick}
                 title="Search"
                 containerStyles={
-                  "text-white py-2 md:py3 px-3 md:px-10 focus:outline-none  transition ease-in-out duration-500 bg-blue-400  hover:bg-blue-900 rounded-full md:rounded-md text-sm md:text-base"
+                  "text-white py-2 md:py3 px-3 md:px-10 focus:outline-none transition ease-in-out duration-500 bg-blue-400 hover:bg-blue-900 rounded-full md:rounded-md text-sm md:text-base"
                 }
               />
             </div>
