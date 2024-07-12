@@ -26,14 +26,15 @@ export const LecturerRegister = async (req, res, next) => {
             return res.status(400).json({ success: false, message: "Lecturer is exist with this email" });
         }
 
-        const hashedPassword = bcrypt.hashSync(password, 10);
+        const salt = bcrypt.genSaltSync(10);
+        const hashedPassword = bcrypt.hashSync(password, salt)
 
         const lecturer = new Lecturers({ name, email, password: hashedPassword });
         await lecturer.save();
 
         const lecturerRegToken = createToken(lecturer._id);
 
-        res.status(201).json({
+        res.status(200).json({
             success: true,
             message: "Lecturer created successfully",
             user: {
