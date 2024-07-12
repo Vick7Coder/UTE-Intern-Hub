@@ -2,7 +2,7 @@ import { Fragment, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { BsCheck2, BsChevronExpand } from "react-icons/bs";
 
-const types = ["Remote Internship", "Hybrid Internship", "Onsite Internship"];
+const types = ["Remote", "Hybrid", "Onsite"];
 
 export default function JobTypes({ jobType, setJobType }) {
   return (

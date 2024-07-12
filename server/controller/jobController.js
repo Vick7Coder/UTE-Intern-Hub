@@ -47,7 +47,7 @@ export const createJob = async (req, res, next) => {
 
     res.status(200).json({
       success: true,
-      message: "Job Posted SUccessfully",
+      message: "Job Posted Successfully",
       job,
     });
   } catch (err) {
