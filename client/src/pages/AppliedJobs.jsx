@@ -60,7 +60,7 @@ const AppliedJobs = () => {
                     ))}
                 </div>
             )}
-            <br /><br /> <br /><br /><br /><br />
+            <br /><br /> <br /><br /><br /><br /> <br />
         </div>
     );
 };
