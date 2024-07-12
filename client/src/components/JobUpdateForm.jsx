@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { Dialog, Transition } from "@headlessui/react";
+import { Dialog, Transition, Listbox } from "@headlessui/react";
 import { useSelector } from 'react-redux';
+import { BsCheck2, BsChevronExpand } from "react-icons/bs";
 
 import { CustomButton, TextInput, Loading, JobTypes } from "../components";
 import { apiRequest } from "../utils";
@@ -11,70 +12,67 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
-const JobUpdateForm = ({ open, setOpen, jobDetails, currentJobData }) => {
+const experienceOptions = [
+  { title: "1 Year", value: "1" },
+  { title: "2 Year", value: "2" },
+  { title: "3 Year", value: "3" },
+  { title: "4 Year", value: "4" },
+  { title: "Fresh graduate", value: "5" },
+];
 
+const JobUpdateForm = ({ open, setOpen, jobDetails, currentJobData }) => {
   const { user } = useSelector((state) => state.user);
   const { id } = useParams();
 
   const schema = yup.object().shape({
     jobTitle: yup.string().required(),
     salary: yup.string().required(),
-
     vacancies: yup.number()
       .typeError('Vacancies must be a number')
       .positive('Vacancies must be a positive number')
       .integer('Vacancies must be an integer')
       .required(),
-
-    experience: yup.string().required(),
     location: yup.string().required(),
     description: yup.string().required(),
     requirements: yup.string().required()
-  })
-
-
-
+  });
 
   const [isLoading, setIsLoading] = useState(false);
   const [jobType, setJobType] = useState(currentJobData?.jobType || "Full-Time");
+  const [experience, setExperience] = useState(experienceOptions[0]);
 
   const { register, handleSubmit, formState: { errors, isSubmitSuccessful }, reset, setValue } = useForm({
     mode: "onChange",
     resolver: yupResolver(schema),
-    defaultValues: {  // Thêm defaultValues
+    defaultValues: {
       jobTitle: currentJobData?.jobTitle || "",
       salary: currentJobData?.salary || "",
       vacancies: currentJobData?.vacancies || "",
-      experience: currentJobData?.experience || "",
       location: currentJobData?.location || "",
       description: currentJobData?.detail?.description || "",
       requirements: currentJobData?.detail?.requirements || "",
     }
   });
 
-  // Sử dụng useEffect để cập nhật giá trị form khi currentJobData thay đổi
   useEffect(() => {
     if (currentJobData) {
       setValue("jobTitle", currentJobData.jobTitle);
       setValue("salary", currentJobData.salary);
       setValue("vacancies", currentJobData.vacancies);
-      setValue("experience", currentJobData.experience);
       setValue("location", currentJobData.location);
       setValue("description", currentJobData.detail?.description);
       setValue("requirements", currentJobData.detail?.requirements);
       setJobType(currentJobData.jobType);
+      setExperience(experienceOptions.find(opt => opt.value === currentJobData.experience) || experienceOptions[0]);
     }
   }, [currentJobData, setValue]);
 
-
   const onSubmit = async (data) => {
-
     setIsLoading(true)
 
-    let updatedData = { ...data, jobType }
+    let updatedData = { ...data, jobType, experience: experience.value }
 
     const result = await apiRequest({
-
       url: `/jobs/update-job/${id}`,
       token: user.token,
       data: updatedData,
@@ -90,19 +88,14 @@ const JobUpdateForm = ({ open, setOpen, jobDetails, currentJobData }) => {
       setIsLoading(false)
       toast.error("Something Went Wrong!")
     }
-
   }
 
-
-  // clear form data after successfull submission
   useEffect(() => {
-
     if (isSubmitSuccessful) {
       reset()
       jobDetails();
       setOpen(false);
     }
-
   }, [isSubmitSuccessful])
 
   const closeModal = () => setOpen(false);
@@ -187,14 +180,55 @@ const JobUpdateForm = ({ open, setOpen, jobDetails, currentJobData }) => {
                       </div>
 
                       <div className='w-full sm:w-1/2'>
-                        <TextInput
-                          name='experience'
-                          label='Years of Experience'
-                          placeholder='0 - 2'
-                          type='text'
-                          register={register("experience")}
-                          error={errors.experience && errors.experience.message}
-                        />
+                        <label className='text-gray-600 text-sm mb-1'>Years of university study</label>
+                        <Listbox value={experience} onChange={setExperience}>
+                          <div className='relative mt-1'>
+                            <Listbox.Button className='relative w-full cursor-default rounded border border-gray-400 bg-white py-2 pl-3 pr-10 text-left focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm'>
+                              <span className='block truncate'>{experience.title}</span>
+                              <span className='pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2'>
+                                <BsChevronExpand
+                                  className='h-5 w-5 text-gray-400'
+                                  aria-hidden='true'
+                                />
+                              </span>
+                            </Listbox.Button>
+                            <Transition
+                              as={Fragment}
+                              leave='transition ease-in duration-100'
+                              leaveFrom='opacity-100'
+                              leaveTo='opacity-0'
+                            >
+                              <Listbox.Options className='absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm'>
+                                {experienceOptions.map((option, optionIdx) => (
+                                  <Listbox.Option
+                                    key={optionIdx}
+                                    className={({ active }) =>
+                                      `relative cursor-default select-none py-2 pl-10 pr-4 ${active ? 'bg-blue-100 text-blue-900' : 'text-gray-900'
+                                      }`
+                                    }
+                                    value={option}
+                                  >
+                                    {({ selected }) => (
+                                      <>
+                                        <span
+                                          className={`block truncate ${selected ? 'font-medium' : 'font-normal'
+                                            }`}
+                                        >
+                                          {option.title}
+                                        </span>
+                                        {selected ? (
+                                          <span className='absolute inset-y-0 left-0 flex items-center pl-3 text-blue-600'>
+                                            <BsCheck2 className='h-5 w-5' aria-hidden='true' />
+                                          </span>
+                                        ) : null}
+                                      </>
+                                    )}
+                                  </Listbox.Option>
+                                ))}
+                              </Listbox.Options>
+                            </Transition>
+                          </div>
+                        </Listbox>
                       </div>
                     </div>
 
@@ -240,7 +274,6 @@ const JobUpdateForm = ({ open, setOpen, jobDetails, currentJobData }) => {
                       )}
                     </div>
 
-
                     {
                       isLoading ? <Loading /> :
                         (
@@ -248,7 +281,7 @@ const JobUpdateForm = ({ open, setOpen, jobDetails, currentJobData }) => {
                             <CustomButton
                               type='submit'
                               containerStyles='rounded-md border border-transparent bg-blue-600 px-8 py-2 text-sm font-medium text-white hover:bg-[#1d4fd846] hover:text-[#1d4fd8] focus:outline-none '
-                              title='Sumbit'
+                              title='Submit'
                             />
                             <CustomButton
                               type='button'
@@ -259,9 +292,7 @@ const JobUpdateForm = ({ open, setOpen, jobDetails, currentJobData }) => {
                           </div>
                         )
                     }
-
                   </form>
-
                 </Dialog.Panel>
               </Transition.Child>
             </div>
