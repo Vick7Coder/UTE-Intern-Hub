@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import InsightCard from "../components/InsightCard";
 import { apiRequest, updateURlinsight } from "../utils";
 import { toast } from "react-toastify";
-import { Header, SortBox, CustomButton, StyledButton, Loading } from '../components';
+import { HeaderNoLocation, SortBox, CustomButton, StyledButton, Loading } from '../components';
 import UploadInsightForm from "../components/UploadInsightForm";
 
 const FindInsights = () => {
@@ -77,7 +77,7 @@ const FindInsights = () => {
 
     return (
         <>
-            <Header
+            <HeaderNoLocation
                 title='Discover Insightful Insights'
                 type='Home'
                 handleClick={handleSearchSubmit}
