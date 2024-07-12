@@ -42,11 +42,19 @@ Install dependencies
 Start the client
 
 ```bash
+  cd client
+```
+
+```bash
   vite dev
 ```
 
 
 Start the server
+
+```bash
+  cd server
+```
 
 ```bash
   npm run dev
