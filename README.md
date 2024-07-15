@@ -8,6 +8,8 @@ UTE Intern Hub is a platform designed to connect students, companies, and facult
 
 To run this project, you will need to add the following environment variables to your .env file
 
+###### Server
+
 `PORT`
 
 `MONGO_URL`
@@ -17,6 +19,18 @@ To run this project, you will need to add the following environment variables to
 `EMAIL`
 
 `PASSWORD_APP_EMAIL`
+
+###### Client
+
+`VITE_GOOGLE_API_KEY`
+
+`VITE_CLOUDINARY_UPLOAD_PRESET`
+
+`VITE_CLOUDINARY_API_KEY`
+
+`VITE_CLOUDINARY_CLOUD_NAME`
+
+`VITE_API_URL`
 
 
 ## Run Locally
