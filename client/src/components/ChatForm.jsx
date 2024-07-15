@@ -55,7 +55,7 @@ const ChatForm = () => {
           contents: [{ role: "user", parts: [{ text: inputMessage }] }]
         },
         {
-          params: { key: 'AIzaSyDfAWYMsP9Ik9euvw_vee7IQ0D4WzuhmnU' },
+          params: { key: import.meta.env.VITE_GOOGLE_API_KEY },
           headers: { 'Content-Type': 'application/json' }
         }
       );

@@ -1,7 +1,6 @@
 import axios from 'axios'
 
-const API_URL = 'https://ute-intern-hub.up.railway.app/api';
-// const API_URL ='http://localhost:8000/api';
+const API_URL = import.meta.env.VITE_API_URL;
 
 export const API = axios.create({
     baseURL: API_URL,
@@ -32,22 +31,20 @@ export const apiRequest = async ({ url, token, data, method }) => {
 }
 
 export const handleFileUpload = async (uploadFile) => {
-
     const formData = new FormData();
     formData.append("file", uploadFile);
-    formData.append('upload_preset', 'm0rb0b5i');
-    formData.append('api_key', '562788298864231');
+    formData.append('upload_preset', import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET);
+    formData.append('api_key', import.meta.env.VITE_CLOUDINARY_API_KEY);
     try {
         const response = await axios.post(
-            'https://api.cloudinary.com/v1_1/dsoc0fo9o/auto/upload', formData
+            `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/auto/upload`,
+            formData
         )
         return response.data.secure_url;
     }
-
     catch (error) {
         console.log(error)
     }
-
 }
 
 export const updateURl = ({
