@@ -4,7 +4,7 @@ import {
   recruiterLogin, recruiterRegister, getCompanies,
   getCompanyById,
   getCompanyJobListing,
-  getCompanyProfile, updateCompanyProfile, forgetPassword, resetRecruiterPassword
+  getCompanyProfile, updateCompanyProfile, forgetPassword, resetRecruiterPassword, deleteRecruiter
 } from "../controller/recruiterController.js";
 
 import userAuth from "../middleware/authMiddleware.js";
@@ -41,6 +41,9 @@ router.put("/update-company", userAuth, updateCompanyProfile);
 
 //forget password
 router.post("/forget-password", forgetPassword);
+
+//Delete Company
+router.delete('/delete-recruiter/:id', userAuth, deleteRecruiter)
 
 //reset password
 router.post("/reset-password/:token", resetRecruiterPassword);

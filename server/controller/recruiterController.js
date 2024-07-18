@@ -386,3 +386,22 @@ export const resetRecruiterPassword = async (req, res, next) => {
     next(error);
   }
 };
+
+
+export const deleteRecruiter = async (req, res, next) => {
+  try {
+
+    const { id } = req.params;
+
+    await Recruiters.findByIdAndDelete(id);
+
+    res.status(200).json({
+      success: true,
+      message: "Successfully Deleted"
+    })
+  }
+
+  catch (err) {
+    next(err)
+  }
+}

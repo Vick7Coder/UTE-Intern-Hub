@@ -46,24 +46,28 @@ const UserProfile = () => {
   }, [id])
 
   const deleteAccount = async () => {
-    if (window.confirm("Do you want to delete your account? ")) {
+    if (window.confirm("Do you want to delete this account?")) {
       const result = await apiRequest({
-        url: `/user/delete-user/${user.id}`,
+        url: `/user/delete-user/${id}`, // Use the id from useParams
         token: user.token,
         method: "DELETE"
-      })
-      console.log(result)
+      });
 
       if (result.status === 200) {
-        toast.success(result.data.message)
-        dispatch(logout())
-        navigate('/user-auth')
-      }
-      else {
-        toast.error("Something Went Wrong")
+        toast.success(result.data.message);
+        if (user.id === id) {
+          // If the user is deleting their own account
+          dispatch(logout());
+          navigate('/user-auth');
+        } else {
+          // If admin is deleting another user's account
+          navigate('/user'); // Or wherever you want to redirect after deletion
+        }
+      } else {
+        toast.error("Something Went Wrong");
       }
     }
-  }
+  };
 
   return (
     <div className="container mx-auto flex items-center justify-center py-10">
@@ -181,12 +185,20 @@ const UserProfile = () => {
               )}
 
               {user.accountType === "admin" && (
-                <button
-                  className="bg-green-600 p-2 rounded text-white"
-                  onClick={() => setOpenAddToStudentList(true)}
-                >
-                  Add to Student Lists
-                </button>
+                <>
+                  <button
+                    className="bg-green-600 p-2 rounded text-white"
+                    onClick={() => setOpenAddToStudentList(true)}
+                  >
+                    Add to Student Lists
+                  </button>
+                  <button
+                    className="bg-red-600 p-2 rounded text-white"
+                    onClick={deleteAccount}
+                  >
+                    Delete User
+                  </button>
+                </>
               )}
             </div>
           )}

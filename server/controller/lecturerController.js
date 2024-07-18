@@ -556,3 +556,21 @@ export const removeSeekerFromLecturer = async (req, res) => {
         return res.status(500).json({ message: 'Internal server error' });
     }
 };
+
+export const deleteLecturer = async (req, res, next) => {
+    try {
+  
+      const { id } = req.params;
+  
+      await Lecturers.findByIdAndDelete(id);
+  
+      res.status(200).json({
+        success: true,
+        message: "Successfully Deleted"
+      })
+    }
+  
+    catch (err) {
+      next(err)
+    }
+  }

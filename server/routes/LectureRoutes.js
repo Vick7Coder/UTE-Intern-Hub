@@ -13,7 +13,8 @@ import {
     addSeekerToLecturer,
     getLecturerStudents,
     getLecturerByLecId,
-    removeSeekerFromLecturer
+    removeSeekerFromLecturer,
+    deleteLecturer
 } from "../controller/lecturerController.js";
 import userAuth from "../middleware/authMiddleware.js";
 
@@ -55,6 +56,7 @@ router.post("/add-seeker-to-lecturer", userAuth, addSeekerToLecturer);
 router.get("/lecturer-students", userAuth, getLecturerStudents);
 
 router.post('/remove-seeker', userAuth, removeSeekerFromLecturer);
-
+//Delete Lecturer
+router.delete('/delete-lecturer/:id', userAuth, deleteLecturer)
 
 export default router;

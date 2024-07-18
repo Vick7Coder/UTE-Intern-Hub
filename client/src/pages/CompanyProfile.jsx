@@ -1,29 +1,22 @@
 import React, { useEffect, useState } from "react";
-
 import { HiLocationMarker } from "react-icons/hi";
 import { AiOutlineMail } from "react-icons/ai";
 import { FiPhoneCall, FiEdit3 } from "react-icons/fi";
 import { Link, useParams } from "react-router-dom";
 import { CustomButton, JobCard, CompanyForm } from "../components";
-
-
+import { useNavigate } from "react-router-dom";
+import { logout } from "../redux/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { apiRequest } from "../utils";
 import { cmpData } from "../redux/companySlice";
-
+import { toast } from "react-toastify";
 
 const CompanyProfile = () => {
-
   const { user } = useSelector((state) => state.user);
-
-  const { companyInfo } = useSelector(state => state.cmp);
-
-
+  const { companyInfo } = useSelector((state) => state.cmp);
+  const navigate = useNavigate();
   const [openForm, setOpenForm] = useState(false);
-
-
   const { id } = useParams();
-
   const dispatch = useDispatch();
 
 
@@ -55,8 +48,40 @@ const CompanyProfile = () => {
 
     id && fetchCompanyById();
   }, [id])
+  const deleteCompany = async () => {
+    const companyId = id || user?.id;
+    if (!companyId) {
+      toast.error("Company ID is not available");
+      return;
+    }
 
+    if (window.confirm("Do you want to delete this company account?")) {
+      try {
+        const result = await apiRequest({
+          url: `/companies/delete-recruiter/${companyId}`,
+          method: "DELETE",
+          token: user?.token,
+        });
 
+        if (result?.status === 200) {
+          toast.success(result.data.message);
+          if (user?.accountType === "company") {
+            // If the company is deleting their own account
+            dispatch(logout());
+            navigate("/user-auth", { replace: true });
+          } else if (user?.accountType === "admin") {
+            // If admin is deleting the company account
+            navigate("/companies", { replace: true });
+          }
+        } else {
+          toast.error(result?.data?.message || "Something went wrong");
+        }
+      } catch (error) {
+        console.error("Error deleting company:", error);
+        toast.error("An error occurred while deleting the company");
+      }
+    }
+  };
   return (
     <div className='container mx-auto p-5'>
       <div>
@@ -72,22 +97,28 @@ const CompanyProfile = () => {
               )
             }
           </h2>
-          {((user?.accountType === 'company' && (id ? id === user.id : !id))) && (
+          {((user?.accountType === 'company' && (id ? id === user.id : true)) || user?.accountType === 'admin') && (
             <div className='flex items-center justifu-center py-5 md:py-0 gap-4'>
-              <CustomButton
-                onClick={() => setOpenForm(true)}
-                iconRight={<FiEdit3 />}
-                containerStyles={`py-1.5 px-3 md:px-5 focus:outline-none bg-blue-600  hover:bg-blue-700 text-white rounded text-sm md:text-base border border-blue-600`}
-              />
-
               {user?.accountType === 'company' && (
-                <Link to='/upload-job'>
+                <>
                   <CustomButton
-                    title='Upload Job'
-                    containerStyles={`text-blue-600 py-1.5 px-3 md:px-5 focus:outline-none  rounded text-sm md:text-base border border-blue-600`}
+                    onClick={() => setOpenForm(true)}
+                    iconRight={<FiEdit3 />}
+                    containerStyles={`py-1.5 px-3 md:px-5 focus:outline-none bg-blue-600  hover:bg-blue-700 text-white rounded text-sm md:text-base border border-blue-600`}
                   />
-                </Link>
+                  <Link to='/upload-job'>
+                    <CustomButton
+                      title='Upload Job'
+                      containerStyles={`text-blue-600 py-1.5 px-3 md:px-5 focus:outline-none  rounded text-sm md:text-base border border-blue-600`}
+                    />
+                  </Link>
+                </>
               )}
+              <CustomButton
+                title='Delete Account'
+                onClick={deleteCompany}
+                containerStyles={`text-white py-1.5 px-3 md:px-5 focus:outline-none bg-red-600 hover:bg-red-700 rounded text-sm md:text-base border border-red-600`}
+              />
             </div>
           )}
 

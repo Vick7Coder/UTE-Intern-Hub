@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { AiOutlineMail } from "react-icons/ai";
 import { FiPhoneCall, FiEdit3 } from "react-icons/fi";
-import { Link, useParams } from "react-router-dom";
-import { CustomButton, SeekerCard, LecturerForm, SeekerSquareCard } from "../components";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import { CustomButton, SeekerCard, LecturerForm } from "../components";
 import { useDispatch, useSelector } from "react-redux";
 import { apiRequest } from "../utils";
 import { ltData } from "../redux/lecturerSlice";
-import { NoProfile } from "../assets"; // Đảm bảo bạn có import này
+import { NoProfile } from "../assets";
+import { logout } from "../redux/userSlice";
+import { toast } from "react-toastify";
 
 const LecturerProfile = () => {
   const { user } = useSelector((state) => state.user);
-  const { lecturerInfo } = useSelector(state => state.lt);
+  const { lecturerInfo } = useSelector((state) => state.lt);
   const [openForm, setOpenForm] = useState(false);
   const { id } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const fetchLecturerById = async () => {
     const result = await apiRequest({
@@ -33,7 +36,40 @@ const LecturerProfile = () => {
   useEffect(() => {
     id && fetchLecturerById();
   }, [id]);
+  const deleteLecturer = async () => {
+    const lecturerId = id || user?.id;
+    if (!lecturerId) {
+      toast.error("Lecturer ID is not available");
+      return;
+    }
 
+    if (window.confirm("Do you want to delete this lecturer account?")) {
+      try {
+        const result = await apiRequest({
+          url: `/lecturer/delete-lecturer/${lecturerId}`,
+          method: "DELETE",
+          token: user?.token,
+        });
+
+        if (result?.status === 200) {
+          toast.success(result.data.message);
+          if (user?.accountType === "lecture") {
+            // If the lecturer is deleting their own account
+            dispatch(logout());
+            navigate("/user-auth", { replace: true });
+          } else if (user?.accountType === "admin") {
+            // If admin is deleting the lecturer account
+            navigate("/lecturer", { replace: true });
+          }
+        } else {
+          toast.error(result?.data?.message || "Something went wrong");
+        }
+      } catch (error) {
+        console.error("Error deleting lecturer:", error);
+        toast.error("An error occurred while deleting the lecturer");
+      }
+    }
+  };
   return (
     <div className='container mx-auto p-5'>
       <div>
@@ -64,21 +100,31 @@ const LecturerProfile = () => {
             </div>
           </div>
 
-          {user?.accountType === 'lecture' && (id ? id === user.id : !id) && (
-            <div className='flex items-center justify-center py-5 md:py-0 gap-4'>
-              <CustomButton
-                onClick={() => setOpenForm(true)}
-                iconRight={<FiEdit3 />}
-                containerStyles={`py-1.5 px-3 md:px-5 focus:outline-none bg-blue-600 hover:bg-blue-700 text-white rounded text-sm md:text-base border border-blue-600`}
-              />
-              <Link to='/user'>
+          {((user?.accountType === "lecture" && (id ? id === user.id : true)) ||
+            user?.accountType === "admin") && (
+              <div className="flex items-center justify-center py-5 md:py-0 gap-4">
+                {user?.accountType === "lecture" && (
+                  <>
+                    <CustomButton
+                      onClick={() => setOpenForm(true)}
+                      iconRight={<FiEdit3 />}
+                      containerStyles={`py-1.5 px-3 md:px-5 focus:outline-none bg-blue-600 hover:bg-blue-700 text-white rounded text-sm md:text-base border border-blue-600`}
+                    />
+                    <Link to="/user">
+                      <CustomButton
+                        title="Manage Seekers"
+                        containerStyles={`text-blue-600 py-1.5 px-3 md:px-5 focus:outline-none rounded text-sm md:text-base border border-blue-600`}
+                      />
+                    </Link>
+                  </>
+                )}
                 <CustomButton
-                  title='Manage Seekers'
-                  containerStyles={`text-blue-600 py-1.5 px-3 md:px-5 focus:outline-none rounded text-sm md:text-base border border-blue-600`}
+                  title="Delete Account"
+                  onClick={deleteLecturer}
+                  containerStyles={`text-white py-1.5 px-3 md:px-5 focus:outline-none bg-red-600 hover:bg-red-700 rounded text-sm md:text-base border border-red-600`}
                 />
-              </Link>
-            </div>
-          )}
+              </div>
+            )}
         </div>
 
         <div className='w-full flex flex-col md:flex-row justify-start md:justify-between mt-4 md:mt-8 text-base'>
